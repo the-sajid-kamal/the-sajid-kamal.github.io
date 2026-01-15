@@ -137,14 +137,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .section-tag {
     display: inline-block;
-    padding: 8px 16px;
+    padding: 12px 32px;
     background: var(--gradient-glow);
     border: 1px solid var(--border);
     border-radius: var(--radius-full);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--primary-light);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 
 .section-title {
