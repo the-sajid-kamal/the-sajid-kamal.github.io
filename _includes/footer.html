@@ -1,0 +1,64 @@
+{%- unless page.hide_footer_cta %}
+<section class="footer-cta" aria-labelledby="footer-cta-title">
+  <div class="container">
+    <p class="eyebrow">Get in touch</p>
+    <h2 class="footer-cta__title" id="footer-cta-title">Building a brand, planning an event or writing a story? <em>Let’s talk.</em></h2>
+    <div class="footer-cta__actions">
+      <a class="big-link" href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <a class="link-arrow" href="{{ site.profiles.linkedin }}" target="_blank" rel="me noopener">Connect on LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+{%- endunless %}
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a class="wordmark wordmark--footer" href="{{ '/' | relative_url }}">{{ site.title }}<span class="wordmark__dot" aria-hidden="true">.</span></a>
+        <p>{{ site.author.role }}. Writing about brands, retail and how people in Bangladesh shop.</p>
+      </div>
+
+      <div>
+        <h2 class="footer-title">Explore</h2>
+        <ul class="footer-links">
+          {%- for item in site.data.navigation %}
+          <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+          {%- endfor %}
+          <li><a href="{{ '/contact/' | relative_url }}">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer-title">Elsewhere</h2>
+        <ul class="footer-links">
+          {%- if site.profiles.linkedin %}<li><a href="{{ site.profiles.linkedin }}" target="_blank" rel="me noopener">LinkedIn</a></li>{% endif %}
+          {%- if site.profiles.facebook %}<li><a href="{{ site.profiles.facebook }}" target="_blank" rel="me noopener">Facebook</a></li>{% endif %}
+          {%- if site.profiles.github %}<li><a href="{{ site.profiles.github }}" target="_blank" rel="me noopener">GitHub</a></li>{% endif %}
+          <li><a href="{{ '/writing/feed.xml' | relative_url }}">RSS feed</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer-title">Contact</h2>
+        <ul class="footer-links">
+          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          <li>{{ site.location }}</li>
+          <li><a href="{{ site.cv | relative_url }}" download>Download CV (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {{ site.time | date: '%Y' }} {{ site.author.full_name }}. All rights reserved.</p>
+      <p>Made in Dhaka.</p>
+    </div>
+
+    <p class="footer-privacy">
+      This site uses Umami, Google Tag Manager and Microsoft Clarity to understand how visitors use it.
+      Clarity records clicks, scrolling and session replays. By using this site, you agree that Microsoft and I
+      can collect and use this data. See the
+      <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft Privacy Statement</a>.
+    </p>
+  </div>
+</footer>

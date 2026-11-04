@@ -1,0 +1,18 @@
+{%- comment -%}
+  Newsletter box. Set newsletter_url in _config.yml (Substack, LinkedIn
+  newsletter, Buttondown...). Until then it points people to LinkedIn.
+{%- endcomment -%}
+<aside class="newsletter" aria-labelledby="newsletter-title" data-reveal>
+  <div>
+    <h2 class="newsletter__title" id="newsletter-title">Get new essays as they come out.</h2>
+    <p class="newsletter__text">About one a month on brands, retail and Bangladeshi shoppers. No spam, unsubscribe any time.</p>
+  </div>
+  <div class="newsletter__actions">
+    {%- if site.newsletter_url and site.newsletter_url != "" %}
+    <a class="button button--primary" href="{{ site.newsletter_url }}" target="_blank" rel="noopener">Subscribe</a>
+    {%- else %}
+    <a class="button button--primary" href="{{ site.profiles.linkedin }}" target="_blank" rel="noopener">Follow on LinkedIn</a>
+    {%- endif %}
+    <a class="link-arrow" href="{{ '/writing/feed.xml' | relative_url }}">RSS <span class="arrow" aria-hidden="true">→</span></a>
+  </div>
+</aside>

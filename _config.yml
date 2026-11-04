@@ -1,0 +1,128 @@
+# =====================================================================
+#  Site settings
+#  The things you are most likely to want to change are at the top.
+#  GitHub rebuilds the site automatically after every change.
+#  (Text after a # is a note and is ignored.)
+# =====================================================================
+
+title: Sajid Kamal
+tagline: FMCG brand strategist in Dhaka
+description: >-
+  Sajid Kamal is an FMCG brand strategist and Brand Manager at Ghorer Bazar
+  in Dhaka. Projects, essays and lessons from building food and beauty
+  brands in Bangladesh.
+url: "https://thesajidkamal.me"
+baseurl: ""
+lang: en
+timezone: Asia/Dhaka
+
+# Colour palette for the whole site.
+# Options: terracotta (default) | bottle | indigo | ink
+# To preview them all before choosing, open the site with ?preview at the end
+# of the address, e.g. https://thesajidkamal.me/?preview
+palette: terracotta
+
+author:
+  name: Sajid Kamal
+  full_name: MD Sajid Kamal
+  role: Brand Manager, Ghorer Bazar
+  # Small round photo shown under articles. Replace with your own headshot.
+  avatar: /assets/img/placeholders/headshot.svg
+
+# ---------------------------------------------------------------------
+#  Contact
+# ---------------------------------------------------------------------
+email: sajidkamal214@gmail.com
+phone: "+880 1732-101111"   # set to "" to hide it on the Contact page
+location: Banasree, Dhaka, Bangladesh
+
+# Where the contact form sends messages (FormSubmit). See README.md.
+contact_form:
+  action: https://formsubmit.co/sajidkamal214@gmail.com
+  endpoint: https://formsubmit.co/ajax/sajidkamal214@gmail.com
+
+# Newsletter sign-up page (Substack, LinkedIn newsletter, Buttondown...).
+# While this is empty, the newsletter boxes ask people to follow you on LinkedIn instead.
+newsletter_url: ""
+
+# Your downloadable CV
+cv: /MD-Sajid-Kamal-CV.pdf
+
+# Profiles shown in the footer and on the Contact page
+profiles:
+  linkedin: https://www.linkedin.com/in/sajid-kamal/
+  facebook: https://www.facebook.com/mohammad.sajid.kamal/
+  github: https://github.com/the-sajid-kamal
+
+# Analytics IDs (leave a value empty to switch that tool off)
+analytics:
+  gtm: GTM-K3FKGBKT
+  umami: c3292b9f-a17a-4e91-9679-1f1fa07db4f9
+  clarity: wnjoux3m19
+
+# ---------------------------------------------------------------------
+#  Search engines and link previews (used by jekyll-seo-tag)
+# ---------------------------------------------------------------------
+# The image shown when a page is shared on LinkedIn, WhatsApp, Facebook...
+# is set under "defaults" below (image: /assets/img/share-card.png).
+# It must be 1200 x 630 pixels, PNG or JPG. A single page can use its own
+# by adding an "image:" line to its front matter.
+social:
+  name: Sajid Kamal
+  links:
+    - https://www.linkedin.com/in/sajid-kamal/
+    - https://www.facebook.com/mohammad.sajid.kamal/
+    - https://github.com/the-sajid-kamal
+
+# =====================================================================
+#  Technical settings - you normally don't need to touch anything below
+# =====================================================================
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Articles live in _posts/ and appear at /writing/<title>/
+permalink: /writing/:title/
+
+# Projects live in _projects/ and appear at /work/<file-name>/
+collections:
+  projects:
+    output: true
+    permalink: /work/:name/
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+      image: /assets/img/share-card.png
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      body_class: page-article
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: project
+      body_class: page-project
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+feed:
+  path: writing/feed.xml
+
+exclude:
+  - README.md
+  - CONTENT-GUIDE.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

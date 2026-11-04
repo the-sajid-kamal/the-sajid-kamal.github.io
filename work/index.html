@@ -1,0 +1,39 @@
+---
+title: Work
+description: Selected projects by Sajid Kamal, from brand builds and category launches to trade programs and a startup, across food, health and beauty in Bangladesh.
+---
+{%- comment -%}
+  WORK PAGE: lists every file in _projects/, in "order".
+  To add a project, copy any file in _projects/ and change the text.
+{%- endcomment -%}
+{%- assign projects = site.projects | sort: "order" -%}
+{%- assign categories = projects | map: "category" | uniq -%}
+
+<section class="page-head">
+  <div class="container">
+    <p class="eyebrow">Selected work</p>
+    <h1 class="page-title">Brands, launches and <em>one startup</em>.</h1>
+    <p class="lead">
+      Six years of FMCG work across bakery, snacks, noodles, honey, oils and cosmetics. Each case study covers
+      the brief, what I did and what happened next.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="filters" role="group" aria-label="Filter projects by type" data-filter-bar hidden>
+      <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+      {%- for category in categories %}
+      <button class="chip" type="button" data-filter="{{ category | slugify }}" aria-pressed="false">{{ category }}</button>
+      {%- endfor %}
+    </div>
+
+    <div class="project-grid" data-filter-grid>
+      {%- for project in projects %}
+      {% include project-card.html project=project %}
+      {%- endfor %}
+    </div>
+    <p class="empty-note" data-filter-empty hidden>No projects of this type yet.</p>
+  </div>
+</section>

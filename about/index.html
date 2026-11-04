@@ -1,0 +1,195 @@
+---
+title: About
+description: About Sajid Kamal, FMCG brand strategist and Brand Manager at Ghorer Bazar in Dhaka. Experience, education, certifications and a short bio for organisers.
+---
+{%- comment -%}
+  ABOUT PAGE
+  The bio below is written from the CV; edit it freely.
+  Experience, ventures, education, certifications and expertise come from
+  the files in _data/.
+{%- endcomment -%}
+
+<section class="page-head">
+  <div class="container">
+    <p class="eyebrow">About</p>
+    <h1 class="page-title">Hello, I’m Sajid. I build brands people <em>reach for</em>.</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-intro">
+    <figure class="about-intro__portrait">
+      {%- comment -%} PLACEHOLDER: a second portrait, ideally a different shot from the home page {%- endcomment %}
+      <img src="{{ '/assets/img/placeholders/portrait.svg' | relative_url }}" alt="Portrait of Sajid Kamal" width="1200" height="1500" data-placeholder>
+    </figure>
+
+    <div class="about-intro__text">
+      <p>I’m an FMCG brand strategist in Dhaka, with more than six years of experience in new product development, digital marketing and integrated campaigns.</p>
+      <p>Today I’m Brand Manager at Ghorer Bazar. I’ve built new categories there, from a honey portfolio to mustard oil, gawa ghee and functional foods, and I’m designing the company’s first route-to-market for retail.</p>
+      <p>Before that I worked at Akij Bakers, Meghna Group and Remark HB: building three bakery brands from scratch, designing trade programs that lifted noodle sales by 172%, launching the Herlan cosmetics portfolio and running more than 100 digital campaigns.</p>
+      <p>Alongside my job I founded Sui Chokri, an “Uber for tailor shops” that connected 156 neighbourhood tailors with customers and indie brands, supported by the H&amp;M Foundation’s Needle Innovation Challenge.</p>
+      <p>I studied MIS and Marketing at North South University. Before marketing, I trained more than 700 volunteers in emergency first aid with Criticalink.</p>
+      <p class="placeholder">[Optional: one personal line, such as what you do outside work or what you are curious about right now.]</p>
+
+      <div class="hero__actions">
+        <a class="button button--primary" href="{{ site.cv | relative_url }}" download>Download CV (PDF)</a>
+        <a class="link-arrow" href="{{ site.profiles.linkedin }}" target="_blank" rel="me noopener">LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+
+      <dl class="glance">
+        <div><dt>Based in</dt><dd>Dhaka, Bangladesh</dd></div>
+        <div><dt>Now</dt><dd>Brand Manager, Ghorer Bazar</dd></div>
+        <div><dt>Focus</dt><dd>Food, health and beauty brands</dd></div>
+        <div><dt>Languages</dt><dd class="placeholder">[Bangla, English]</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="section section--rule" aria-labelledby="experience-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">01</span>
+        <h2 class="h-section" id="experience-title">Experience</h2>
+      </div>
+      <a class="link-arrow" href="{{ site.cv | relative_url }}" download>Full CV (PDF) <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+    <ol class="timeline">
+      {%- for job in site.data.experience %}
+      <li class="timeline__item" data-reveal>
+        <p class="timeline__when">{{ job.dates }}</p>
+        <div>
+          <h3 class="timeline__role">{{ job.role }}</h3>
+          <p class="timeline__company">{{ job.company }}</p>
+          <ul>
+            {%- for line in job.highlights %}
+            <li>{{ line }}</li>
+            {%- endfor %}
+          </ul>
+        </div>
+      </li>
+      {%- endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section section--rule" aria-labelledby="ventures-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">02</span>
+        <h2 class="h-section" id="ventures-title">Building and giving back</h2>
+      </div>
+    </div>
+    <ol class="timeline">
+      {%- for item in site.data.ventures %}
+      <li class="timeline__item" data-reveal>
+        <p class="timeline__when">{{ item.dates }}</p>
+        <div>
+          <h3 class="timeline__role">{{ item.company }}</h3>
+          <p class="timeline__company">{{ item.role }}</p>
+          <ul>
+            {%- for line in item.highlights %}
+            <li>{{ line }}</li>
+            {%- endfor %}
+          </ul>
+        </div>
+      </li>
+      {%- endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section section--rule" aria-labelledby="expertise-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">03</span>
+        <h2 class="h-section" id="expertise-title">What I work on</h2>
+      </div>
+    </div>
+    <div class="expertise">
+      {%- for group in site.data.expertise %}
+      <div data-reveal>
+        <h3>{{ group.group }}</h3>
+        <ul class="tag-list">
+          {%- for item in group.items %}
+          <li class="tag">{{ item }}</li>
+          {%- endfor %}
+        </ul>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--rule" aria-labelledby="learning-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">04</span>
+        <h2 class="h-section" id="learning-title">Education and certifications</h2>
+      </div>
+    </div>
+    <div class="split">
+      <ul class="cred-list" aria-label="Education">
+        {%- for e in site.data.education %}
+        <li>
+          <span><span class="cred-list__name">{{ e.school }}</span><span class="cred-list__detail">{{ e.degree }}</span></span>
+          <span class="cred-list__year">{{ e.dates }}</span>
+        </li>
+        {%- endfor %}
+      </ul>
+      <ul class="cred-list" aria-label="Certifications">
+        {%- for c in site.data.certifications %}
+        <li>
+          <span><span class="cred-list__name">{{ c.name }}</span><span class="cred-list__detail">{{ c.issuer }} · {{ c.detail }}</span></span>
+          <span class="cred-list__year">{{ c.year }}</span>
+        </li>
+        {%- endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section--rule" aria-labelledby="media-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">05</span>
+        <h2 class="h-section" id="media-title">Speaking and media</h2>
+        <p class="lead placeholder">[Placeholder: talks, panels, guest lectures, podcasts and interviews. Delete this section until you have your first one.]</p>
+      </div>
+    </div>
+    <ul class="media-list">
+      <li><span class="media-list__year placeholder">[2026]</span><span class="placeholder">[Talk or panel title · Event name, City]</span></li>
+      <li><span class="media-list__year placeholder">[2025]</span><span class="placeholder">[Guest lecture on brand management · University name]</span></li>
+      <li><span class="media-list__year placeholder">[2025]</span><span class="placeholder">[Interview or podcast · Publication or show name]</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section--rule" aria-labelledby="bio-title">
+  <div class="container split">
+    <div>
+      <span class="section-num">06</span>
+      <h2 class="h-section" id="bio-title">Short bio for organisers</h2>
+      <p class="lead">For event programmes, articles and introductions. Feel free to copy it as it is.</p>
+    </div>
+    <div class="bio-card">
+      <p class="bio-card__text" id="short-bio">
+        Sajid Kamal is an FMCG brand strategist based in Dhaka and Brand Manager at Ghorer Bazar. Over six years at
+        Akij Bakers, Meghna Group, Remark HB and Ghorer Bazar, Sajid has built three brands from scratch, launched new
+        food and beauty categories and led more than 100 digital campaigns. Sajid is also the founder of Sui Chokri, a
+        distributed production network for neighbourhood tailors supported by the H&amp;M Foundation’s Needle Innovation Challenge.
+      </p>
+      <div class="bio-card__actions">
+        <button class="button button--ghost button--small" type="button" data-copy="#short-bio" hidden>Copy bio</button>
+        <a class="link-arrow" href="{{ site.cv | relative_url }}" download>Download CV <span class="arrow" aria-hidden="true">→</span></a>
+        {%- comment -%} PLACEHOLDER: link a high-resolution press photo, e.g. /assets/img/sajid-kamal-press.jpg {%- endcomment %}
+        <a class="link-arrow placeholder" href="{{ '/assets/img/placeholders/portrait.svg' | relative_url }}" download>[Download press photo] <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>

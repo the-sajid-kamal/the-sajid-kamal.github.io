@@ -1,0 +1,83 @@
+---
+layout: default
+---
+{%- assign cover = page.cover | default: '/assets/img/placeholders/project-cover.svg' -%}
+<article class="project">
+  <header class="project-head container">
+    <a class="back-link" href="{{ '/work/' | relative_url }}"><span class="arrow" aria-hidden="true">←</span> All work</a>
+    <p class="eyebrow">{{ page.category }}</p>
+    <h1 class="project-title">{{ page.title }}</h1>
+    <p class="lead">{{ page.summary }}</p>
+
+    <dl class="facts">
+      <div><dt>Company</dt><dd>{{ page.client }}</dd></div>
+      <div><dt>Role</dt><dd>{{ page.role }}</dd></div>
+      <div><dt>When</dt><dd>{{ page.year }}</dd></div>
+      <div><dt>Focus</dt><dd>{{ page.focus | join: ', ' }}</dd></div>
+    </dl>
+  </header>
+
+  <figure class="project-cover container">
+    <img src="{{ cover | relative_url }}" alt="{{ page.cover_alt }}" width="1600" height="1000"{% if cover contains 'placeholder' %} data-placeholder{% endif %}>
+  </figure>
+
+  {%- if page.metrics %}
+  <div class="container">
+    <ul class="metrics" aria-label="Results">
+      {%- for m in page.metrics %}
+      <li class="metric" data-reveal{% if m.placeholder %} data-placeholder{% endif %}>
+        <span class="metric__value">{{ m.value }}</span>
+        <span class="metric__label">{{ m.label }}</span>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+  {%- endif %}
+
+  <div class="container">
+    <div class="prose">
+      {%- if page.placeholder %}{% include placeholder-note.html kind="case study" %}{% endif %}
+      {{ content }}
+    </div>
+  </div>
+
+  {%- if page.gallery %}
+  <div class="container">
+    <div class="gallery">
+      {%- for image in page.gallery %}
+      <figure class="gallery__item" data-reveal>
+        <img src="{{ image.src | relative_url }}" alt="{{ image.alt }}" width="1200" height="800" loading="lazy" decoding="async"{% if image.src contains 'placeholder' %} data-placeholder{% endif %}>
+        {%- if image.caption %}<figcaption{% if image.caption contains '[' %} class="placeholder"{% endif %}>{{ image.caption }}</figcaption>{% endif %}
+      </figure>
+      {%- endfor %}
+    </div>
+  </div>
+  {%- endif %}
+
+  {%- if page.quote %}
+  <div class="container">
+    <figure class="project-quote" data-reveal>
+      <blockquote{% if page.quote.placeholder %} class="placeholder"{% endif %}>{{ page.quote.text }}</blockquote>
+      <figcaption><strong>{{ page.quote.name }}</strong> {{ page.quote.role }}</figcaption>
+    </figure>
+  </div>
+  {%- endif %}
+</article>
+
+{%- assign projects = site.projects | sort: "order" %}
+{%- for p in projects %}
+  {%- if p.url == page.url %}
+    {%- assign next_index = forloop.index %}
+  {%- endif %}
+{%- endfor %}
+{%- if next_index >= projects.size %}{% assign next_index = 0 %}{% endif %}
+{%- assign next = projects[next_index] %}
+{%- if next and next.url != page.url %}
+<nav class="next-project container" aria-label="Next project">
+  <p class="eyebrow">Next project</p>
+  <a class="next-project__link" href="{{ next.url | relative_url }}">
+    <span class="next-project__title">{{ next.title }}</span>
+    <span class="arrow" aria-hidden="true">→</span>
+  </a>
+</nav>
+{%- endif %}

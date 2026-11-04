@@ -1,498 +1,147 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-K3FKGBKT');</script>
-<!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Lets the CSS hide fade-in elements only when JavaScript is running, so the page never stays blank -->
-    <script>document.documentElement.classList.add('js');</script>
-    <title>MD Sajid Kamal | Brand Strategist & Digital Marketing Expert</title>
-    <meta name="description" content="FMCG Brand Strategist with 6+ years experience in product development, digital marketing, and campaign management.">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+---
+layout: default
+seo:
+  type: Person
+  name: Sajid Kamal
+---
+{%- comment -%}
+  HOME PAGE
+  Text marked class="placeholder" or images marked data-placeholder are
+  stand-ins. Headline and copy alternatives are in CONTENT-GUIDE.md.
+  Lists (brands, numbers, testimonials) live in _data/home.yml.
+{%- endcomment -%}
+{%- assign featured = site.projects | where: "featured", true | sort: "order" -%}
 
-<script defer src="https://cloud.umami.is/script.js" data-website-id="c3292b9f-a17a-4e91-9679-1f1fa07db4f9"></script>
+<section class="hero">
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow">Brand Manager · FMCG · Dhaka</p>
+      <h1 class="display hero__title">I build food and beauty brands that <em>earn their place</em> on the shelf.</h1>
+      <p class="hero__intro">
+        I’m Sajid Kamal, Brand Manager at Ghorer Bazar. For six years I’ve taken products from idea to shelf
+        at Akij Bakers, Meghna Group and Remark HB, and I founded Sui Chokri, a production network for
+        neighbourhood tailors. This is where I share the work and what it taught me.
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="{{ '/writing/' | relative_url }}">Read my writing</a>
+        <a class="link-arrow" href="{{ '/work/' | relative_url }}">See selected work <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
 
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "wnjoux3m19");
-</script>
+    <figure class="hero__portrait">
+      {%- comment -%} PLACEHOLDER: a professional portrait, 4:5, about 1200 × 1500 px {%- endcomment %}
+      <img src="{{ '/assets/img/placeholders/portrait.svg' | relative_url }}" alt="Portrait of Sajid Kamal" width="1200" height="1500" fetchpriority="high" data-placeholder>
+      <figcaption class="now">
+        <span class="now__dot" aria-hidden="true"></span>
+        <span><strong>Now</strong> · Designing Ghorer Bazar’s first route-to-market for retail.</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
 
-    
-</head>
-<body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3FKGBKT"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-    <!-- Cursor follower -->
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
+<section class="proof" aria-label="Brands and companies I have worked with">
+  <div class="container proof__inner">
+    <p class="proof__label">Brands &amp; companies</p>
+    <ul class="proof__list">
+      {%- for company in site.data.home.companies %}
+      <li>{% if company.logo %}<img src="{{ company.logo | relative_url }}" alt="{{ company.name }}">{% else %}{{ company.name }}{% endif %}</li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
 
-    <!-- Navigation -->
-    <nav class="nav" id="nav">
-        <div class="nav-container">
-            <a href="#" class="logo">
-                <span class="logo-text">the<span class="logo-accent">sajid</span>kamal</span>
-            </a>
-            <div class="nav-menu" id="nav-menu">
-                <a href="#home" class="nav-link active">Home</a>
-                <a href="#about" class="nav-link">About</a>
-                <a href="#experience" class="nav-link">Experience</a>
-                <a href="#skills" class="nav-link">Skills</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </div>
-            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-controls="nav-menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+<section class="container" aria-label="In numbers">
+  <ul class="stats">
+    {%- for stat in site.data.home.stats %}
+    <li class="stat" data-reveal>
+      <span class="stat__value">{{ stat.value }}{% if stat.unit %}<span class="stat__unit">{{ stat.unit }}</span>{% endif %}</span>
+      <span class="stat__label">{{ stat.label }}</span>
+    </li>
+    {%- endfor %}
+  </ul>
+</section>
 
-    <!-- Hero Section with 3D -->
-    <section class="hero" id="home">
-        <canvas id="hero-canvas"></canvas>
-        <div class="hero-content">
-            <div class="hero-badge" data-aos="fade-down">Brand Strategist</div>
-            <h1 class="hero-title" data-aos="fade-up">
-                <span class="line">Hi, I'm</span>
-                <span class="name gradient-text">MD Sajid Kamal</span>
-            </h1>
-            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                Transforming brands through <span class="typed-text" aria-hidden="true"></span><span class="sr-only">data-driven insights, creative campaigns and strategic branding</span>
-            </p>
-            <div class="hero-stats" data-aos="fade-up" data-aos-delay="200">
-                <div class="stat">
-                    <span class="stat-number" data-count="6" data-suffix="+">6+</span>
-                    <span class="stat-label">Years Experience</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number" data-count="100" data-suffix="+">100+</span>
-                    <span class="stat-label">Campaigns Led</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number" data-count="140" data-suffix="%">140%</span>
-                    <span class="stat-label">Sales Growth</span>
-                </div>
-            </div>
-            <div class="hero-cta" data-aos="fade-up" data-aos-delay="300">
-                <a href="#contact" class="btn btn-primary">
-                    <span>Get In Touch</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-                <a href="#experience" class="btn btn-secondary">View My Work</a>
-            </div>
-        </div>
-        <div class="scroll-indicator" aria-hidden="true">
-            <div class="mouse">
-                <div class="wheel"></div>
-            </div>
-            <span>Scroll Down</span>
-        </div>
-    </section>
+<section class="section section--rule" aria-labelledby="work-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">01</span>
+        <h2 class="h-section" id="work-title">Selected work</h2>
+        <p class="lead">Launches, brand builds, trade programs and one startup, with the numbers behind them.</p>
+      </div>
+      <a class="link-arrow" href="{{ '/work/' | relative_url }}">All projects <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+    <div class="project-grid">
+      {%- for project in featured limit: 4 %}
+      {% include project-card.html project=project %}
+      {%- endfor %}
+    </div>
+  </div>
+</section>
 
-    <!-- About Section -->
-    <section class="about section" id="about">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">About Me</span>
-                <h2 class="section-title">Crafting Brand Stories <br>That <span class="gradient-text">Resonate</span></h2>
-            </div>
-            <div class="about-grid">
-                <div class="about-image" data-aos="fade-right">
-                    <div class="image-frame">
-                        <div class="image-placeholder">
-                            <img src="sajid-kamal.jpg" alt="MD Sajid Kamal" class="profile-image" width="640" height="640" loading="lazy" decoding="async">
-                        </div>
-                        <div class="image-decoration"></div>
-                    </div>
-                </div>
-                <div class="about-content" data-aos="fade-left">
-                    <p class="about-text">
-                        FMCG brand strategist with over <strong>6 years of experience</strong> in new product development, 
-                        digital marketing, and integrated campaign management. I've launched multi-channel marketing 
-                        initiatives and developed brand architectures that drive real business growth.
-                    </p>
-                    <p class="about-text">
-                        My data-driven approach leverages consumer insights to create impactful, culturally relevant campaigns. 
-                        From launching honey portfolios to designing RTM strategies, I transform brands from the ground up.
-                    </p>
-                    <div class="about-info">
-                        <div class="info-item">
-                            <span class="info-icon">📍</span>
-                            <div>
-                                <span class="info-label">Location</span>
-                                <span class="info-value">Dhaka, Bangladesh</span>
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-icon">🎓</span>
-                            <div>
-                                <span class="info-label">Education</span>
-                                <span class="info-value">BBA - North South University</span>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="MD-Sajid-Kamal-CV.pdf" download class="btn btn-primary">
-                        <span>Download CV</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="section section--rule" aria-labelledby="writing-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">02</span>
+        <h2 class="h-section" id="writing-title">Notes from the shelf</h2>
+        <p class="lead">Essays on building brands, retail and how people in Bangladesh shop.</p>
+      </div>
+      <a class="link-arrow" href="{{ '/writing/' | relative_url }}">All writing <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+    <div class="post-list">
+      {%- for post in site.posts limit: 3 %}
+      {% include post-row.html post=post %}
+      {%- endfor %}
+    </div>
+    {% include newsletter.html %}
+  </div>
+</section>
 
-    <!-- Experience Section -->
-    <section class="experience section" id="experience">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">Career Journey</span>
-                <h2 class="section-title">Professional <span class="gradient-text">Experience</span></h2>
-            </div>
-            <div class="timeline">
-                <div class="timeline-item" data-aos="fade-up">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Brand Manager</h3>
-                                <span class="timeline-company">Ghorerbazar</span>
-                            </div>
-                            <span class="timeline-date">May 2025 - Present</span>
-                        </div>
-                        <ul class="timeline-list">
-                            <li>Developed new product categories: Honey Portfolio, Mustard Oil, Gawa Ghee, Functional Foods</li>
-                            <li>Brought sales growth to <strong>140%</strong> through strategic campaigns</li>
-                            <li>Designed RTM for retail market penetration - first time in company history</li>
-                            <li>Developed brand-wise P&L and margin monitoring dashboard</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span>GTM Strategy</span>
-                            <span>P&L Management</span>
-                            <span>RTM Design</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item" data-aos="fade-up">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Brand Strategist & Lead, Digital Marketing</h3>
-                                <span class="timeline-company">Akij Bakers Ltd.</span>
-                            </div>
-                            <span class="timeline-date">Mar 2024 - Apr 2025</span>
-                        </div>
-                        <ul class="timeline-list">
-                            <li>Developed two new product categories: Chanachur and Chocolate</li>
-                            <li>Executed <strong>100+ integrated digital campaigns</strong> across multiple channels</li>
-                            <li>Led rebranding initiative for English Medium School</li>
-                            <li>Coordinated corporate branding for Akij Insaf Group</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span>Digital Marketing</span>
-                            <span>Brand Architecture</span>
-                            <span>Campaign Management</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item" data-aos="fade-up">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Assistant Brand Manager</h3>
-                                <span class="timeline-company">Remark HB Limited</span>
-                            </div>
-                            <span class="timeline-date">Jul 2023 - Feb 2024</span>
-                        </div>
-                        <ul class="timeline-list">
-                            <li>Launched GTM strategy for Herlan Cosmetics Portfolio</li>
-                            <li>Increased online sales by <strong>60%</strong> through digital campaigns</li>
-                            <li>Secured global media coverage for Herlan portfolio</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span>Cosmetics</span>
-                            <span>E-commerce</span>
-                            <span>Global PR</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item" data-aos="fade-up">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Brand Executive</h3>
-                                <span class="timeline-company">Meghna Group of Industries (MGI)</span>
-                            </div>
-                            <span class="timeline-date">Jul 2022 - Jun 2023</span>
-                        </div>
-                        <ul class="timeline-list">
-                            <li>Designed Trade Programs achieving <strong>172% sales growth</strong> for Noodles</li>
-                            <li>Achieved <strong>158% sales growth</strong> for Snacks & Confectionery</li>
-                            <li>Developed MGI flagship store program with 50+ dedicated stores</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span>Trade Marketing</span>
-                            <span>Sales Growth</span>
-                            <span>Channel Development</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item" data-aos="fade-up">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <div>
-                                <h3 class="timeline-title">Brand Executive</h3>
-                                <span class="timeline-company">Akij Bakers Ltd.</span>
-                            </div>
-                            <span class="timeline-date">Jul 2020 - Jun 2022</span>
-                        </div>
-                        <ul class="timeline-list">
-                            <li>Built <strong>3 brands from scratch</strong> (Yum, Funtastic & Fast) - 2nd highest market share</li>
-                            <li>Launched 22 Cake SKUs, 7 Bread SKUs & 6 Bun SKUs</li>
-                            <li>Led development of official corporate website</li>
-                        </ul>
-                        <div class="timeline-tags">
-                            <span>Brand Building</span>
-                            <span>Product Launch</span>
-                            <span>Digital Platforms</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="section section--rule" aria-labelledby="about-title">
+  <div class="container split">
+    <div data-reveal>
+      <span class="section-num">03</span>
+      <h2 class="sr-only" id="about-title">About me</h2>
+      {%- comment -%} COPY: your point of view in one sentence. Alternatives in CONTENT-GUIDE.md {%- endcomment %}
+      <blockquote class="pullquote" data-placeholder>Great brands are built where people buy, not only where they scroll.</blockquote>
+    </div>
+    <div class="teaser-text" data-reveal>
+      <p>
+        I started in brand management at Akij Bakers in 2020, building three bakery brands from nothing:
+        Yum, Funtastic and Fast. Since then I’ve worked across food, health and beauty, designing trade
+        programs at Meghna Group, launching Herlan cosmetics at Remark HB, running more than 100 digital
+        campaigns and, today, building new categories at Ghorer Bazar.
+      </p>
+      <p>
+        Alongside my job I founded Sui Chokri, which connected 156 neighbourhood tailor shops with customers
+        and indie brands.
+      </p>
+      <div class="link-row">
+        <a class="link-arrow" href="{{ '/about/' | relative_url }}">More about me <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="link-arrow" href="{{ site.cv | relative_url }}" download>Download CV (PDF) <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Skills Section -->
-    <section class="skills section" id="skills">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">Expertise</span>
-                <h2 class="section-title">Skills & <span class="gradient-text">Capabilities</span></h2>
-            </div>
-            <div class="skills-grid">
-                <div class="skill-category" data-aos="fade-up">
-                    <div class="skill-icon">🎯</div>
-                    <h3 class="skill-category-title">Marketing & Strategy</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Brand Development</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="95"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Digital Marketing</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Campaign Management</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="92"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Go-to-Market Strategy</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="88"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
-                    <div class="skill-icon">📊</div>
-                    <h3 class="skill-category-title">Analytics & Research</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">Market Research</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="88"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Data Analysis</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Business Intelligence</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="82"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Consumer Insights</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
-                    <div class="skill-icon">💻</div>
-                    <h3 class="skill-category-title">Technical Skills</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="skill-name">MS Excel</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="90"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Figma</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="75"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Python & SQL</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="70"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Google Analytics</span>
-                            <div class="skill-bar"><div class="skill-progress" data-width="85"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="certifications" data-aos="fade-up">
-                <h3 class="cert-title">Certifications</h3>
-                <div class="cert-grid">
-                    <div class="cert-item">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" class="cert-logo">
-                        <span>Google Analytics 4</span>
-                    </div>
-                    <div class="cert-item">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" class="cert-logo">
-                        <span>Google Ads</span>
-                    </div>
-                    <div class="cert-item">
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Meta" class="cert-logo">
-                        <span>Meta Business Suite</span>
-                    </div>
-                    <div class="cert-item">
-                        <div class="cert-logo cert-logo-text">AD</div>
-                        <span>Digital Ad Expert</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact section" id="contact">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">Get In Touch</span>
-                <h2 class="section-title">Let's <span class="gradient-text">Connect</span></h2>
-                <p class="section-description">Have a project in mind or want to discuss brand strategy? I'd love to hear from you.</p>
-            </div>
-            <div class="contact-grid">
-                <div class="contact-info" data-aos="fade-right">
-                    <div class="contact-card">
-                        <div class="contact-icon">📧</div>
-                        <h4>Email</h4>
-                        <a href="mailto:sajidkamal214@gmail.com">sajidkamal214@gmail.com</a>
-                    </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">📱</div>
-                        <h4>Phone</h4>
-                        <a href="tel:+8801732101111">+880 1732-101111</a>
-                    </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">📍</div>
-                        <h4>Location</h4>
-                        <span>Banasree, Rampura, Dhaka</span>
-                    </div>
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/sajid-kamal/" target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                            </svg>
-                        </a>
-                        <a href="https://github.com/the-sajid-kamal" target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                            </svg>
-                        </a>
-                        <a href="https://www.facebook.com/mohammad.sajid.kamal/" target="_blank" rel="noopener" class="social-link" aria-label="Facebook">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                            </svg>
-                        </a>
-                        <a href="mailto:sajidkamal214@gmail.com" class="social-link" aria-label="Email">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <!--
-                    Contact form, delivered by FormSubmit (formsubmit.co).
-                    - action: used when JavaScript is off (FormSubmit shows its own page, then returns to _next).
-                    - data-endpoint: FormSubmit's JSON endpoint, used by js/main.js so the visitor stays on the page.
-                    - data-fallback-email: shown to the visitor if sending fails.
-                    The first message sent to a new address triggers an activation email from FormSubmit;
-                    nothing is delivered until the "Activate Form" link in it has been clicked.
-                -->
-                <form class="contact-form" data-aos="fade-left"
-                      action="https://formsubmit.co/sajidkamal214@gmail.com"
-                      data-endpoint="https://formsubmit.co/ajax/sajidkamal214@gmail.com"
-                      data-fallback-email="sajidkamal214@gmail.com"
-                      method="POST">
-                    <input type="hidden" name="_subject" value="New message from thesajidkamal.me">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_next" value="https://thesajidkamal.me/?submitted=true">
-                    <!-- Spam trap: hidden from people; FormSubmit discards any message where a bot filled it in -->
-                    <input type="text" name="_honey" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-                    <div class="form-group">
-                        <input type="text" name="name" id="name" required placeholder=" ">
-                        <label for="name">Your Name</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" name="email" id="email" required placeholder=" ">
-                        <label for="email">Your Email</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" name="subject" id="subject" placeholder=" ">
-                        <label for="subject">Subject</label>
-                    </div>
-                    <div class="form-group">
-                        <textarea name="message" id="message" rows="5" required placeholder=" "></textarea>
-                        <label for="message">Your Message</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full">
-                        <span>Send Message</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-                        </svg>
-                    </button>
-                    <p class="form-status" role="status" aria-live="polite"></p>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <span class="footer-logo">the<span class="logo-accent">sajid</span>kamal</span>
-                <p>&copy; 2026 MD Sajid Kamal. All rights reserved.</p>
-                <p class="footer-tagline">Crafted with passion in Dhaka, Bangladesh</p>
-                <p class="footer-privacy">
-                    This site uses Umami, Google Tag Manager and Microsoft Clarity to understand how visitors use it.
-                    Clarity records clicks, scrolling and session replays. By using this site, you agree that Microsoft and I
-                    can collect and use this data. See the
-                    <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft Privacy Statement</a>.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/particles.js"></script>
-    <script src="js/main.js"></script>
-</body>
-</html>
+{%- if site.data.home.testimonials and site.data.home.testimonials.size > 0 %}
+<section class="section section--rule" aria-labelledby="quotes-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <span class="section-num">04</span>
+        <h2 class="h-section" id="quotes-title">Kind words</h2>
+      </div>
+    </div>
+    <div class="quotes">
+      {%- for t in site.data.home.testimonials %}
+      <figure class="quote-card" data-reveal>
+        <blockquote{% if t.placeholder %} class="placeholder"{% endif %}>{{ t.quote }}</blockquote>
+        <figcaption{% if t.placeholder %} class="placeholder"{% endif %}><strong>{{ t.name }}</strong>{{ t.role }}</figcaption>
+      </figure>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}

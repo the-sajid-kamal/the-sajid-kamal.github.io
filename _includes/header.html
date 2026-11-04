@@ -1,0 +1,21 @@
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a class="wordmark" href="{{ '/' | relative_url }}">{{ site.title }}<span class="wordmark__dot" aria-hidden="true">.</span></a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
+      <span class="menu-toggle__label" data-menu-label>Menu</span>
+      <span class="menu-toggle__icon" aria-hidden="true"></span>
+    </button>
+
+    <nav class="site-nav" id="site-menu" aria-label="Main">
+      <ul class="site-nav__list">
+        {%- for item in site.data.navigation %}
+        {%- assign is_current = false %}
+        {%- if page.url contains item.url %}{% assign is_current = true %}{% endif %}
+        <li><a class="site-nav__link" href="{{ item.url | relative_url }}"{% if is_current %} aria-current="page"{% endif %}>{{ item.title }}</a></li>
+        {%- endfor %}
+        <li class="site-nav__cta"><a class="button button--primary button--small" href="{{ '/contact/' | relative_url }}"{% if page.url contains '/contact/' %} aria-current="page"{% endif %}>Get in touch</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

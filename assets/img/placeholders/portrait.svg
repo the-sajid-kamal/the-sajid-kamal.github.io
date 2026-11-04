@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-label="Your portrait placeholder">
+  <defs>
+    <pattern id="stripes" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="24" height="24" fill="rgb(128,110,90)" fill-opacity="0.10"/>
+      <line x1="0" y1="0" x2="0" y2="24" stroke="rgb(128,110,90)" stroke-opacity="0.10" stroke-width="6"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#stripes)"/>
+  <g fill="none" stroke="rgb(110,96,80)" stroke-opacity="0.55" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" transform="translate(558.0 645.0)">
+    <rect x="0" y="0" width="84" height="65.5" rx="6.7"/>
+    <circle cx="26.9" cy="23.5" r="7.6"/>
+    <path d="M5.0 58.8 L31.9 35.3 L50.4 52.1 L62.2 42.0 L79.0 58.8"/>
+  </g>
+  <text x="600.0" y="771.6" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="54" fill="rgb(90,78,64)" fill-opacity="0.85">Your portrait</text>
+  <text x="600.0" y="825.6" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="27" letter-spacing="3.2" fill="rgb(90,78,64)" fill-opacity="0.7">PLACEHOLDER · 1200 × 1500 · 4:5</text>
+</svg>
