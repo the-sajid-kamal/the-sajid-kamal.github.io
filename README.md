@@ -168,6 +168,8 @@ If you'd rather edit visually later, the design here can be rebuilt in Framer.
 Google Tag Manager, Umami and Microsoft Clarity load on every page (IDs in `src/site.config.ts`;
 set one to `''` to switch it off). Cloudflare Web Analytics, which is free and cookie-free, can be
 added with its token. The footer carries the visitor notice Microsoft recommends for Clarity.
+Analytics never load in `npm run dev`, or in a build made with `PUBLIC_ANALYTICS=off npm run build`,
+so your own previews don't count as visits.
 
 Pages change without a full reload, for smooth transitions. Umami and Clarity track this
 automatically; in Google Tag Manager, use a *History Change* trigger for page views.
