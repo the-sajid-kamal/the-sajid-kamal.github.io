@@ -1,0 +1,14 @@
+---
+// Numbered section heading with an optional intro line and link.
+// The title may contain <em>…</em> for the accent italic.
+interface Props { num?: string; title: string; lead?: string; id?: string; link?: { href: string; label: string } }
+const { num, title, lead, id, link } = Astro.props;
+---
+<div class="section-head">
+  <div class="section-head__text">
+    {num && <span class="section-num">{num}</span>}
+    <h2 class="h-section" id={id} set:html={title} />
+    {lead && <p class="lead">{lead}</p>}
+  </div>
+  {link && <a class="link-arrow" href={link.href}>{link.label} <span class="arrow" aria-hidden="true">→</span></a>}
+</div>

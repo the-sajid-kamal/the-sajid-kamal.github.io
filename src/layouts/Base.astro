@@ -1,0 +1,77 @@
+---
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/inter/index.css';
+import '@fontsource-variable/noto-serif-bengali/index.css';
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { site } from '../site.config';
+import Seo from '../components/Seo.astro';
+import Analytics from '../components/Analytics.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article' | 'profile';
+  published?: Date;
+  person?: boolean;
+  hideCta?: boolean;
+  noindex?: boolean;
+}
+const { hideCta = false, ...seo } = Astro.props;
+---
+<!doctype html>
+<html lang="en" data-palette={site.palette} data-default-palette={site.palette}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      /* Before the page is drawn: light or dark theme (saved choice, else the device
+         setting), plus anything picked in the owner preview (?preview). Re-applied
+         after each page change. */
+      (function () {
+        var d = document.documentElement;
+        function apply() {
+          var theme = null, preview = {};
+          try { theme = localStorage.getItem('theme'); } catch (e) {}
+          try { preview = JSON.parse(sessionStorage.getItem('owner-preview') || '{}'); } catch (e) {}
+          var palette = new URLSearchParams(location.search).get('palette') || (preview.on && preview.palette);
+          if (palette) d.setAttribute('data-palette', palette);
+          if (theme !== 'light' && theme !== 'dark') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          d.setAttribute('data-theme', theme);
+          d.classList.toggle('show-placeholders', !!(preview.on && preview.placeholders));
+          d.classList.add('js');
+        }
+        apply();
+        if (!window.__siteThemeHook) {
+          window.__siteThemeHook = true;
+          document.addEventListener('astro:after-swap', apply);
+        }
+      })();
+    </script>
+    <Seo {...seo} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name}: writing`} href="/writing/feed.xml" />
+    <meta name="theme-color" content="#F6F1E9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121315" media="(prefers-color-scheme: dark)" />
+    <Analytics />
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    {!hideCta && <CtaBand />}
+    <Footer />
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>

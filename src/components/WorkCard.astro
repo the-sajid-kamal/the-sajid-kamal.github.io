@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import CoverArt from './CoverArt.astro';
+import { photo } from '../lib/photos';
+
+interface Props { project: CollectionEntry<'work'>; index?: number }
+const { project, index = 0 } = Astro.props;
+const { data, id } = project;
+const cover = photo(`work/${id}`);
+---
+<article class="work-card" data-category={data.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')} data-reveal>
+  <a class="work-card__link" href={`/work/${id}/`}>
+    <div class="work-card__media" transition:name={`work-media-${id}`}>
+      {cover ? (
+        <Image src={cover} alt="" widths={[480, 720, 960, 1280]} sizes="(max-width: 760px) 92vw, 46vw" />
+      ) : (
+        <CoverArt kicker={data.category} value={data.art.value} label={data.art.label} tone={index + 1} />
+      )}
+    </div>
+    <div class="work-card__body">
+      <p class="meta">{data.client} · {data.year}</p>
+      <h3 class="work-card__title">{data.title}</h3>
+      <p class="work-card__summary">{data.summary}</p>
+      <span class="link-arrow">Read the case study <span class="arrow" aria-hidden="true">→</span></span>
+    </div>
+  </a>
+</article>

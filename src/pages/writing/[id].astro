@@ -1,0 +1,81 @@
+---
+// One article. The text comes from src/content/writing/<id>.md;
+// a cover photo is picked up from src/assets/photos/writing/<id>.jpg.
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import CoverArt from '../../components/CoverArt.astro';
+import PostCard from '../../components/PostCard.astro';
+import { site } from '../../site.config';
+import { photo } from '../../lib/photos';
+import { formatDate, readingTime, isPlaceholder } from '../../lib/util';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('writing', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return posts.map((post) => ({ params: { id: post.id }, props: { post, others: posts.filter((p) => p.id !== post.id).slice(0, 3) } }));
+}
+
+const { post, others } = Astro.props;
+const { data, id } = post;
+const { Content } = await render(post);
+const cover = photo(`writing/${id}`);
+const headshot = photo('headshot');
+const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(new URL(`/writing/${id}/`, site.url).href)}`;
+---
+<Base title={data.title} description={isPlaceholder(data.excerpt) ? site.description : data.excerpt} type="article" published={data.date}>
+  <div class="reading-progress" aria-hidden="true" data-reading-progress></div>
+  <article data-article>
+    <header class="article-head container">
+      <a class="back-link" href="/writing/"><span class="arrow" aria-hidden="true">←</span> All writing</a>
+      <p class="eyebrow">{data.topic} · {readingTime(post.body)}</p>
+      <h1 class="article-title">{data.title}</h1>
+      {data.dek && <p class:list={['article-dek', isPlaceholder(data.dek) && 'placeholder']}>{data.dek}</p>}
+      <div class="byline">
+        <span class="avatar">{headshot ? <Image src={headshot} alt="" width={92} height={92} /> : 'SK'}</span>
+        <p><strong>{site.name}</strong><time datetime={data.date.toISOString()}>{formatDate(data.date)}</time></p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="article-media" transition:name={`post-media-${id}`}>
+        {cover ? (
+          <Image src={cover} alt="" widths={[720, 1080, 1440, 2000]} sizes="(max-width: 1340px) 94vw, 1240px" loading="eager" />
+        ) : (
+          <CoverArt kicker={`Essay · ${formatDate(data.date, 'short')}`} value={data.topic} tone={3} variant="title" />
+        )}
+      </div>
+
+      <div class="prose">
+        {data.placeholder && (
+          <p class="placeholder-note" role="note"><strong>Placeholder article.</strong> Text in [square brackets] is a stand-in for your own writing.</p>
+        )}
+        <Content />
+      </div>
+
+      <div class="share-row">
+        <span>Share this essay</span>
+        <a class="link-arrow" href={shareUrl} target="_blank" rel="noopener">LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        <button class="btn btn--ghost btn--small" type="button" data-copy="url" hidden>Copy link</button>
+      </div>
+
+      <aside class="author-box" aria-label="About the author">
+        <span class="avatar">{headshot ? <Image src={headshot} alt="" width={128} height={128} /> : 'SK'}</span>
+        <p><strong>{site.name}</strong>{site.role} at {site.company}. I write about building brands, retail and how people in Bangladesh shop. <a class="text-link" href="/about/">More about me</a></p>
+      </aside>
+    </div>
+  </article>
+
+  {others.length > 0 && (
+    <section class="section section--rule" aria-labelledby="more-title" style="margin-top: var(--section)">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="h-section" id="more-title">More writing</h2>
+          <a class="link-arrow" href="/writing/">All writing <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <div class="post-grid">
+          {others.map((p, i) => <PostCard post={p} index={i + 1} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Base>

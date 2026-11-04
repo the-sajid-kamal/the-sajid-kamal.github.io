@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import CoverArt from './CoverArt.astro';
+import { photo } from '../lib/photos';
+import { formatDate, readingTime, isPlaceholder } from '../lib/util';
+
+interface Props { post: CollectionEntry<'writing'>; index?: number }
+const { post, index = 0 } = Astro.props;
+const { data, id } = post;
+const cover = photo(`writing/${id}`);
+---
+<article class="post-card" data-reveal>
+  <a class="post-card__link" href={`/writing/${id}/`}>
+    <div class="post-card__media" transition:name={`post-media-${id}`}>
+      {cover ? (
+        <Image src={cover} alt="" widths={[420, 640, 900]} sizes="(max-width: 640px) 92vw, (max-width: 960px) 46vw, 30vw" />
+      ) : (
+        <CoverArt kicker={`Essay · ${formatDate(data.date, 'short')}`} value={data.topic} tone={[3, 1, 2][index % 3]} variant="title" />
+      )}
+    </div>
+    <div class="post-card__body">
+      <p class="meta">{data.topic} · {readingTime(post.body)}</p>
+      <h3 class="post-card__title">{data.title}</h3>
+      <p class:list={['post-card__excerpt', isPlaceholder(data.excerpt) && 'placeholder']}>{data.excerpt}</p>
+    </div>
+  </a>
+</article>

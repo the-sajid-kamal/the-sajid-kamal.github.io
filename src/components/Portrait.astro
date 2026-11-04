@@ -1,0 +1,39 @@
+---
+// Arched portrait. Uses src/assets/photos/<photo>.jpg if it exists,
+// otherwise shows a designed placeholder with your initials.
+import { Image } from 'astro:assets';
+import { site } from '../site.config';
+import { photo } from '../lib/photos';
+
+interface Props { photo?: string; priority?: boolean; signature?: boolean; now?: boolean }
+const { photo: name = 'portrait', priority = false, signature = false, now = false } = Astro.props;
+const img = photo(name);
+---
+<div class="hero__visual">
+  <div class="arch">
+    <div class="arch__frame">
+      {img ? (
+        <Image
+          src={img}
+          alt={`Portrait of ${site.name}`}
+          widths={[420, 640, 900, 1200]}
+          sizes="(max-width: 900px) 86vw, 34vw"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchpriority={priority ? 'high' : 'auto'}
+        />
+      ) : (
+        <div class="arch-placeholder" data-placeholder role="img" aria-label={`Portrait of ${site.name} (placeholder)`}>
+          <span class="arch-placeholder__mark" aria-hidden="true">SK</span>
+          <span class="arch-placeholder__note" aria-hidden="true">Portrait placeholder</span>
+        </div>
+      )}
+    </div>
+  </div>
+  {now && (
+    <p class="now-card">
+      <span class="pulse" aria-hidden="true"></span>
+      <span><strong>Now</strong>Designing Ghorer Bazar’s first route-to-market for retail.</span>
+    </p>
+  )}
+  {signature && site.nameBangla && <span class="signature" lang="bn" aria-hidden="true">{site.nameBangla}</span>}
+</div>

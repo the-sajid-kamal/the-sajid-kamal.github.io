@@ -1,9 +1,13 @@
-# Builds the site with Jekyll (the same version GitHub Pages uses).
+# Builds and checks the site on every push and pull request.
 #
-# - Every push and pull request is built, so a mistake shows up as a red
-#   cross on GitHub before it reaches the live site.
-# - Only pushes to main are published to https://thesajidkamal.me.
-name: Build and deploy site
+# Hosting:
+#  - Cloudflare Pages (recommended): Cloudflare builds the site itself from
+#    this repository; see README.md. Once it is live there, go to
+#    Settings → Secrets and variables → Actions → Variables and add
+#    DEPLOY_TARGET = cloudflare, so this workflow stops publishing to GitHub Pages.
+#  - GitHub Pages (current): pushes to main are published to GitHub Pages
+#    automatically, as before.
+name: Build site
 
 on:
   push:
@@ -24,22 +28,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          source: ./
-          destination: ./_site
-      - name: Upload site
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+          node-version-file: .node-version
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Test the contact form function
+        run: npm run test:contact
+      - name: Build
+        run: npm run build
+      - name: Upload site for GitHub Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.DEPLOY_TARGET != 'cloudflare'
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.DEPLOY_TARGET != 'cloudflare'
     needs: build
     runs-on: ubuntu-latest
-    # Allow only one deployment at a time, and don't cancel one in progress
     concurrency:
       group: pages
       cancel-in-progress: false

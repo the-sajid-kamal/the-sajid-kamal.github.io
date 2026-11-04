@@ -1,0 +1,17 @@
+---
+// Slow-scrolling band of products. Pauses on hover; still for reduced motion.
+import { shelf } from '../data/home';
+---
+<section class="marquee" aria-labelledby="shelf-title">
+  <div class="container marquee__head">
+    <p class="eyebrow" id="shelf-title">Brought to the shelf</p>
+  </div>
+  <div class="marquee__viewport">
+    <ul class="marquee__track">
+      {shelf.map((item) => <li class="marquee__item">{item}</li>)}
+    </ul>
+    <ul class="marquee__track" aria-hidden="true">
+      {shelf.map((item) => <li class="marquee__item">{item}</li>)}
+    </ul>
+  </div>
+</section>

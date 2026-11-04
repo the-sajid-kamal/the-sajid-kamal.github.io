@@ -1,0 +1,14 @@
+---
+// A designed, typographic cover used until a project or article has a photo.
+interface Props { kicker: string; value: string; label?: string; tone?: number; variant?: 'metric' | 'title' }
+const { kicker, value, label, tone = 1, variant = 'metric' } = Astro.props;
+const toneClass = `cover-art--${((tone - 1) % 4) + 1}`;
+---
+<div class:list={['cover-art', toneClass, variant === 'title' && 'cover-art--title']} aria-hidden="true">
+  <span class="cover-art__kicker">{kicker}</span>
+  <span class="cover-art__mark">SK.</span>
+  <span>
+    <span class="cover-art__value">{value}</span>
+    {label && <span class="cover-art__label">{label}</span>}
+  </span>
+</div>

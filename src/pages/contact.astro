@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../site.config';
+import { resolveHref, isExternal } from '../lib/util';
+
+const booking = resolveHref('booking');
+const reasons = [
+  { topic: 'hiring', title: 'Hiring', text: 'A brand or marketing role' },
+  { topic: 'consulting', title: 'Consulting', text: 'Help with a brand or launch' },
+  { topic: 'venture', title: 'Ventures', text: 'Investing or building together' },
+  { topic: 'speaking', title: 'Speaking', text: 'Events, classes and media' },
+  { topic: 'other', title: 'Hello', text: 'Anything else' },
+];
+---
+<Base title="Contact" description="Get in touch with Sajid Kamal about a role, consulting, a venture, speaking or anything else." hideCta>
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Contact</p>
+      <h1 class="page-title">Let’s <em>talk</em>.</h1>
+      <p class="lead">Whether you’re hiring, building a brand, backing a founder or planning an event, I’d be glad to hear from you. Pick what it’s about and send a note.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <nav class="reasons" aria-label="What would you like to talk about?">
+        {reasons.map((r) => (
+          <a class="reason-card" href={`/contact/?topic=${r.topic}#message`} data-topic={r.topic}>
+            <strong>{r.title}</strong>
+            <span>{r.text}</span>
+          </a>
+        ))}
+      </nav>
+
+      <div class="contact-grid">
+        <div>
+          <a class="big-link" href={`mailto:${site.email}`}>{site.email}</a>
+          <ul class="contact-details">
+            <li><span class="contact-details__label">LinkedIn</span><a href={site.profiles.linkedin} target="_blank" rel="me noopener">linkedin.com/in/sajid-kamal</a></li>
+            {site.phone && <li><span class="contact-details__label">Phone</span><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></li>}
+            <li><span class="contact-details__label">Based in</span><span>{site.location}</span></li>
+            <li><span class="contact-details__label">Call</span><a href={booking} target={isExternal(booking) ? '_blank' : undefined} rel={isExternal(booking) ? 'noopener' : undefined}>Book 30 minutes</a></li>
+            <li><span class="contact-details__label">CV</span><a href={site.cv} download data-astro-reload>Download (PDF)</a></li>
+          </ul>
+        </div>
+
+        <div class="form-card" id="message">
+          <h2>Send a message</h2>
+          <p class="placeholder">[I usually reply within two working days.]</p>
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

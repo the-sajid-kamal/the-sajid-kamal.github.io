@@ -1,0 +1,14 @@
+---
+import { principles } from '../data/home';
+---
+<ol class="principles">
+  {principles.map((p, i) => (
+    <li class="principle" data-reveal>
+      <span class="principle__num">{String(i + 1).padStart(2, '0')}</span>
+      <div>
+        <h3 class="principle__title">{p.title}</h3>
+        <p class="principle__text">{p.text}</p>
+      </div>
+    </li>
+  ))}
+</ol>

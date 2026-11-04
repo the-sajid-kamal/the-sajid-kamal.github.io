@@ -1,0 +1,21 @@
+---
+// "The story so far". compact = the short home-page version.
+import { chapters } from '../data/story';
+import { isPlaceholder } from '../lib/util';
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+<ol class="chapters" data-chapters>
+  {chapters.map((c) => (
+    <li class="chapter" data-chapter>
+      <p class="chapter__when">{c.years}</p>
+      <div class="chapter__body">
+        {c.place && <p class="chapter__place">{c.place}</p>}
+        <h3 class:list={['chapter__title', isPlaceholder(c.title) && 'placeholder']}>{c.title}</h3>
+        <p class:list={['chapter__text', isPlaceholder(compact ? c.short : c.text) && 'placeholder']}>{compact ? c.short : c.text}</p>
+        {!compact && c.lesson && <p class="chapter__lesson">{c.lesson}</p>}
+        {c.metric && <span class="chapter__metric"><strong>{c.metric.value}</strong>{c.metric.label}</span>}
+      </div>
+    </li>
+  ))}
+</ol>

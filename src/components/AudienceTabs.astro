@@ -1,0 +1,38 @@
+---
+// "How I can help": one tab per kind of visitor. Content lives in src/data/home.ts.
+// Without JavaScript the panels simply stack, so nothing is ever hidden.
+import { audiences } from '../data/home';
+import { resolveHref, isExternal, isPlaceholder } from '../lib/util';
+---
+<div class="audience" data-tabs>
+  <div class="audience__tabs" role="tablist" aria-label="I’m here for">
+    {audiences.map((a, i) => (
+      <button class="audience__tab" type="button" role="tab" id={`tab-${a.id}`} aria-controls={a.id} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{a.tab}</button>
+    ))}
+  </div>
+  {audiences.map((a) => {
+    const primary = resolveHref(a.primary.href);
+    const secondary = resolveHref(a.secondary.href);
+    return (
+      <section class="audience__panel" id={a.id} role="tabpanel" aria-labelledby={`tab-${a.id}`}>
+        <div class="audience__pitch">
+          <p class="eyebrow">{a.eyebrow}</p>
+          <h3 class="audience__title">{a.title}</h3>
+          <p>{a.text}</p>
+          <div class="actions">
+            <a class="btn btn--primary" href={primary} download={a.primary.href === 'cv' ? '' : undefined} data-astro-reload={a.primary.href === 'cv' ? '' : undefined}>{a.primary.label}</a>
+            <a class="link-arrow" href={secondary} target={isExternal(secondary) ? '_blank' : undefined} rel={isExternal(secondary) ? 'noopener' : undefined}>{a.secondary.label} <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <ul class="proof-list">
+          {a.proof.map((p) => (
+            <li class:list={['proof-item', isPlaceholder(p.label) && 'placeholder']}>
+              <span class="proof-item__value">{p.value}</span>
+              <span class="proof-item__label">{p.label}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  })}
+</div>

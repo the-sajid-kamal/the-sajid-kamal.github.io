@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import WorkCard from '../../components/WorkCard.astro';
+
+const projects = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const categories = [...new Set(projects.map((p) => p.data.category))];
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+<Base title="Work" description="Selected projects by Sajid Kamal: brand builds, category launches, trade programs and a startup, across food, health and beauty in Bangladesh.">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Selected work</p>
+      <h1 class="page-title">Brands, launches and <em>one startup</em>.</h1>
+      <p class="lead">Six years of FMCG work across bakery, snacks, noodles, honey, oils and cosmetics. Each case study covers the brief, what I did and what happened next.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="filters" role="group" aria-label="Filter projects by type" data-filter-bar>
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        {categories.map((c) => <button class="chip" type="button" data-filter={slug(c)} aria-pressed="false">{c}</button>)}
+      </div>
+      <div class="work-grid work-grid--flat" data-filter-grid>
+        {projects.map((project, i) => <WorkCard project={project} index={i} />)}
+      </div>
+    </div>
+  </section>
+</Base>

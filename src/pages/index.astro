@@ -1,0 +1,106 @@
+---
+// HOME PAGE. Most text here is drawn from your CV; alternatives are in CONTENT-GUIDE.md.
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Portrait from '../components/Portrait.astro';
+import Marquee from '../components/Marquee.astro';
+import SectionHead from '../components/SectionHead.astro';
+import AudienceTabs from '../components/AudienceTabs.astro';
+import WorkCard from '../components/WorkCard.astro';
+import Stats from '../components/Stats.astro';
+import Chapters from '../components/Chapters.astro';
+import Principles from '../components/Principles.astro';
+import PostCard from '../components/PostCard.astro';
+import Testimonials from '../components/Testimonials.astro';
+import { site } from '../site.config';
+import { companies, testimonials } from '../data/home';
+
+const work = (await getCollection('work')).filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const posts = (await getCollection('writing', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
+---
+<Base person>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow hero__fade">{site.roles.join(' · ')} · Dhaka</p>
+        <h1 class="display hero__title">
+          <span class="line"><span>I build brands</span></span>
+          <span class="line"><span>people <em>reach for</em>.</span></span>
+        </h1>
+        <p class="hero__intro hero__fade">
+          I’m <strong>Sajid Kamal</strong>, {site.role} at {site.company}. For six years I’ve taken food and beauty products
+          from idea to shelf in Bangladesh: three brands built from scratch, four new categories, 100+ campaigns, and a startup
+          that put 156 neighbourhood tailors on one network.
+        </p>
+        <div class="actions hero__fade">
+          <a class="btn btn--primary" href="/work/">See my work</a>
+          <a class="btn btn--ghost" href="#how-i-can-help">How I can help</a>
+        </div>
+      </div>
+      <Portrait priority signature now />
+    </div>
+  </section>
+
+  <section class="brands" aria-label="Companies I have worked with">
+    <div class="container brands__inner">
+      <p class="brands__label">Worked with</p>
+      <ul class="brands__list">{companies.map((c) => <li>{c}</li>)}</ul>
+    </div>
+  </section>
+
+  <Marquee />
+
+  <section class="section section--rule" aria-labelledby="help-title" id="how-i-can-help">
+    <div class="container">
+      <SectionHead num="01" id="help-title" title="How I can <em>help</em>" lead="Whether you’re hiring, investing, building a brand or planning an event, start here." />
+      <AudienceTabs />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="work-title">
+    <div class="container">
+      <SectionHead num="02" id="work-title" title="Selected work" lead="Launches, brand builds, trade programs and a startup, with the numbers behind them." link={{ href: '/work/', label: 'All projects' }} />
+      <div class="work-grid">
+        {work.map((project, i) => <WorkCard project={project} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--night" aria-label="In numbers">
+    <div class="container">
+      <Stats />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="story-title">
+    <div class="container">
+      <SectionHead num="03" id="story-title" title="The story <em>so far</em>" lead="From first-aid trainer to brand builder and founder, one chapter at a time." link={{ href: '/about/', label: 'The full story' }} />
+      <Chapters compact />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="principles-title">
+    <div class="container">
+      <SectionHead num="04" id="principles-title" title="How I work" />
+      <Principles />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="writing-title">
+    <div class="container">
+      <SectionHead num="05" id="writing-title" title="Notes from <em>the shelf</em>" lead="Essays on building brands, retail and how people in Bangladesh shop." link={{ href: '/writing/', label: 'All writing' }} />
+      <div class="post-grid">
+        {posts.map((post, i) => <PostCard post={post} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  {testimonials.length > 0 && (
+    <section class="section section--rule" aria-labelledby="quotes-title">
+      <div class="container">
+        <SectionHead num="06" id="quotes-title" title="Kind words" />
+        <Testimonials />
+      </div>
+    </section>
+  )}
+</Base>

@@ -1,0 +1,162 @@
+---
+// ABOUT PAGE. The bio is written from the CV; edit it freely.
+import Base from '../layouts/Base.astro';
+import Portrait from '../components/Portrait.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Chapters from '../components/Chapters.astro';
+import { site } from '../site.config';
+import { experience, ventures, education, certifications, expertise, beyondWork, media } from '../data/career';
+import { isPlaceholder } from '../lib/util';
+---
+<Base title="About" description="About Sajid Kamal, FMCG brand strategist, Brand Manager at Ghorer Bazar and founder of Sui Chokri. Story, experience, education and a press kit." person type="profile">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">About</p>
+      <h1 class="page-title">Hello, I’m Sajid. I build brands people <em>reach for</em>.</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-hero">
+      <Portrait photo="about" />
+      <div class="about-hero__text">
+        <p>I’m an FMCG brand strategist in Dhaka. For more than six years I’ve worked on new product development, digital marketing and integrated campaigns, and on the systems that make brands grow.</p>
+        <p>Today I’m {site.role} at {site.company}. I’ve built new categories there, from a honey portfolio to mustard oil, gawa ghee and functional foods, and I’m designing the company’s first route-to-market for retail.</p>
+        <p>Before that I worked at Akij Bakers, Meghna Group and Remark HB: building three bakery brands from scratch, designing trade programs that lifted noodle sales by 172%, launching the Herlan cosmetics portfolio and running more than 100 digital campaigns.</p>
+        <p>Alongside my job I founded Sui Chokri, an “Uber for tailor shops” that connected 156 neighbourhood tailors with customers and indie brands, supported by the H&amp;M Foundation’s Needle Innovation Challenge.</p>
+        <p>I studied MIS and marketing at North South University, after starting at IBA, University of Dhaka. Before marketing, I trained more than 700 volunteers in emergency first aid with Criticalink.</p>
+        <p class="placeholder">[Optional: one personal line, such as what you do outside work or what you are curious about right now.]</p>
+        <div class="actions">
+          <a class="btn btn--primary" href={site.cv} download data-astro-reload>Download CV (PDF)</a>
+          <a class="link-arrow" href={site.profiles.linkedin} target="_blank" rel="me noopener">LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <dl class="glance">
+          <div><dt>Based in</dt><dd>Dhaka, Bangladesh</dd></div>
+          <div><dt>Now</dt><dd>{site.role}, {site.company}</dd></div>
+          <div><dt>Focus</dt><dd>Food, health and beauty brands</dd></div>
+          <div><dt>Open to</dt><dd>Roles, advisory, ventures and talks</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="story-title">
+    <div class="container">
+      <SectionHead num="01" id="story-title" title="The story <em>so far</em>" />
+      <Chapters />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="experience-title" id="experience">
+    <div class="container">
+      <SectionHead num="02" id="experience-title" title="Experience" link={{ href: site.cv, label: 'Full CV (PDF)' }} />
+      <ol class="timeline">
+        {experience.map((job) => (
+          <li class="timeline__item" data-reveal>
+            <p class="timeline__when">{job.dates}</p>
+            <div>
+              <h3 class="timeline__role">{job.role}</h3>
+              <p class="timeline__company">{job.company}</p>
+              <ul>{job.highlights.map((h) => <li>{h}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="ventures-title">
+    <div class="container">
+      <SectionHead num="03" id="ventures-title" title="Building and giving back" />
+      <ol class="timeline">
+        {ventures.map((v) => (
+          <li class="timeline__item" data-reveal>
+            <p class="timeline__when">{v.dates}</p>
+            <div>
+              <h3 class="timeline__role">{v.company}</h3>
+              <p class="timeline__company">{v.role}</p>
+              <ul>{v.highlights.map((h) => <li>{h}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="expertise-title">
+    <div class="container">
+      <SectionHead num="04" id="expertise-title" title="What I work on" />
+      <div class="expertise">
+        {expertise.map((g) => (
+          <div data-reveal>
+            <h3>{g.group}</h3>
+            <ul class="tag-list">{g.items.map((item) => <li class="tag">{item}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="learning-title">
+    <div class="container">
+      <SectionHead num="05" id="learning-title" title="Education and certifications" />
+      <div class="split">
+        <ul class="cred-list" aria-label="Education">
+          {education.map((e) => (
+            <li><span><span class="cred-list__name">{e.school}</span><span class="cred-list__detail">{e.degree}</span></span><span class="cred-list__year">{e.dates}</span></li>
+          ))}
+        </ul>
+        <ul class="cred-list" aria-label="Certifications">
+          {certifications.map((c) => (
+            <li><span><span class="cred-list__name">{c.name}</span><span class="cred-list__detail">{c.issuer} · {c.detail}</span></span><span class="cred-list__year">{c.year}</span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="beyond-title">
+    <div class="container">
+      <SectionHead num="06" id="beyond-title" title="Beyond work" />
+      <dl class="beyond">
+        {beyondWork.map((b) => (
+          <div data-reveal><dt>{b.label}</dt><dd class:list={[isPlaceholder(b.text) && 'placeholder']}>{b.text}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="media-title">
+    <div class="container">
+      <SectionHead num="07" id="media-title" title="Speaking and media" lead="[Placeholder: talks, panels, guest lectures, podcasts and interviews. Delete this section until you have your first one.]" />
+      <ul class="media-list">
+        {media.map((m) => (
+          <li class="placeholder"><span class="media-list__year">{m.year}</span><span>{m.title}</span><span>{m.where}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="press-title" id="press">
+    <div class="container split">
+      <div>
+        <span class="section-num">08</span>
+        <h2 class="h-section" id="press-title">Press kit</h2>
+        <p class="lead">A short bio for event programmes, articles and introductions, plus my CV. Feel free to use it as it is.</p>
+      </div>
+      <div class="press">
+        <p class="press__bio" id="short-bio">
+          Sajid Kamal is an FMCG brand strategist based in Dhaka and {site.role} at {site.company}. Over six years at Akij Bakers,
+          Meghna Group, Remark HB and Ghorer Bazar, Sajid has built three brands from scratch, launched new food and beauty
+          categories and led more than 100 digital campaigns. Sajid is also the founder of Sui Chokri, a distributed production
+          network for neighbourhood tailors supported by the H&amp;M Foundation’s Needle Innovation Challenge.
+        </p>
+        <div class="actions">
+          <button class="btn btn--ghost btn--small" type="button" data-copy="#short-bio" hidden>Copy bio</button>
+          <a class="link-arrow" href={site.cv} download data-astro-reload>Download CV <span class="arrow" aria-hidden="true">→</span></a>
+          <span class="link-arrow placeholder" data-placeholder>[Download press photos]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

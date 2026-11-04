@@ -1,45 +1,48 @@
 # thesajidkamal.me
 
-Personal website of **Sajid Kamal**, FMCG brand strategist in Dhaka.
-Live at **https://thesajidkamal.me**.
+Personal site of **Sajid Kamal**: brand builder, operator and founder in Dhaka.
 
-The site is built with [Jekyll](https://jekyllrb.com), the system GitHub Pages runs natively.
-You write in plain text files, and GitHub turns them into the website every time you save.
+Built with [Astro](https://astro.build) and designed to run on **Cloudflare Pages**, which is free, fast
+and runs the contact form. It also still works on GitHub Pages.
 
-**What to replace before going live:** see [CONTENT-GUIDE.md](CONTENT-GUIDE.md). It lists
-every placeholder, plus colour palette and copy suggestions.
+- **What to replace before going live:** [CONTENT-GUIDE.md](CONTENT-GUIDE.md) lists every
+  placeholder, plus colour palette and copy suggestions.
+- **Where to put photos:** [src/assets/photos/README.md](src/assets/photos/README.md). Drop a file in with the right name; no code needed.
 
 ---
 
-## Pages
+## What's on the site
 
-| Address | What it is | Edit this file |
+| Address | Page | Content comes from |
 | --- | --- | --- |
-| `/` | Home | `index.html`, plus lists in `_data/home.yml` |
-| `/work/` | All projects | Each project is a file in `_projects/` |
-| `/work/<name>/` | One project (case study) | `_projects/<name>.md` |
-| `/writing/` | All articles | Each article is a file in `_posts/` |
-| `/writing/<title>/` | One article | `_posts/<date>-<title>.md` |
-| `/about/` | Bio, experience, education | `about/index.html`, plus `_data/experience.yml`, `ventures.yml`, `education.yml`, `certifications.yml`, `expertise.yml` |
-| `/contact/` | Contact details and form | `contact/index.html` |
-| `/writing/feed.xml` | RSS feed (automatic) | – |
+| `/` | Home: hero, products band, "How I can help" tabs, work, numbers, story, principles, writing, testimonials | `src/pages/index.astro`, `src/data/home.ts`, `src/data/story.ts` |
+| `/work/` | Project showcase with filters | every file in `src/content/work/` |
+| `/work/<name>/` | Case study | `src/content/work/<name>.md` |
+| `/writing/` | Essays, newest first | every file in `src/content/writing/` |
+| `/writing/<name>/` | One essay | `src/content/writing/<name>.md` |
+| `/about/` | Bio, story, experience, education, press kit | `src/pages/about.astro`, `src/data/career.ts`, `src/data/story.ts` |
+| `/services/` | Consulting, advisory and speaking | `src/data/services.ts` (hide with `showServices: false`) |
+| `/contact/` | Contact form with topics | `src/pages/contact.astro` |
+| `/writing/feed.xml` | RSS feed | automatic |
+
+Also automatic: link previews (Open Graph), a Google profile tag (Person), `sitemap-index.xml`,
+dark mode, smooth page transitions and reduced-motion support.
 
 ## Where things live
 
-| Path | What it holds |
-| --- | --- |
-| `_config.yml` | **Site settings:** name, email, phone, social links, colour palette, analytics IDs, newsletter link |
-| `_data/` | Lists shown on pages (career timeline, certifications, numbers, testimonials...) |
-| `_posts/` | Articles (one Markdown file each) |
-| `_projects/` | Project case studies (one Markdown file each) |
-| `_layouts/` | Page templates (article, project, base page) |
-| `_includes/` | Shared pieces (header, footer, cards, analytics) |
-| `assets/css/main.css` | All the styling, including the four colour palettes |
-| `assets/js/main.js` | Menu, fade-ins, project filters, contact form, owner preview |
-| `assets/img/` | Images. `placeholders/` holds the striped stand-ins |
-| `MD-Sajid-Kamal-CV.pdf` | The downloadable CV |
-| `CNAME` | The custom domain |
-| `.github/workflows/pages.yml` | Builds and publishes the site |
+```
+src/site.config.ts        ← names, email, links, palette, booking link, analytics: start here
+src/data/                 ← lists: story chapters, experience, services, numbers, testimonials
+src/content/work/         ← one Markdown file per project
+src/content/writing/      ← one Markdown file per article
+src/assets/photos/        ← your photos (picked up by file name)
+src/components/           ← building blocks (header, cards, tabs...)
+src/pages/                ← one file per page
+src/styles/global.css     ← all styling, including the colour palettes
+src/scripts/site.ts       ← menu, tabs, fade-ins, contact form, dark mode
+functions/api/contact.js  ← the contact form's email sender (Cloudflare)
+public/                   ← files served as they are: CV, favicon, share image, _redirects, _headers
+```
 
 ---
 
@@ -47,118 +50,129 @@ every placeholder, plus colour palette and copy suggestions.
 
 ### Publish an article
 
-1. Create a file in `_posts/` named `YEAR-MONTH-DAY-short-title.md`, for example
-   `_posts/2026-12-01-what-shoppers-want.md`. The date sets its place in the list,
-   and the short title becomes the address (`/writing/what-shoppers-want/`).
-2. Start the file with this block, then write the article underneath in plain text:
+Create `src/content/writing/my-article.md` (the file name becomes `/writing/my-article/`):
 
 ```markdown
 ---
 title: "What shoppers want from a honey brand"
 dek: "One line under the title."
 excerpt: "One or two sentences shown in lists and link previews."
+date: 2026-12-01
 topic: Brand building
-cover: /assets/img/writing/honey-shelf.jpg
-cover_alt: "Honey jars on a supermarket shelf in Dhaka"
 ---
 
 Your first paragraph.
 
 ## A subheading
 
-More text. Use **bold**, *italic* and [links](https://example.com).
+More text with **bold**, *italic* and [links](https://example.com).
 
 > A line worth quoting.
 
-- A list item
-- Another item
-
-![Describe the image](/assets/img/writing/photo.jpg)
-*A caption under the image.*
+![What the photo shows](../../assets/photos/writing/honey-shelf.jpg)
 ```
 
-It appears on the Writing page, on the home page and in the RSS feed automatically.
+It appears on the Writing page, on the home page and in the RSS feed. Add `draft: true` to keep it
+hidden while you work on it. For a cover photo, save `src/assets/photos/writing/my-article.jpg`.
 
 ### Add or change a project
 
-Copy any file in `_projects/`, rename it (the name becomes the address) and change the text.
-The block at the top controls the card and the header: `title`, `summary`, `client`, `role`,
-`year`, `category` (used by the filter buttons), `cover`, `metrics`, `gallery` and `quote`.
+Copy any file in `src/content/work/`, rename it and change the text. The top block controls the
+card and the page header: `title`, `summary`, `client`, `role`, `year`, `category` (used by the
+filter buttons), `art` (the big number on the card until it has a photo), `metrics`, `gallery`
+and `quote`. `featured: true` puts it on the home page (the first four, by `order`).
 
-- `featured: true` shows it on the home page (the first four, by `order`).
-- `order:` sets its position on the Work page.
-
-### Replace a placeholder image
-
-1. Upload your photo to `assets/img/` (for example `assets/img/portrait.jpg`).
-   JPG under 400 KB is ideal; see CONTENT-GUIDE.md for sizes.
-2. Change the path that points to `/assets/img/placeholders/...` so it points to your file.
-3. Remove `data-placeholder` from that `<img>` tag if it has one, and add a short description to `alt`.
+Photos: `src/assets/photos/work/<file name>.jpg` for the cover, and `<file name>-1.jpg`, `-2.jpg`
+for the gallery.
 
 ### Other quick changes
 
-- **Name, email, phone, links, palette:** `_config.yml`
-- **Career timeline:** `_data/experience.yml` (newest first)
-- **Numbers on the home page:** `_data/home.yml` → `stats`
-- **Testimonials:** `_data/home.yml` → `testimonials` (delete the list to hide the section)
-- **Menu:** `_data/navigation.yml`
-- **CV:** replace `MD-Sajid-Kamal-CV.pdf`, keeping the same name
+| To change | Edit |
+| --- | --- |
+| Name, email, phone, links, booking link, palette | `src/site.config.ts` |
+| Hide the Services page | `showServices: false` in `src/site.config.ts` |
+| Story chapters (home and About) | `src/data/story.ts` |
+| Career timeline, education, certifications, skills | `src/data/career.ts` |
+| "How I can help" tabs, numbers, principles, testimonials, product band | `src/data/home.ts` |
+| Services, formats, prices, FAQ | `src/data/services.ts` |
+| CV | replace `public/MD-Sajid-Kamal-CV.pdf` (same name) |
+| Link-preview image | replace `public/og/share-card.png` (1200 × 630) |
 
 ---
 
-## Previewing changes
+## Previewing
 
-**Owner preview (in any browser).** Add `?preview` to any address, for example
-`https://thesajidkamal.me/?preview`. A small bar appears in the corner where you can:
+**Owner preview (any browser).** Add `?preview` to any address, e.g. `https://thesajidkamal.me/?preview`.
+A small bar lets you switch palettes and outline every placeholder. Only you see it; × closes it.
 
-- switch between the four colour palettes, and
-- press **Placeholders** to outline every stand-in still on the page.
-
-It is remembered while the tab is open, and only you see it. Press × to leave.
-
-**On your computer (optional).** With Ruby installed:
+**On your computer.** Install [Node.js](https://nodejs.org) 22, then:
 
 ```sh
-gem install jekyll -v 3.10.0 jekyll-feed jekyll-seo-tag jekyll-sitemap kramdown-parser-gfm webrick
-jekyll serve
-# then open http://localhost:4000
+npm install
+npm run dev            # live preview at http://localhost:4321
+npm run build          # build the finished site into dist/
+npm run cf:preview     # run the built site the way Cloudflare does, contact form included
+npm run test:contact   # test the contact form's email sender
 ```
-
-## Publishing
-
-`.github/workflows/pages.yml` builds the site with the same Jekyll version GitHub Pages uses.
-
-- **Every branch and pull request is built.** A green tick on GitHub means the site builds; a red cross means something needs fixing before it goes live.
-- **Only `main` is published.** Merging a branch into `main` updates https://thesajidkamal.me within a minute or two.
-
-In the repository settings, **Pages → Build and deployment → Source** must be **GitHub Actions** (it already is).
 
 ---
 
-## Contact form
+## Hosting on Cloudflare Pages (recommended)
 
-Messages are delivered by [FormSubmit](https://formsubmit.co) to the address in
-`_config.yml` (`contact_form`).
+Free, fast in Bangladesh and worldwide, and it runs the contact form without a third-party form service.
 
-- **Activation:** the first message sent through the form makes FormSubmit email you an
-  "Activate Form" link. Nothing is delivered until you click it.
-- After activating, FormSubmit gives you a random string to use in place of the email
-  address in `contact_form`, which hides your address from spam bots.
-- If sending fails, visitors are shown your email address instead.
-- To switch provider (e.g. Web3Forms or Formspree), change the two addresses under
-  `contact_form` and the hidden `_` fields in `contact/index.html`. `assets/js/main.js`
-  already understands the replies from all three.
+1. **Create the project.** In the [Cloudflare dashboard](https://dash.cloudflare.com):
+   Workers & Pages → Create → Pages → *Connect to Git* → choose this repository.
+   - Production branch: `main`
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+   Cloudflare reads the Node version from `.node-version`. Every branch gets its own preview address,
+   so you can check a branch before merging it.
+2. **Contact form email.** Create a free account at [resend.com](https://resend.com) and an API key.
+   In the Pages project: Settings → Variables and Secrets, add:
+   - `RESEND_API_KEY` (secret): your Resend key
+   - `CONTACT_TO_EMAIL`: `sajidkamal214@gmail.com`
+   - `CONTACT_FROM_EMAIL` (optional): e.g. `Website <hello@thesajidkamal.me>`, after verifying
+     the domain in Resend. Until then, messages come from Resend's test sender.
+   Redeploy, then send yourself a test message from `/contact/`.
+3. **Spam protection (optional).** Create a Turnstile widget in Cloudflare. Put the *site key*
+   in `src/site.config.ts` → `contactForm.turnstileSiteKey`, and the *secret key* in Pages as
+   `TURNSTILE_SECRET_KEY`.
+4. **Your domain.** Add `thesajidkamal.me` to Cloudflare (free plan) and switch the nameservers at
+   your registrar to the two Cloudflare gives you. Then in the Pages project: Custom domains →
+   add `thesajidkamal.me` and `www.thesajidkamal.me`.
+5. **Stop GitHub Pages publishing.** In GitHub: Settings → Secrets and variables → Actions →
+   Variables → add `DEPLOY_TARGET` = `cloudflare`. Optionally turn off Settings → Pages.
+
+`public/_redirects` sends old links (like the previous CV address) to the right place, and
+`public/_headers` adds security headers. Both only work on Cloudflare.
+
+### Staying on GitHub Pages instead
+
+Merging into `main` keeps publishing to GitHub Pages through `.github/workflows/pages.yml`, as
+before. The one difference is the contact form: GitHub Pages can't run `functions/api/contact.js`,
+so set `contactForm.endpoint` in `src/site.config.ts` to a form service address (Formspree, Web3Forms
+or FormSubmit's `/ajax/` address). The form understands their replies.
+
+### Why not Framer?
+
+Framer is a good no-code builder with great animation, but sites are built inside Framer's own
+editor, so this code can't be imported into it. It also costs about $10–30 a month for a custom
+domain. This site gives you the same polish for free, with your content in plain files you own.
+If you'd rather edit visually later, the design here can be rebuilt in Framer.
+
+---
 
 ## Analytics and privacy
 
-Google Tag Manager, Umami and Microsoft Clarity are loaded on every page (IDs in
-`_config.yml` → `analytics`; set one to `""` to switch it off). The footer carries the
-visitor notice Microsoft recommends for Clarity.
+Google Tag Manager, Umami and Microsoft Clarity load on every page (IDs in `src/site.config.ts`;
+set one to `''` to switch it off). Cloudflare Web Analytics, which is free and cookie-free, can be
+added with its token. The footer carries the visitor notice Microsoft recommends for Clarity.
 
-## Built in
+Pages change without a full reload, for smooth transitions. Umami and Clarity track this
+automatically; in Google Tag Manager, use a *History Change* trigger for page views.
 
-- Search and social: page titles, descriptions, link-preview images (`assets/img/share-card.png`),
-  a Google profile tag (Person), `sitemap.xml` and `robots.txt` are generated automatically.
-- Accessibility: every colour pair passes WCAG AA contrast (body text passes AAA), keyboard
-  navigation, a skip link, and visitors who ask their device for reduced motion get no animations.
-- If JavaScript fails, every page still shows all its content.
+## Checks
+
+Every push runs `.github/workflows/pages.yml`: it installs, tests the contact function and builds
+the site. A red cross on GitHub means something needs fixing before it goes live.

@@ -1,0 +1,14 @@
+---
+import { site } from '../site.config';
+const href = site.newsletterUrl || site.profiles.linkedin;
+---
+<aside class="newsletter" aria-labelledby="newsletter-title" data-reveal>
+  <div>
+    <h2 class="newsletter__title" id="newsletter-title">Get new essays as they come out.</h2>
+    <p>About one a month on brands, retail and how people in Bangladesh shop. No spam, unsubscribe any time.</p>
+  </div>
+  <div class="actions">
+    <a class="btn btn--primary" href={href} target="_blank" rel="noopener">{site.newsletterUrl ? 'Subscribe' : 'Follow on LinkedIn'}</a>
+    <a class="link-arrow" href="/writing/feed.xml">RSS <span class="arrow" aria-hidden="true">→</span></a>
+  </div>
+</aside>

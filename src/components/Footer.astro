@@ -1,0 +1,61 @@
+---
+import { site } from '../site.config';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <p class="footer-name">{site.name}<span>.</span></p>
+        {site.nameBangla && <span class="footer-name__bn" lang="bn">{site.nameBangla}</span>}
+      </div>
+      <p class="footer-clock" data-clock-wrap hidden>
+        <strong data-clock data-timezone={site.timezone}></strong>
+        in Dhaka right now
+      </p>
+    </div>
+
+    <div class="footer-grid">
+      <div class="footer-about">
+        <p>{site.role} at {site.company}. Building food and beauty brands in Bangladesh, and writing about what it takes.</p>
+      </div>
+      <div>
+        <h2 class="footer-title">Explore</h2>
+        <ul class="footer-links">
+          <li><a href="/work/">Work</a></li>
+          <li><a href="/writing/">Writing</a></li>
+          <li><a href="/about/">About</a></li>
+          {site.showServices && <li><a href="/services/">Services</a></li>}
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="footer-title">Elsewhere</h2>
+        <ul class="footer-links">
+          {site.profiles.linkedin && <li><a href={site.profiles.linkedin} target="_blank" rel="me noopener">LinkedIn</a></li>}
+          {site.profiles.facebook && <li><a href={site.profiles.facebook} target="_blank" rel="me noopener">Facebook</a></li>}
+          {site.profiles.github && <li><a href={site.profiles.github} target="_blank" rel="me noopener">GitHub</a></li>}
+          <li><a href="/writing/feed.xml">RSS feed</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="footer-title">Contact</h2>
+        <ul class="footer-links">
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{site.location}</li>
+          <li><a href={site.cv} download data-astro-reload>Download CV (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {year} {site.fullName}. All rights reserved.</p>
+      <p>Made in Dhaka.</p>
+    </div>
+    <p class="footer-privacy">
+      This site uses Umami, Google Tag Manager and Microsoft Clarity to understand how visitors use it. Clarity records
+      clicks, scrolling and session replays. By using this site, you agree that Microsoft and I can collect and use this data.
+      See the <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft Privacy Statement</a>.
+    </p>
+  </div>
+</footer>

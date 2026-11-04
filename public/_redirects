@@ -1,0 +1,5 @@
+# Cloudflare Pages redirects (ignored by other hosts).
+# Old addresses that may still be shared somewhere:
+/MD%20SAJID%20KAMAL_CV.pdf   /MD-Sajid-Kamal-CV.pdf   301
+/index.html                  /                        301
+/feed.xml                    /writing/feed.xml        301
