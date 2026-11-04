@@ -60,16 +60,36 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
-    cursor: none;
 }
 
-/* Custom Cursor */
+/* Custom Cursor
+   Hidden by default. js/main.js adds .has-custom-cursor to <html> only for
+   mouse/trackpad users who haven't asked their device for reduced motion,
+   so touch screens and keyboard users keep the normal system cursor. */
 .cursor, .cursor-follower {
+    display: none;
     position: fixed;
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
     mix-blend-mode: difference;
+    opacity: 0;
+}
+
+.has-custom-cursor .cursor,
+.has-custom-cursor .cursor-follower {
+    display: block;
+}
+
+/* Only show the dots once the mouse has actually moved over the page */
+.cursor-visible .cursor,
+.cursor-visible .cursor-follower {
+    opacity: 1;
+}
+
+.has-custom-cursor,
+.has-custom-cursor * {
+    cursor: none !important;
 }
 
 .cursor {
@@ -77,7 +97,7 @@ body {
     height: 8px;
     background: var(--text-primary);
     transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
+    transition: transform 0.1s ease, opacity 0.2s ease;
 }
 
 .cursor-follower {
@@ -85,22 +105,13 @@ body {
     height: 40px;
     border: 1px solid var(--text-primary);
     transform: translate(-50%, -50%);
-    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, opacity 0.2s ease;
 }
 
 .cursor-follower.hover {
     width: 60px;
     height: 60px;
     border-color: var(--primary);
-}
-
-@media (max-width: 768px) {
-    .cursor, .cursor-follower {
-        display: none;
-    }
-    body {
-        cursor: auto;
-    }
 }
 
 /* Typography */
@@ -171,9 +182,15 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: var(--radius-full);
     text-decoration: none;
     transition: all var(--transition-normal);
-    cursor: none;
+    cursor: pointer;
     border: none;
     font-family: inherit;
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: progress;
+    transform: none;
 }
 
 .btn-primary {
@@ -343,6 +360,10 @@ h1, h2, h3, h4, h5, h6 {
    ============================================ */
 .hero {
     min-height: 100vh;
+    min-height: 100svh;
+    /* Top padding keeps the content clear of the fixed nav bar,
+       bottom padding keeps it clear of the "Scroll Down" indicator */
+    padding: 120px 0 140px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -414,6 +435,10 @@ h1, h2, h3, h4, h5, h6 {
 .typed-text::after {
     content: '|';
     animation: blink 0.7s infinite;
+}
+
+.typed-text.is-static::after {
+    content: none;
 }
 
 @keyframes blink {
@@ -498,6 +523,71 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes scroll {
     0% { opacity: 1; transform: translateX(-50%) translateY(0); }
     100% { opacity: 0; transform: translateX(-50%) translateY(12px); }
+}
+
+/* A mouse-shaped "Scroll Down" hint means nothing on a phone, and on short
+   screens it collides with the buttons, so drop it there */
+@media (max-width: 768px), (max-height: 600px) {
+    .scroll-indicator {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 104px 0 64px;
+    }
+
+    /* The typed phrase wraps onto a second line on phones; reserve both
+       lines so the stats and buttons don't jump up and down as it types */
+    .hero-subtitle {
+        min-height: 3.2em;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-badge {
+        margin-bottom: 20px;
+    }
+
+    .hero-title {
+        margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+        margin-bottom: 32px;
+    }
+
+    /* Keep the three stats side by side instead of stacking them */
+    .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 36px;
+    }
+
+    .stat-number {
+        font-size: clamp(1.6rem, 8vw, 2rem);
+    }
+
+    .stat-label {
+        display: block;
+        font-size: 0.75rem;
+        line-height: 1.3;
+        margin-top: 4px;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .hero-cta .btn {
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
+    }
 }
 
 /* ============================================
@@ -1013,7 +1103,6 @@ h1, h2, h3, h4, h5, h6 {
     font-family: inherit;
     font-size: 1rem;
     transition: all var(--transition-fast);
-    cursor: none;
 }
 
 .form-group textarea {
@@ -1055,6 +1144,35 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-light);
 }
 
+/* Spam trap field: never shown to people */
+.form-honeypot {
+    display: none !important;
+}
+
+.form-status {
+    min-height: 1.5em;
+    font-size: 0.95rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.form-status:empty {
+    display: none;
+}
+
+.form-status.is-success {
+    color: #34d399;
+}
+
+.form-status.is-error {
+    color: #fca5a5;
+}
+
+.form-status a {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
 /* ============================================
    Footer
    ============================================ */
@@ -1094,36 +1212,73 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 8px;
 }
 
+.footer .footer-privacy {
+    max-width: 640px;
+    margin: 24px auto 0;
+    font-size: 0.75rem;
+    line-height: 1.6;
+}
+
+.footer-privacy a {
+    color: var(--text-secondary);
+}
+
 /* ============================================
    Animations (AOS-like)
+   Scoped to .js (set in <head>) so that if the script ever fails
+   to load, the content is simply visible instead of stuck at opacity 0.
    ============================================ */
-[data-aos] {
+.js [data-aos] {
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.6s ease-out;
 }
 
-[data-aos].aos-animate {
+.js [data-aos].aos-animate {
     opacity: 1;
     transform: translateY(0);
 }
 
-[data-aos="fade-down"] {
+.js [data-aos="fade-down"] {
     transform: translateY(-30px);
 }
 
-[data-aos="fade-right"] {
+.js [data-aos="fade-right"] {
     transform: translateX(-30px);
 }
 
-[data-aos="fade-left"] {
+.js [data-aos="fade-left"] {
     transform: translateX(30px);
 }
 
-[data-aos="fade-down"].aos-animate,
-[data-aos="fade-right"].aos-animate,
-[data-aos="fade-left"].aos-animate {
+.js [data-aos="fade-down"].aos-animate,
+.js [data-aos="fade-right"].aos-animate,
+.js [data-aos="fade-left"].aos-animate {
     transform: translate(0);
+}
+
+/* ============================================
+   Reduced motion
+   For visitors whose device is set to "reduce motion": no floating,
+   bouncing, fading or smooth scrolling. js/main.js also turns off the
+   particles, typing effect, counters, parallax and custom cursor.
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .js [data-aos] {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 /* ============================================

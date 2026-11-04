@@ -2,6 +2,11 @@
    Main JavaScript - Interactive Features
    ============================================ */
 
+// Visitors can ask their device for less motion (an accessibility setting on
+// iOS, Android, macOS and Windows). When they do, every effect below either
+// switches off or shows its end state straight away.
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all modules
     initCustomCursor();
@@ -12,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initSkillBars();
     initSmoothScroll();
+    initContactForm();
+    initHeroParallax();
 });
 
 /* ============================================
@@ -20,16 +27,37 @@ document.addEventListener('DOMContentLoaded', () => {
 function initCustomCursor() {
     const cursor = document.querySelector('.cursor');
     const follower = document.querySelector('.cursor-follower');
-    
+
     if (!cursor || !follower) return;
-    
+
+    // Only for a real mouse or trackpad. Phones and tablets keep their normal behaviour.
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!hasFinePointer || prefersReducedMotion) return;
+
+    const root = document.documentElement;
+    root.classList.add('has-custom-cursor');
+
     let mouseX = 0, mouseY = 0;
     let cursorX = 0, cursorY = 0;
     let followerX = 0, followerY = 0;
+    let visible = false;
 
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
+
+        if (!visible) {
+            // Appear where the mouse is, instead of sliding in from the top-left corner
+            cursorX = followerX = mouseX;
+            cursorY = followerY = mouseY;
+            root.classList.add('cursor-visible');
+            visible = true;
+        }
+    });
+
+    root.addEventListener('mouseleave', () => {
+        root.classList.remove('cursor-visible');
+        visible = false;
     });
 
     // Smooth cursor animation
@@ -77,20 +105,30 @@ function initNavigation() {
 
         // Update active link based on scroll position
         updateActiveLink();
-    });
+    }, { passive: true });
+
+    function setMenuOpen(open) {
+        navToggle?.classList.toggle('active', open);
+        navMenu?.classList.toggle('active', open);
+        navToggle?.setAttribute('aria-expanded', String(open));
+    }
 
     // Mobile menu toggle
     navToggle?.addEventListener('click', () => {
-        navToggle.classList.toggle('active');
-        navMenu.classList.toggle('active');
+        setMenuOpen(!navMenu.classList.contains('active'));
     });
 
     // Close menu on link click
     navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navToggle?.classList.remove('active');
-            navMenu?.classList.remove('active');
-        });
+        link.addEventListener('click', () => setMenuOpen(false));
+    });
+
+    // Close menu with the Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu?.classList.contains('active')) {
+            setMenuOpen(false);
+            navToggle?.focus();
+        }
     });
 
     function updateActiveLink() {
@@ -115,16 +153,14 @@ function initNavigation() {
 }
 
 /* ============================================
-   3D Particle Background
+   Particle Background (js/particles.js)
    ============================================ */
 function initParticleBackground() {
     const canvas = document.getElementById('hero-canvas');
-    if (!canvas) return;
+    if (!canvas || typeof ParticleSystem === 'undefined') return;
 
-    // Use the ParticleSystem from three.min.js
-    if (typeof ParticleSystem !== 'undefined') {
-        new ParticleSystem(canvas);
-    }
+    // With reduced motion the particles are drawn once and stay still
+    new ParticleSystem(canvas, { animate: !prefersReducedMotion });
 }
 
 /* ============================================
@@ -141,6 +177,12 @@ function initTypingEffect() {
         'digital innovation',
         'market leadership'
     ];
+
+    if (prefersReducedMotion) {
+        typedElement.textContent = words[0];
+        typedElement.classList.add('is-static');
+        return;
+    }
 
     let wordIndex = 0;
     let charIndex = 0;
@@ -177,44 +219,44 @@ function initTypingEffect() {
 
 /* ============================================
    Counter Animation
+   The final numbers ("6+", "100+", "140%") are written in the HTML, so they
+   are right even without JavaScript or with reduced motion. Here we count
+   up to them from zero when they scroll into view.
    ============================================ */
 function initCounterAnimation() {
-    const counters = document.querySelectorAll('.stat-number');
-    
-    const observerOptions = {
-        threshold: 0.5,
-        rootMargin: '0px'
-    };
+    if (prefersReducedMotion) return;
+
+    const counters = document.querySelectorAll('.stat-number[data-count]');
+
+    counters.forEach(counter => {
+        counter.textContent = '0' + (counter.dataset.suffix || '');
+    });
 
     const counterObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = parseInt(counter.getAttribute('data-count'));
-                animateCounter(counter, target);
-                counterObserver.unobserve(counter);
+                animateCounter(entry.target);
+                counterObserver.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.5 });
 
     counters.forEach(counter => counterObserver.observe(counter));
 
-    function animateCounter(element, target) {
+    function animateCounter(element) {
+        const target = parseInt(element.dataset.count, 10);
+        const suffix = element.dataset.suffix || '';
         const duration = 2000;
-        const increment = target / (duration / 16);
-        let current = 0;
+        const start = performance.now();
 
-        const updateCounter = () => {
-            current += increment;
-            if (current < target) {
-                element.textContent = Math.floor(current);
-                requestAnimationFrame(updateCounter);
-            } else {
-                element.textContent = target;
-            }
+        const updateCounter = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out
+            element.textContent = Math.round(eased * target) + suffix;
+            if (progress < 1) requestAnimationFrame(updateCounter);
         };
 
-        updateCounter();
+        requestAnimationFrame(updateCounter);
     }
 }
 
@@ -224,21 +266,25 @@ function initCounterAnimation() {
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('[data-aos]');
 
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+    if (prefersReducedMotion) {
+        animatedElements.forEach(el => el.classList.add('aos-animate'));
+        return;
+    }
 
     const animationObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const delay = entry.target.getAttribute('data-aos-delay') || 0;
+                const delay = parseInt(entry.target.getAttribute('data-aos-delay'), 10) || 0;
                 setTimeout(() => {
                     entry.target.classList.add('aos-animate');
-                }, parseInt(delay));
+                }, delay);
+                animationObserver.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
 
     animatedElements.forEach(el => animationObserver.observe(el));
 }
@@ -249,21 +295,15 @@ function initScrollAnimations() {
 function initSkillBars() {
     const skillBars = document.querySelectorAll('.skill-progress');
 
-    const observerOptions = {
-        threshold: 0.5,
-        rootMargin: '0px'
-    };
-
     const skillObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const bar = entry.target;
-                const width = bar.getAttribute('data-width');
-                bar.style.width = width + '%';
+                bar.style.width = bar.getAttribute('data-width') + '%';
                 skillObserver.unobserve(bar);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.5 });
 
     skillBars.forEach(bar => skillObserver.observe(bar));
 }
@@ -282,10 +322,9 @@ function initSmoothScroll() {
             const target = document.querySelector(href);
             if (target) {
                 e.preventDefault();
-                const offsetTop = target.offsetTop - 80;
                 window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
+                    top: target.offsetTop - 80,
+                    behavior: prefersReducedMotion ? 'auto' : 'smooth'
                 });
             }
         });
@@ -293,44 +332,74 @@ function initSmoothScroll() {
 }
 
 /* ============================================
-   Form Handling
+   Contact Form
+   Sends the message to FormSubmit's JSON endpoint (data-endpoint on the
+   form) so the visitor stays on the page, then reports the real result.
+   If anything goes wrong, the visitor is given the email address instead.
    ============================================ */
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const submitBtn = contactForm.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        
-        submitBtn.innerHTML = '<span>Sending...</span>';
-        submitBtn.disabled = true;
+function initContactForm() {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
 
-        // Simulate form submission (replace with actual Formspree endpoint)
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const status = form.querySelector('.form-status');
+    const originalButton = submitBtn.innerHTML;
+    const endpoint = form.dataset.endpoint || form.action;
+    const fallbackEmail = form.dataset.fallbackEmail;
+
+    function showStatus(type, message, email) {
+        if (!status) return;
+        status.className = 'form-status' + (type ? ` is-${type}` : '');
+        status.textContent = message;
+        if (email) {
+            const link = document.createElement('a');
+            link.href = `mailto:${email}`;
+            link.textContent = email;
+            status.append(' ', link, '.');
+        }
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Sending...</span>';
+        showStatus('', '');
+
         try {
-            const formData = new FormData(contactForm);
-            const response = await fetch(contactForm.action, {
+            // Sent as ordinary form fields (not JSON), so the browser needs no
+            // extra CORS round trip before the actual request.
+            const response = await fetch(endpoint, {
                 method: 'POST',
-                body: formData,
+                body: new URLSearchParams(new FormData(form)),
                 headers: { 'Accept': 'application/json' }
             });
 
-            if (response.ok) {
-                submitBtn.innerHTML = '<span>Message Sent! ✓</span>';
-                contactForm.reset();
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 3000);
-            } else {
-                throw new Error('Form submission failed');
+            const data = await response.json().catch(() => ({}));
+
+            // FormSubmit replies {"success": "true"} (a string). Formspree ({"ok": true})
+            // and Web3Forms ({"success": true}) are accepted too, in case the site
+            // switches provider later.
+            const sent = response.ok && (String(data.success) === 'true' || data.ok === true);
+            if (!sent) {
+                // e.g. "This form needs Activation..." before the address is activated
+                throw new Error(data.message || `HTTP ${response.status}`);
             }
+
+            form.reset();
+            showStatus('success', "Thanks! Your message has been sent. I'll get back to you soon.");
         } catch (error) {
-            submitBtn.innerHTML = '<span>Error. Try again.</span>';
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 3000);
+            console.error('Contact form could not be sent:', error);
+            showStatus(
+                'error',
+                fallbackEmail
+                    ? "Sorry, your message couldn't be sent right now. Please email me directly at"
+                    : "Sorry, your message couldn't be sent right now. Please try again later.",
+                fallbackEmail
+            );
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalButton;
         }
     });
 }
@@ -338,14 +407,27 @@ if (contactForm) {
 /* ============================================
    Parallax Effect on Hero
    ============================================ */
-window.addEventListener('scroll', () => {
+function initHeroParallax() {
     const hero = document.querySelector('.hero-content');
-    if (hero) {
-        const scrolled = window.scrollY;
-        hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-        hero.style.opacity = 1 - (scrolled / 700);
-    }
-});
+    if (!hero || prefersReducedMotion) return;
+
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+
+        requestAnimationFrame(() => {
+            const scrolled = window.scrollY;
+            // Nothing to do once the hero is well out of view
+            if (scrolled < window.innerHeight * 1.5) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+                hero.style.opacity = Math.max(0, 1 - scrolled / 700);
+            }
+            ticking = false;
+        });
+    }, { passive: true });
+}
 
 /* ============================================
    Preloader (optional)

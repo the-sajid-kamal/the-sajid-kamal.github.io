@@ -10,6 +10,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Lets the CSS hide fade-in elements only when JavaScript is running, so the page never stays blank -->
+    <script>document.documentElement.classList.add('js');</script>
     <title>MD Sajid Kamal | Brand Strategist & Digital Marketing Expert</title>
     <meta name="description" content="FMCG Brand Strategist with 6+ years experience in product development, digital marketing, and campaign management.">
     <link rel="stylesheet" href="css/style.css">
@@ -51,7 +53,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <a href="#skills" class="nav-link">Skills</a>
                 <a href="#contact" class="nav-link">Contact</a>
             </div>
-            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-controls="nav-menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -69,20 +71,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="name gradient-text">MD Sajid Kamal</span>
             </h1>
             <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
-                Transforming brands through <span class="typed-text"></span>
+                Transforming brands through <span class="typed-text" aria-hidden="true"></span><span class="sr-only">data-driven insights, creative campaigns and strategic branding</span>
             </p>
             <div class="hero-stats" data-aos="fade-up" data-aos-delay="200">
                 <div class="stat">
-                    <span class="stat-number" data-count="6">0</span>
+                    <span class="stat-number" data-count="6" data-suffix="+">6+</span>
                     <span class="stat-label">Years Experience</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number" data-count="100">0</span>
+                    <span class="stat-number" data-count="100" data-suffix="+">100+</span>
                     <span class="stat-label">Campaigns Led</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number" data-count="140">0</span>
-                    <span class="stat-label">% Sales Growth</span>
+                    <span class="stat-number" data-count="140" data-suffix="%">140%</span>
+                    <span class="stat-label">Sales Growth</span>
                 </div>
             </div>
             <div class="hero-cta" data-aos="fade-up" data-aos-delay="300">
@@ -95,7 +97,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <a href="#experience" class="btn btn-secondary">View My Work</a>
             </div>
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" aria-hidden="true">
             <div class="mouse">
                 <div class="wheel"></div>
             </div>
@@ -114,7 +116,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="about-image" data-aos="fade-right">
                     <div class="image-frame">
                         <div class="image-placeholder">
-                            <img src="self image sajid.jpg" alt="MD Sajid Kamal" class="profile-image">
+                            <img src="sajid-kamal.jpg" alt="MD Sajid Kamal" class="profile-image" width="640" height="640" loading="lazy" decoding="async">
                         </div>
                         <div class="image-decoration"></div>
                     </div>
@@ -145,7 +147,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             </div>
                         </div>
                     </div>
-                    <a href="MD SAJID KAMAL_CV.pdf" download class="btn btn-primary">
+                    <a href="MD-Sajid-Kamal-CV.pdf" download class="btn btn-primary">
                         <span>Download CV</span>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
@@ -427,10 +429,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </a>
                     </div>
                 </div>
-                <form class="contact-form" data-aos="fade-left" action="https://formsubmit.co/sajidkamal214@gmail.com" method="POST">
+                <!--
+                    Contact form, delivered by FormSubmit (formsubmit.co).
+                    - action: used when JavaScript is off (FormSubmit shows its own page, then returns to _next).
+                    - data-endpoint: FormSubmit's JSON endpoint, used by js/main.js so the visitor stays on the page.
+                    - data-fallback-email: shown to the visitor if sending fails.
+                    The first message sent to a new address triggers an activation email from FormSubmit;
+                    nothing is delivered until the "Activate Form" link in it has been clicked.
+                -->
+                <form class="contact-form" data-aos="fade-left"
+                      action="https://formsubmit.co/sajidkamal214@gmail.com"
+                      data-endpoint="https://formsubmit.co/ajax/sajidkamal214@gmail.com"
+                      data-fallback-email="sajidkamal214@gmail.com"
+                      method="POST">
                     <input type="hidden" name="_subject" value="New message from thesajidkamal.me">
                     <input type="hidden" name="_captcha" value="false">
                     <input type="hidden" name="_next" value="https://thesajidkamal.me/?submitted=true">
+                    <!-- Spam trap: hidden from people; FormSubmit discards any message where a bot filled it in -->
+                    <input type="text" name="_honey" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
                     <div class="form-group">
                         <input type="text" name="name" id="name" required placeholder=" ">
                         <label for="name">Your Name</label>
@@ -453,6 +469,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
                         </svg>
                     </button>
+                    <p class="form-status" role="status" aria-live="polite"></p>
                 </form>
             </div>
         </div>
@@ -465,11 +482,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="footer-logo">the<span class="logo-accent">sajid</span>kamal</span>
                 <p>&copy; 2026 MD Sajid Kamal. All rights reserved.</p>
                 <p class="footer-tagline">Crafted with passion in Dhaka, Bangladesh</p>
+                <p class="footer-privacy">
+                    This site uses Umami, Google Tag Manager and Microsoft Clarity to understand how visitors use it.
+                    Clarity records clicks, scrolling and session replays. By using this site, you agree that Microsoft and I
+                    can collect and use this data. See the
+                    <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft Privacy Statement</a>.
+                </p>
             </div>
         </div>
     </footer>
 
-    <script src="js/three.min.js"></script>
+    <script src="js/particles.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
