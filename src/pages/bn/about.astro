@@ -1,0 +1,169 @@
+---
+// বাংলা "পরিচয়" পাতা: the Bangla About page. Lists come from src/data/bn.ts.
+// DRAFT TRANSLATION of src/pages/about.astro: read it through before going live.
+import '../../styles/bangla.css';
+import Base from '../../layouts/Base.astro';
+import Portrait from '../../components/Portrait.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Chapters from '../../components/Chapters.astro';
+import IntroVideo from '../../components/IntroVideo.astro';
+import { site } from '../../site.config';
+import { experience, ventures, education, certifications, expertise, beyondWork, media, openTo } from '../../data/bn';
+import { isPlaceholder } from '../../lib/util';
+---
+<Base title="পরিচয়" description="সাজিদ কামাল: FMCG ব্র্যান্ড স্ট্র্যাটেজিস্ট, ঘরের বাজারের ব্র্যান্ড ম্যানেজার এবং Sui Chokri-র প্রতিষ্ঠাতা। গল্প, অভিজ্ঞতা, শিক্ষা ও প্রেস কিট।" person type="profile">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">পরিচয়</p>
+      <h1 class="page-title">হ্যালো, আমি সাজিদ। এমন ব্র্যান্ড গড়ি, যা মানুষ <em>বারবার বেছে নেয়</em>।</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-hero">
+      <Portrait photo="about" />
+      <div class="about-hero__text">
+        <p>আমি ঢাকার একজন FMCG ব্র্যান্ড স্ট্র্যাটেজিস্ট। ছয় বছরের বেশি সময় ধরে নতুন পণ্য উন্নয়ন, ডিজিটাল মার্কেটিং ও ইন্টিগ্রেটেড ক্যাম্পেইন নিয়ে কাজ করছি, সঙ্গে সেই সিস্টেমগুলো নিয়েও, যা ব্র্যান্ডকে বড় করে।</p>
+        <p>এখন আমি ঘরের বাজারের ব্র্যান্ড ম্যানেজার। সেখানে মধুর পোর্টফোলিও থেকে সরিষার তেল, গাওয়া ঘি ও ফাংশনাল ফুড পর্যন্ত নতুন ক্যাটাগরি গড়েছি, আর রিটেইলের জন্য কোম্পানির প্রথম রুট-টু-মার্কেট ডিজাইন করছি।</p>
+        <p>এর আগে কাজ করেছি আকিজ বেকার্স, মেঘনা গ্রুপ ও রিমার্ক এইচবি-তে: শূন্য থেকে তিনটি বেকারি ব্র্যান্ড গড়া, নুডলসের বিক্রি ১৭২% বাড়ানো ট্রেড প্রোগ্রাম, হারল্যান কসমেটিকস পোর্টফোলিওর লঞ্চ, আর ১০০-র বেশি ডিজিটাল ক্যাম্পেইন।</p>
+        <p>চাকরির পাশাপাশি প্রতিষ্ঠা করেছি Sui Chokri, দর্জির দোকানের জন্য একধরনের “উবার”, যা পাড়ার ১৫৬টি দর্জিকে ক্রেতা ও ইন্ডি ব্র্যান্ডের সঙ্গে যুক্ত করেছে। উদ্যোগটি H&amp;M Foundation-এর Needle Innovation Challenge-এর সহায়তা পেয়েছে।</p>
+        <p>নর্থ সাউথ ইউনিভার্সিটিতে MIS ও মার্কেটিং পড়েছি, শুরু করেছিলাম ঢাকা বিশ্ববিদ্যালয়ের আইবিএ-তে। মার্কেটিংয়ে আসার আগে Criticalink-এর হয়ে ৭০০-র বেশি স্বেচ্ছাসেবককে জরুরি প্রাথমিক চিকিৎসার প্রশিক্ষণ দিয়েছি।</p>
+        <p class="placeholder">[ঐচ্ছিক: নিজের সম্পর্কে একটি ব্যক্তিগত লাইন, যেমন কাজের বাইরে কী করেন বা এখন কী নিয়ে কৌতূহল।]</p>
+        <div class="actions">
+          <a class="btn btn--primary" href={site.cv} download data-astro-reload>সিভি ডাউনলোড (PDF)</a>
+          <a class="link-arrow" href="/one-pager/" hreflang="en">এক পাতায় পরিচিতি <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="link-arrow" href={site.profiles.linkedin} target="_blank" rel="me noopener">লিংকডইন <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <dl class="glance">
+          <div><dt>অবস্থান</dt><dd>ঢাকা, বাংলাদেশ</dd></div>
+          <div><dt>এখন</dt><dd>ব্র্যান্ড ম্যানেজার, ঘরের বাজার</dd></div>
+          <div><dt>ফোকাস</dt><dd>খাদ্য, স্বাস্থ্য ও সৌন্দর্য পণ্যের ব্র্যান্ড</dd></div>
+          <div><dt>আগ্রহ</dt><dd>{openTo}</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <IntroVideo />
+
+  <section class="section section--rule" aria-labelledby="story-title">
+    <div class="container">
+      <SectionHead num="০১" id="story-title" title="এ পর্যন্ত <em>গল্পটা</em>" />
+      <Chapters />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="experience-title" id="experience">
+    <div class="container">
+      <SectionHead num="০২" id="experience-title" title="অভিজ্ঞতা" link={{ href: site.cv, label: 'পূর্ণ সিভি (PDF)' }} />
+      <ol class="timeline">
+        {experience.map((job) => (
+          <li class="timeline__item" data-reveal>
+            <p class="timeline__when">{job.dates}</p>
+            <div>
+              <h3 class="timeline__role">{job.role}</h3>
+              <p class="timeline__company">{job.company}</p>
+              <ul>{job.highlights.map((h) => <li>{h}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="ventures-title">
+    <div class="container">
+      <SectionHead num="০৩" id="ventures-title" title="গড়া, আর ফিরিয়ে দেওয়া" />
+      <ol class="timeline">
+        {ventures.map((v) => (
+          <li class="timeline__item" data-reveal>
+            <p class="timeline__when">{v.dates}</p>
+            <div>
+              <h3 class="timeline__role">{v.company}</h3>
+              <p class="timeline__company">{v.role}</p>
+              <ul>{v.highlights.map((h) => <li>{h}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="expertise-title">
+    <div class="container">
+      <SectionHead num="০৪" id="expertise-title" title="যা নিয়ে কাজ করি" />
+      <div class="expertise">
+        {expertise.map((g) => (
+          <div data-reveal>
+            <h3>{g.group}</h3>
+            <ul class="tag-list">{g.items.map((item) => <li class="tag">{item}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="learning-title">
+    <div class="container">
+      <SectionHead num="০৫" id="learning-title" title="শিক্ষা ও সার্টিফিকেশন" />
+      <div class="split">
+        <ul class="cred-list" aria-label="শিক্ষা">
+          {education.map((e) => (
+            <li><span><span class="cred-list__name">{e.school}</span><span class="cred-list__detail">{e.degree}</span></span><span class="cred-list__year">{e.dates}</span></li>
+          ))}
+        </ul>
+        <ul class="cred-list" aria-label="সার্টিফিকেশন">
+          {certifications.map((c) => (
+            <li><span><span class="cred-list__name">{c.name}</span><span class="cred-list__detail">{c.issuer} · {c.detail}</span></span><span class="cred-list__year">{c.year}</span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="beyond-title">
+    <div class="container">
+      <SectionHead num="০৬" id="beyond-title" title="কাজের বাইরে" />
+      <dl class="beyond">
+        {beyondWork.map((b) => (
+          <div data-reveal><dt>{b.label}</dt><dd class:list={[isPlaceholder(b.text) && 'placeholder']}>{b.text}</dd></div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="media-title">
+    <div class="container">
+      <SectionHead num="০৭" id="media-title" title="বক্তৃতা ও গণমাধ্যম" lead="[প্লেসহোল্ডার: বক্তৃতা, প্যানেল, গেস্ট লেকচার, পডকাস্ট ও সাক্ষাৎকার। প্রথমটি না হওয়া পর্যন্ত এই অংশটি মুছে রাখুন।]" />
+      <ul class="media-list">
+        {media.map((m) => (
+          <li class:list={[isPlaceholder(m.title) && 'placeholder']}><span class="media-list__year">{m.year}</span><span>{m.title}</span><span>{m.where}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="press-title" id="press">
+    <div class="container split">
+      <div>
+        <span class="section-num">০৮</span>
+        <h2 class="h-section" id="press-title">প্রেস কিট</h2>
+        <p class="lead">অনুষ্ঠানসূচি, প্রতিবেদন ও পরিচিতির জন্য সংক্ষিপ্ত পরিচিতি, সঙ্গে আমার সিভি। যেমন আছে, তেমনই ব্যবহার করতে পারেন।</p>
+      </div>
+      <div class="press">
+        <p class="press__bio" id="short-bio">
+          সাজিদ কামাল ঢাকাভিত্তিক একজন FMCG ব্র্যান্ড স্ট্র্যাটেজিস্ট এবং ঘরের বাজারের ব্র্যান্ড ম্যানেজার। আকিজ বেকার্স, মেঘনা গ্রুপ, রিমার্ক এইচবি ও
+          ঘরের বাজারে ছয় বছরে তিনি শূন্য থেকে তিনটি ব্র্যান্ড গড়েছেন, খাদ্য ও সৌন্দর্য পণ্যের নতুন ক্যাটাগরি লঞ্চ করেছেন এবং ১০০-র বেশি ডিজিটাল
+          ক্যাম্পেইনের নেতৃত্ব দিয়েছেন। তিনি Sui Chokri-রও প্রতিষ্ঠাতা, পাড়ার দর্জিদের নিয়ে গড়া একটি ডিস্ট্রিবিউটেড প্রোডাকশন নেটওয়ার্ক, যা
+          H&amp;M Foundation-এর Needle Innovation Challenge-এর সহায়তা পেয়েছে।
+        </p>
+        <div class="actions">
+          <button class="btn btn--ghost btn--small" type="button" data-copy="#short-bio" hidden>বায়ো কপি করুন</button>
+          <a class="link-arrow" href={site.cv} download data-astro-reload>সিভি ডাউনলোড <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="link-arrow" href={site.onePager} download data-astro-reload>এক পাতায় পরিচিতি (PDF) <span class="arrow" aria-hidden="true">→</span></a>
+          <span class="link-arrow placeholder" data-placeholder>[প্রেস ছবি ডাউনলোড]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

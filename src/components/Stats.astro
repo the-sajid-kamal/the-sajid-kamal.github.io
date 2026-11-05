@@ -1,11 +1,15 @@
 ---
 // Four big numbers. The final values are in the HTML; they count up when scrolled into view.
-import { stats } from '../data/home';
+import { stats as en } from '../data/home';
+import { stats as bn } from '../data/bn';
+import { getLang, digits } from '../i18n/ui';
+const lang = getLang(Astro.url);
+const stats = lang === 'bn' ? bn : en;
 ---
 <ul class="stats">
   {stats.map((s) => (
     <li class="stat" data-reveal>
-      <span class="stat__value"><span data-count={s.value}>{s.value}</span>{s.suffix && <em>{s.suffix}</em>}</span>
+      <span class="stat__value"><span data-count={s.value}>{digits(lang, s.value)}</span>{s.suffix && <em>{s.suffix}</em>}</span>
       <span class="stat__label">{s.label}</span>
     </li>
   ))}

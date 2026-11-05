@@ -14,6 +14,10 @@
 //
 //  Replies: {"ok": true} when sent; {"ok": false, "error": "..."} otherwise,
 //  and the page then shows your email address instead.
+//
+//  Each email ends with "How they found you": the campaign or site that brought
+//  the visitor (UTM tags, referrer), the first page they saw and how many pages
+//  they read, so you know which post, profile or printout is working.
 // =====================================================================
 
 const TOPICS = {
@@ -30,8 +34,30 @@ const json = (body, status = 200) =>
     headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
   });
 
+const LANGUAGES = { en: 'English', bn: 'Bangla' };
+
 const clean = (value, max) => String(value ?? '').replace(/\r\n?/g, '\n').trim().slice(0, max);
 const oneLine = (value) => value.replace(/[\r\n]+/g, ' ');
+
+// The visit summary the page attaches (see src/scripts/analytics.ts). Anything odd is ignored.
+function describeVisit(raw) {
+  let visit;
+  try { visit = typeof raw === 'string' ? JSON.parse(raw.slice(0, 3000)) : raw; } catch { return []; }
+  if (!visit || typeof visit !== 'object') return [];
+  const field = (value, max = 120) => (typeof value === 'string' || typeof value === 'number' ? oneLine(clean(value, max)) : '');
+  const count = (value) => { const n = Number(value); return Number.isFinite(n) && n > 0 ? Math.min(Math.round(n), 9999) : 0; };
+  const lines = [];
+  const source = [field(visit.source), field(visit.medium)].filter(Boolean).join(' / ');
+  const campaign = field(visit.campaign);
+  if (source) lines.push(`Source: ${source}${campaign ? ` (campaign: ${campaign})` : ''}`);
+  if (field(visit.referrer)) lines.push(`Came from: ${field(visit.referrer)}`);
+  if (!source && !field(visit.referrer)) lines.push('Source: direct (typed the address, a bookmark or an app)');
+  if (field(visit.landing, 200)) lines.push(`First page: ${field(visit.landing, 200)}`);
+  if (count(visit.pages)) lines.push(`Pages viewed this visit: ${count(visit.pages)}`);
+  if (count(visit.visits) > 1) lines.push(`Visits so far: ${count(visit.visits)}${field(visit.firstSource) ? ` (first via ${field(visit.firstSource)})` : ''}`);
+  if (field(visit.sentFrom, 200)) lines.push(`Sent from: ${field(visit.sentFrom, 200)}`);
+  return lines;
+}
 
 export async function onRequest({ request, env }) {
   if (request.method !== 'POST') {
@@ -62,6 +88,8 @@ export async function onRequest({ request, env }) {
   const organisation = oneLine(clean(data.organisation, 150));
   const message = clean(data.message, 5000);
   const topic = TOPICS[data.topic] ? data.topic : 'other';
+  const language = LANGUAGES[data.lang] ? data.lang : 'en';
+  const visit = describeVisit(data.attribution);
 
   if (!name || !message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ ok: false, error: 'invalid' }, 422);
@@ -88,9 +116,11 @@ export async function onRequest({ request, env }) {
     `Email: ${email}`,
     organisation ? `Organisation: ${organisation}` : null,
     `Topic: ${TOPICS[topic]}`,
+    language !== 'en' ? `Language: ${LANGUAGES[language]} (sent from the Bangla site)` : null,
     '',
     message,
     '',
+    ...(visit.length ? ['— How they found you —', ...visit, ''] : []),
     '— Sent from the contact form on thesajidkamal.me',
   ].filter((line) => line !== null).join('\n');
 

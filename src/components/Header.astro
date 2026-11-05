@@ -1,38 +1,45 @@
 ---
 import { site } from '../site.config';
+import { getLang, t, localHref, counterpart, type Lang } from '../i18n/ui';
 
-const nav = [
-  { label: 'Work', href: '/work/' },
-  { label: 'Writing', href: '/writing/' },
-  { label: 'About', href: '/about/' },
-  ...(site.showServices ? [{ label: 'Services', href: '/services/' }] : []),
-];
+const lang = getLang(Astro.url);
+const s = t(lang);
 const path = Astro.url.pathname;
-const isCurrent = (href: string) => path === href || path.startsWith(href);
+const nav = [
+  { label: s.nav.work, href: '/work/' },
+  { label: s.nav.writing, href: '/writing/' },
+  { label: s.nav.about, href: localHref(lang, '/about/') },
+  ...(site.showServices ? [{ label: s.nav.services, href: localHref(lang, '/services/') }] : []),
+];
+const contact = localHref(lang, '/contact/');
+const isCurrent = (href: string) => path === href || (href.length > 4 && path.startsWith(href));
+// The language switch goes to the same page in the other language, or to its home page
+const other: { lang: Lang; href: string } = counterpart(path) ?? (lang === 'bn' ? { lang: 'en', href: '/' } : { lang: 'bn', href: '/bn/' });
 ---
-<header class="site-header" data-header>
+<header class="site-header" id="top" data-header data-zone="header">
   <div class="container site-header__inner">
-    <a class="wordmark" href="/">{site.name}<span class="wordmark__dot" aria-hidden="true">.</span></a>
+    <a class="wordmark" href={localHref(lang, '/')}>{site.name}<span class="wordmark__dot" aria-hidden="true">.</span></a>
 
-    <nav class="site-nav" id="site-menu" aria-label="Main">
+    <nav class="site-nav" id="site-menu" aria-label={s.mainNav}>
       <ul class="site-nav__list">
         {nav.map((item) => (
           <li>
             <a class="site-nav__link" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
           </li>
         ))}
-        <li class="site-nav__cta"><a class="btn btn--primary" href="/contact/">Work with me</a></li>
+        <li class="site-nav__cta"><a class="btn btn--primary" href={contact}>{s.workWithMe}</a></li>
       </ul>
     </nav>
 
     <div class="header-tools">
-      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Switch between light and dark theme">
+      <a class="lang-switch" href={other.href} hreflang={other.lang} lang={other.lang} aria-label={s.langSwitch.aria} data-lang-switch={other.lang}>{s.langSwitch.label}</a>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label={s.themeToggle}>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6" stroke-linecap="round"></path></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8 8.4 8.4 0 1 0 20.2 14.6Z" stroke-linejoin="round"></path></svg>
       </button>
-      <a class="btn btn--primary btn--small" href="/contact/" aria-current={isCurrent('/contact/') ? 'page' : undefined}>Work with me</a>
+      <a class="btn btn--primary btn--small" href={contact} aria-current={isCurrent(contact) ? 'page' : undefined}>{s.workWithMe}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
-        <span data-menu-label>Menu</span>
+        <span data-menu-label>{s.menu}</span>
         <span class="menu-toggle__icon" aria-hidden="true"></span>
       </button>
     </div>

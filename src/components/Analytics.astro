@@ -2,32 +2,53 @@
 // Analytics tools. The IDs live in src/site.config.ts → analytics ('' switches one off).
 // They never load while you work locally (npm run dev), or in a build made with
 // PUBLIC_ANALYTICS=off, so your own visits don't count.
+//
+// Speed: Umami and Cloudflare are tiny and load straight away, so every visit is counted.
+// The heavier tools (Tag Manager, GA4, Clarity, Meta, LinkedIn) start once the page has
+// loaded and the browser is idle, or at the visitor's first tap, scroll or key press.
+// Events sent before then are queued, not lost. Events: src/scripts/analytics.ts
 import { site } from '../site.config';
 const off = import.meta.env.DEV || import.meta.env.PUBLIC_ANALYTICS === 'off';
-const { gtm, umami, clarity, cloudflare } = off ? { gtm: '', umami: '', clarity: '', cloudflare: '' } : site.analytics;
+const none = { gtm: '', umami: '', clarity: '', cloudflare: '', ga4: '', metaPixel: '', linkedinInsight: '' };
+const { gtm, umami, clarity, cloudflare, ga4, metaPixel, linkedinInsight } = off ? none : site.analytics;
+const deferred = gtm || ga4 || clarity || metaPixel || linkedinInsight;
 ---
-{gtm && (
-  <script is:inline define:vars={{ gtm }}>
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', gtm);
-  </script>
-)}
 {umami && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={umami}></script>}
-{clarity && (
-  <script is:inline define:vars={{ clarity }}>
-    (function (c, l, a, r, i, t, y) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, 'clarity', 'script', clarity);
+{cloudflare && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cloudflare })}></script>}
+{deferred && (
+  <script is:inline define:vars={{ gtm, ga4, clarity, metaPixel, linkedinInsight }}>
+    (function (w, d) {
+      if (w.__analyticsStarted) return;
+      w.__analyticsStarted = true;
+      w.dataLayer = w.dataLayer || [];
+      // Stand-ins that queue calls until each tool arrives
+      if (gtm) w.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      if (ga4) { w.gtag = function () { w.dataLayer.push(arguments); }; w.gtag('js', new Date()); w.gtag('config', ga4); }
+      if (clarity) w.clarity = w.clarity || function () { (w.clarity.q = w.clarity.q || []).push(arguments); };
+      if (metaPixel && !w.fbq) {
+        var n = w.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+        w._fbq = n; n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+        w.fbq('init', metaPixel); w.fbq('track', 'PageView');
+      }
+      if (linkedinInsight) {
+        w._linkedin_partner_id = linkedinInsight;
+        (w._linkedin_data_partner_ids = w._linkedin_data_partner_ids || []).push(linkedinInsight);
+        if (!w.lintrk) { w.lintrk = function (a, b) { w.lintrk.q.push([a, b]); }; w.lintrk.q = []; }
+      }
+      function add(src) { var s = d.createElement('script'); s.async = true; s.src = src; d.head.appendChild(s); }
+      var started = false;
+      function start() {
+        if (started) return;
+        started = true;
+        if (gtm) add('https://www.googletagmanager.com/gtm.js?id=' + gtm);
+        if (ga4) add('https://www.googletagmanager.com/gtag/js?id=' + ga4);
+        if (clarity) add('https://www.clarity.ms/tag/' + clarity);
+        if (metaPixel) add('https://connect.facebook.net/en_US/fbevents.js');
+        if (linkedinInsight) add('https://snap.licdn.com/li.lms-analytics/insight.min.js');
+      }
+      function whenIdle() { (w.requestIdleCallback || function (f) { setTimeout(f, 1200); })(start, { timeout: 3000 }); }
+      if (d.readyState === 'complete') whenIdle(); else w.addEventListener('load', whenIdle, { once: true });
+      ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(function (e) { w.addEventListener(e, start, { once: true, passive: true }); });
+    })(window, document);
   </script>
-)}
-{cloudflare && (
-  <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cloudflare })}></script>
 )}

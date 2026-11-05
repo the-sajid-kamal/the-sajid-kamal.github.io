@@ -4,6 +4,9 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { readdirSync, readFileSync } from 'node:fs';
 
+// Short links like /card and /li (src/data/links.ts) only forward visitors: keep them out of the sitemap
+const shortLinks = [...readFileSync('./src/data/links.ts', 'utf8').matchAll(/slug: '([^']+)'/g)].map((m) => `/${m[1]}/`);
+
 // Articles still marked "placeholder: true" are left out of the sitemap
 const unfinished = readdirSync('./src/content/writing')
   .filter((f) => f.endsWith('.md'))
@@ -17,6 +20,13 @@ export default defineConfig({
   // Put the styles inside each page: one less download before anything shows
   build: { inlineStylesheets: 'always' },
   integrations: [
-    sitemap({ filter: (page) => !page.includes('/404') && !unfinished.some((path) => page.endsWith(path)) }),
+    sitemap({
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        return !path.includes('/404') && !unfinished.includes(path) && !shortLinks.includes(path);
+      },
+      // English and Bangla versions of a page point to each other
+      i18n: { defaultLocale: 'en', locales: { en: 'en-GB', bn: 'bn-BD' } },
+    }),
   ],
 });

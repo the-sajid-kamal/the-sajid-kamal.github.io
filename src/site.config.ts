@@ -25,9 +25,34 @@ export const site = {
   // A booking page (Cal.com, Calendly, Google Calendar). While '', "Book a call"
   // buttons go to the contact form instead.
   bookingUrl: '',
-  // Newsletter sign-up page (Substack, LinkedIn newsletter, Buttondown...). '' points people to LinkedIn.
-  newsletterUrl: '',
+  // WhatsApp: the number in international format, digits only (8801… for Bangladesh).
+  // Set number to '' to remove every WhatsApp button. floating: the round button in the corner.
+  whatsapp: {
+    number: '8801732101111',
+    floating: true,
+    message: {
+      en: 'Hi Sajid, I found your website and would like to talk about ',
+      bn: 'হ্যালো সাজিদ, আপনার ওয়েবসাইট দেখে যোগাযোগ করছি। কথা বলতে চাই ',
+    },
+  },
+
   cv: '/MD-Sajid-Kamal-CV.pdf',
+  // One-page summary (PDF). Rebuild it with `npm run pdf` after changing /one-pager/.
+  onePager: '/Sajid-Kamal-One-Pager.pdf',
+
+  // HIDDEN FOR NOW. Newsletter sign-up box on the Writing page, articles and home page.
+  // Switch on with showNewsletter: true. The button goes to newsletterUrl
+  // (Substack, LinkedIn newsletter, Buttondown...), or to LinkedIn while it is ''.
+  showNewsletter: false,
+  newsletterUrl: '',
+
+  // HIDDEN FOR NOW. Intro video on the home and About pages. Switch on with show: true.
+  // Until youtubeId is set (the part after v= in a YouTube link) a placeholder shows.
+  video: {
+    show: false,
+    youtubeId: '',
+    title: { en: 'Meet Sajid in two minutes', bn: 'দুই মিনিটে সাজিদের সঙ্গে পরিচয়' },
+  },
 
   profiles: {
     linkedin: 'https://www.linkedin.com/in/sajid-kamal/',
@@ -56,13 +81,27 @@ export const site = {
     turnstileSiteKey: '',
   },
 
-  // Analytics. Leave a value '' to switch that tool off.
+  // Analytics. Leave a value '' to switch that tool off. Every click that matters
+  // (CV, WhatsApp, email, share, contact form...) is sent to all the tools that are on.
+  // See "Analytics and tracking" in the README for the full list of events.
   analytics: {
     gtm: 'GTM-K3FKGBKT',
     umami: 'c3292b9f-a17a-4e91-9679-1f1fa07db4f9',
     clarity: 'wnjoux3m19',
     // Cloudflare Web Analytics token (free, cookie-free), if you switch it on in Cloudflare
     cloudflare: '',
+    // Google Analytics 4 measurement ID (G-XXXXXXX). Only if GA4 is NOT already set up inside GTM.
+    ga4: '',
+    // Meta (Facebook/Instagram) Pixel ID: lets you retarget visitors with ads
+    metaPixel: '',
+    // LinkedIn Insight Tag partner ID: company insights and retargeting on LinkedIn
+    linkedinInsight: '',
+  },
+
+  // Search Console ownership checks: paste only the code from the meta tag each one gives you
+  verification: {
+    google: '',
+    bing: '',
   },
 };
 

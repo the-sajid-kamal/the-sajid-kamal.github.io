@@ -1,6 +1,9 @@
 ---
-import { testimonials } from '../data/home';
+import { testimonials as en } from '../data/home';
+import { testimonials as bn } from '../data/bn';
+import { getLang } from '../i18n/ui';
 import { isPlaceholder } from '../lib/util';
+const testimonials = getLang(Astro.url) === 'bn' ? bn : en;
 ---
 {testimonials.length > 0 && (
   <div class="quotes">

@@ -1,0 +1,60 @@
+---
+// বাংলা "যোগাযোগ" পাতা: the Bangla Contact page (the same form as the English page).
+import '../../styles/bangla.css';
+import Base from '../../layouts/Base.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { site } from '../../site.config';
+import { resolveHref, isExternal, whatsappHref } from '../../lib/util';
+
+const booking = resolveHref('booking', 'bn');
+const reasons = [
+  { topic: 'hiring', title: 'নিয়োগ', text: 'ব্র্যান্ড বা মার্কেটিংয়ের কোনো পদ' },
+  { topic: 'consulting', title: 'কনসাল্টিং', text: 'ব্র্যান্ড বা লঞ্চে সহায়তা' },
+  { topic: 'venture', title: 'উদ্যোগ', text: 'বিনিয়োগ বা একসাথে কিছু গড়া' },
+  { topic: 'speaking', title: 'বক্তৃতা', text: 'অনুষ্ঠান, ক্লাস ও গণমাধ্যম' },
+  { topic: 'other', title: 'হ্যালো', text: 'অন্য যেকোনো বিষয়' },
+];
+---
+<Base title="যোগাযোগ" description="চাকরি, কনসাল্টিং, নতুন উদ্যোগ, বক্তৃতা বা অন্য যেকোনো বিষয়ে সাজিদ কামালের সঙ্গে যোগাযোগ করুন।" hideCta>
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">যোগাযোগ</p>
+      <h1 class="page-title">চলুন <em>কথা বলি</em>।</h1>
+      <p class="lead">নিয়োগ, ব্র্যান্ড গড়া, কোনো উদ্যোক্তার পাশে দাঁড়ানো বা ইভেন্ট, যা-ই হোক, আপনার কথা শুনতে পেলে খুশি হব। বিষয়টা বেছে নিয়ে একটা ছোট নোট পাঠান।</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <nav class="reasons" aria-label="কী নিয়ে কথা বলতে চান?">
+        {reasons.map((r) => (
+          <a class="reason-card" href={`/bn/contact/?topic=${r.topic}#message`} data-topic={r.topic}>
+            <strong>{r.title}</strong>
+            <span>{r.text}</span>
+          </a>
+        ))}
+      </nav>
+
+      <div class="contact-grid">
+        <div>
+          <a class="big-link" href={`mailto:${site.email}`}>{site.email}</a>
+          <ul class="contact-details">
+            <li><span class="contact-details__label">লিংকডইন</span><a href={site.profiles.linkedin} target="_blank" rel="me noopener">linkedin.com/in/sajid-kamal</a></li>
+            {site.whatsapp.number && <li><span class="contact-details__label">হোয়াটসঅ্যাপ</span><a href={whatsappHref('bn')} target="_blank" rel="noopener">হোয়াটসঅ্যাপে মেসেজ দিন</a></li>}
+            {site.phone && <li><span class="contact-details__label">ফোন</span><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></li>}
+            <li><span class="contact-details__label">অবস্থান</span><span>ঢাকা, বাংলাদেশ</span></li>
+            <li><span class="contact-details__label">কল</span><a href={booking} target={isExternal(booking) ? '_blank' : undefined} rel={isExternal(booking) ? 'noopener' : undefined} data-track="booking_click">৩০ মিনিটের কল বুক করুন</a></li>
+            <li><span class="contact-details__label">সিভি</span><a href={site.cv} download data-astro-reload>ডাউনলোড (PDF)</a></li>
+            <li><span class="contact-details__label">কন্টাক্ট কার্ড</span><a href="/sajid-kamal.vcf" download="Sajid-Kamal.vcf" data-astro-reload>ফোনে সেভ করুন</a></li>
+          </ul>
+        </div>
+
+        <div class="form-card" id="message">
+          <h2>বার্তা পাঠান</h2>
+          <p class="placeholder">[সাধারণত দুই কর্মদিবসের মধ্যে উত্তর দিই।]</p>
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -12,6 +12,8 @@ import Chapters from '../components/Chapters.astro';
 import Principles from '../components/Principles.astro';
 import PostCard from '../components/PostCard.astro';
 import Testimonials from '../components/Testimonials.astro';
+import IntroVideo from '../components/IntroVideo.astro';
+import Newsletter from '../components/Newsletter.astro';
 import { site } from '../site.config';
 import { companies, testimonials, credentials } from '../data/home';
 import { getPosts } from '../lib/posts';
@@ -22,7 +24,7 @@ const realPosts = allPosts.filter((p) => !p.data.placeholder);
 const posts = [...realPosts, ...allPosts.filter((p) => p.data.placeholder)].slice(0, 3);
 ---
 <Base person>
-  <section class="hero">
+  <section class="hero" data-zone="hero">
     <div class="container hero__grid">
       <div class="hero__copy">
         <p class="eyebrow hero__fade">{site.roles.join(' · ')} · Dhaka</p>
@@ -52,6 +54,8 @@ const posts = [...realPosts, ...allPosts.filter((p) => p.data.placeholder)].slic
   </section>
 
   <Marquee />
+
+  <IntroVideo />
 
   <section class="section section--rule" aria-labelledby="help-title" id="how-i-can-help">
     <div class="container">
@@ -99,6 +103,7 @@ const posts = [...realPosts, ...allPosts.filter((p) => p.data.placeholder)].slic
       <div class="post-grid">
         {posts.map((post, i) => <PostCard post={post} index={i} />)}
       </div>
+      <Newsletter />
     </div>
   </section>
 

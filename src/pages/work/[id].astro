@@ -8,6 +8,7 @@ import CoverArt from '../../components/CoverArt.astro';
 import { photo } from '../../lib/photos';
 import { isPlaceholder } from '../../lib/util';
 import { markDrafts } from '../../lib/drafts';
+import Share from '../../components/Share.astro';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
@@ -26,7 +27,8 @@ const gallery = data.gallery.map((g, i) => ({ ...g, img: photo(`work/${id}-${i +
 const body = data.placeholder && project.rendered?.html ? markDrafts(project.rendered.html) : null;
 ---
 <Base title={data.title} description={data.summary}>
-  <article>
+  <div class="reading-progress" aria-hidden="true" data-reading-progress></div>
+  <article data-article data-zone="case-study">
     <header class="case-head container">
       <a class="back-link" href="/work/"><span class="arrow" aria-hidden="true">←</span> All work</a>
       <p class="eyebrow">{data.category}</p>
@@ -95,6 +97,8 @@ const body = data.placeholder && project.rendered?.html ? markDrafts(project.ren
           <figcaption class:list={[isPlaceholder(data.quote.name) && 'placeholder']}><strong>{data.quote.name}</strong>{data.quote.role}</figcaption>
         </figure>
       )}
+
+      <Share title={`${data.title}: a case study by Sajid Kamal`} text={data.summary} label="Share this case study" />
 
       {next && next.id !== id && (
         <nav class="next-link" aria-label="Next project">

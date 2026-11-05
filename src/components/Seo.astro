@@ -1,7 +1,11 @@
 ---
 // Page title, description, link previews (Open Graph / X) and structured data for Google.
+// Every page gets its own link-preview image, made at build time (src/pages/og/[slug].png.ts).
 import { site } from '../site.config';
 import { experience, education } from '../data/career';
+import { meta as bnMeta } from '../data/bn';
+import { getLang, counterpart } from '../i18n/ui';
+import { shareImageFor } from '../lib/util';
 
 interface Props {
   title?: string;
@@ -13,16 +17,29 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, description = site.description, image = '/og/share-card.png', type = 'website', published, person = false, noindex = false } = Astro.props;
-const fullTitle = title ? `${title} | ${site.name}` : site.title;
+const lang = getLang(Astro.url);
+const bn = lang === 'bn';
+const {
+  title,
+  description = bn ? bnMeta.description : site.description,
+  image = shareImageFor(Astro.url.pathname),
+  type = 'website',
+  published,
+  person = false,
+  noindex = false,
+} = Astro.props;
+const siteTitle = bn ? bnMeta.title : site.title;
+const fullTitle = title ? `${title} | ${site.name}` : siteTitle;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const imageUrl = new URL(image, site.url).href;
+const alternate = counterpart(Astro.url.pathname);
+const { google, bing } = site.verification;
 
 const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: site.name,
-  alternateName: site.fullName,
+  alternateName: [site.fullName, site.nameBangla].filter(Boolean),
   url: site.url + '/',
   image: imageUrl,
   email: `mailto:${site.email}`,
@@ -31,6 +48,7 @@ const personLd = {
   address: { '@type': 'PostalAddress', addressLocality: 'Dhaka', addressCountry: 'BD' },
   alumniOf: education.map((e) => ({ '@type': 'CollegeOrUniversity', name: e.school })),
   knowsAbout: ['Brand management', 'FMCG', 'Go-to-market strategy', 'Route-to-market', 'Trade marketing', 'Digital marketing', 'Category development'],
+  knowsLanguage: ['bn', 'en'],
   sameAs: Object.values(site.profiles).filter(Boolean),
   hasOccupation: experience.slice(0, 1).map((job) => ({ '@type': 'Occupation', name: job.role })),
 };
@@ -49,19 +67,30 @@ const articleLd = type === 'article' && published && {
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+{!noindex && alternate && (
+  <>
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    <link rel="alternate" hreflang={alternate.lang} href={new URL(alternate.href, site.url).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(bn ? alternate.href : Astro.url.pathname, site.url).href} />
+  </>
+)}
+{google && <meta name="google-site-verification" content={google} />}
+{bing && <meta name="msvalidate.01" content={bing} />}
 
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={site.name} />
-<meta property="og:title" content={title ?? site.title} />
+<meta property="og:title" content={title ?? siteTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={imageUrl} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:locale" content="en_GB" />
+<meta property="og:image:alt" content={title ?? siteTitle} />
+<meta property="og:locale" content={bn ? 'bn_BD' : 'en_GB'} />
+{alternate && <meta property="og:locale:alternate" content={bn ? 'en_GB' : 'bn_BD'} />}
 {published && <meta property="article:published_time" content={published.toISOString()} />}
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title ?? site.title} />
+<meta name="twitter:title" content={title ?? siteTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={imageUrl} />
 

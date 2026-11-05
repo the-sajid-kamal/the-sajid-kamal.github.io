@@ -1,0 +1,37 @@
+---
+// Share buttons: the phone's own share sheet (where the browser has one), LinkedIn,
+// WhatsApp, Facebook, X, email and "copy link". Shared links carry UTM tags, so
+// analytics shows which network each visit came from.
+import { site } from '../site.config';
+import { getLang, t } from '../i18n/ui';
+interface Props { title: string; text?: string; path?: string; label?: string }
+const lang = getLang(Astro.url);
+const s = t(lang).share;
+const { title, text = '', path = Astro.url.pathname, label = s.label } = Astro.props;
+const tagged = (source: string, medium = 'social') => {
+  const url = new URL(path, site.url);
+  url.searchParams.set('utm_source', source);
+  url.searchParams.set('utm_medium', medium);
+  url.searchParams.set('utm_campaign', 'share');
+  return url.href;
+};
+const enc = encodeURIComponent;
+const links = [
+  { network: 'linkedin', name: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(tagged('linkedin'))}` },
+  { network: 'whatsapp', name: 'WhatsApp', href: `https://wa.me/?text=${enc(`${title} ${tagged('whatsapp')}`)}` },
+  { network: 'facebook', name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${enc(tagged('facebook'))}` },
+  { network: 'x', name: 'X', href: `https://x.com/intent/post?text=${enc(title)}&url=${enc(tagged('x'))}` },
+  { network: 'email', name: s.email, href: `mailto:?subject=${enc(title)}&body=${enc(`${text ? `${text}\n\n` : ''}${tagged('email', 'email')}`)}` },
+];
+---
+<div class="share" data-share data-share-title={title} data-share-text={text} data-share-url={tagged('native', 'share')} data-zone="share">
+  <span class="share__label">{label}</span>
+  <button class="share__btn share__btn--native" type="button" data-share-native hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    {s.native}
+  </button>
+  {links.map((l) => (
+    <a class="share__btn" href={l.href} target={l.network === 'email' ? undefined : '_blank'} rel="noopener" data-share-network={l.network}>{l.name}</a>
+  ))}
+  <button class="share__btn" type="button" data-copy="url" hidden>{s.copy}</button>
+</div>

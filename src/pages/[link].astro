@@ -1,0 +1,25 @@
+---
+// Short links such as /card or /li (the list is in src/data/links.ts).
+// Each is a tiny page that forwards the visitor straight away, on any host.
+import { shortLinks } from '../data/links';
+import { site } from '../site.config';
+
+export function getStaticPaths() {
+  return shortLinks.map((link) => ({ params: { link: link.slug }, props: { to: link.to } }));
+}
+const { to } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0;url=${to}`} />
+    <title>{site.name}</title>
+    <script is:inline define:vars={{ to }}>location.replace(to);</script>
+  </head>
+  <body style="font-family: system-ui, sans-serif; padding: 2rem">
+    <a href={to}>Continue to {site.name}’s site</a>
+  </body>
+</html>

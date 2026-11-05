@@ -1,18 +1,22 @@
 ---
 import { site } from '../site.config';
-import { resolveHref, isExternal } from '../lib/util';
-const booking = resolveHref('booking');
+import { getLang, t } from '../i18n/ui';
+import { resolveHref, isExternal, whatsappHref } from '../lib/util';
+const lang = getLang(Astro.url);
+const s = t(lang).cta;
+const booking = resolveHref('booking', lang);
 ---
-<section class="cta-band section--night" aria-labelledby="cta-title">
+<section class="cta-band section--night" aria-labelledby="cta-title" data-zone="cta-band">
   <div class="container">
-    <p class="eyebrow">Let’s talk</p>
-    <h2 class="cta-band__title" id="cta-title">Let’s build something people <em>reach for</em>.</h2>
-    <p class="cta-band__text">Hiring for a brand role, launching a product, backing a founder or planning an event? Tell me what you’re working on.</p>
+    <p class="eyebrow">{s.eyebrow}</p>
+    <h2 class="cta-band__title" id="cta-title" set:html={s.title} />
+    <p class="cta-band__text">{s.text}</p>
     <a class="big-link" href={`mailto:${site.email}`}>{site.email}</a>
     <div class="actions">
-      <a class="btn btn--primary" href={booking} target={isExternal(booking) ? '_blank' : undefined} rel={isExternal(booking) ? 'noopener' : undefined}>Book a 30-minute call</a>
-      <a class="link-arrow" href={site.profiles.linkedin} target="_blank" rel="me noopener">Connect on LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
-      <a class="link-arrow" href={site.cv} download data-astro-reload>Download CV <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn--primary" href={booking} target={isExternal(booking) ? '_blank' : undefined} rel={isExternal(booking) ? 'noopener' : undefined} data-track="booking_click">{s.book}</a>
+      {site.whatsapp.number && <a class="link-arrow" href={whatsappHref(lang)} target="_blank" rel="noopener">{s.whatsapp} <span class="arrow" aria-hidden="true">→</span></a>}
+      <a class="link-arrow" href={site.profiles.linkedin} target="_blank" rel="me noopener">{s.linkedin} <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="link-arrow" href={site.cv} download data-astro-reload>{s.cv} <span class="arrow" aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>

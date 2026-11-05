@@ -1,10 +1,14 @@
 ---
-import { principles } from '../data/home';
+import { principles as en } from '../data/home';
+import { principles as bn } from '../data/bn';
+import { getLang, digits } from '../i18n/ui';
+const lang = getLang(Astro.url);
+const principles = lang === 'bn' ? bn : en;
 ---
 <ol class="principles">
   {principles.map((p, i) => (
     <li class="principle" data-reveal>
-      <span class="principle__num">{String(i + 1).padStart(2, '0')}</span>
+      <span class="principle__num">{digits(lang, String(i + 1).padStart(2, '0'))}</span>
       <div>
         <h3 class="principle__title">{p.title}</h3>
         <p class="principle__text">{p.text}</p>

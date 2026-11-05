@@ -1,0 +1,117 @@
+---
+// বাংলা প্রথম পাতা: the Bangla home page. Text is here and in src/data/bn.ts.
+// DRAFT TRANSLATION of src/pages/index.astro: read it through before going live.
+// Case studies and essays stay in English (the cards link to them).
+import '../../styles/bangla.css';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Portrait from '../../components/Portrait.astro';
+import Marquee from '../../components/Marquee.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import AudienceTabs from '../../components/AudienceTabs.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import Stats from '../../components/Stats.astro';
+import Chapters from '../../components/Chapters.astro';
+import Principles from '../../components/Principles.astro';
+import PostCard from '../../components/PostCard.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import IntroVideo from '../../components/IntroVideo.astro';
+import { companies, testimonials, credentials } from '../../data/bn';
+import { getPosts } from '../../lib/posts';
+
+const work = (await getCollection('work')).filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const allPosts = await getPosts();
+const posts = [...allPosts.filter((p) => !p.data.placeholder), ...allPosts.filter((p) => p.data.placeholder)].slice(0, 3);
+---
+<Base person>
+  <section class="hero" data-zone="hero">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow hero__fade">ব্র্যান্ড বিল্ডার · অপারেটর · উদ্যোক্তা · ঢাকা</p>
+        <h1 class="display hero__title">
+          <span class="line"><span>আমি এমন ব্র্যান্ড গড়ি,</span></span>
+          <span class="line"><span>যা মানুষ <em>বারবার বেছে নেয়</em>।</span></span>
+        </h1>
+        <p class="hero__intro hero__fade">
+          আমি <strong>সাজিদ কামাল</strong>, ঘরের বাজারের ব্র্যান্ড ম্যানেজার। ছয় বছর ধরে বাংলাদেশে খাদ্য ও সৌন্দর্য পণ্যকে আইডিয়া থেকে
+          দোকানের তাক পর্যন্ত নিয়ে গেছি: শূন্য থেকে তিনটি ব্র্যান্ড, চারটি নতুন ক্যাটাগরি, ১০০+ ক্যাম্পেইন, আর একটি স্টার্টআপ, যা পাড়ার
+          ১৫৬টি দর্জির দোকানকে এক নেটওয়ার্কে এনেছে।
+        </p>
+        <div class="actions hero__fade">
+          <a class="btn btn--primary" href="/work/">আমার কাজ দেখুন</a>
+          <a class="btn btn--ghost" href="#how-i-can-help">কীভাবে সাহায্য করতে পারি</a>
+        </div>
+      </div>
+      <Portrait priority signature now />
+    </div>
+  </section>
+
+  <section class="brands" aria-label="যেসব প্রতিষ্ঠানের সঙ্গে কাজ করেছি">
+    <div class="container brands__inner">
+      <p class="brands__label">যাদের সঙ্গে কাজ করেছি</p>
+      <ul class="brands__list">{companies.map((c) => <li>{c}</li>)}</ul>
+    </div>
+  </section>
+
+  <Marquee />
+
+  <IntroVideo />
+
+  <section class="section section--rule" aria-labelledby="help-title" id="how-i-can-help">
+    <div class="container">
+      <SectionHead num="০১" id="help-title" title="কীভাবে <em>সাহায্য</em> করতে পারি" lead="নিয়োগ, বিনিয়োগ, ব্র্যান্ড গড়া বা ইভেন্ট আয়োজন, যে কারণেই আসুন, শুরু করুন এখান থেকে।" />
+      <AudienceTabs />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="work-title">
+    <div class="container">
+      <SectionHead num="০২" id="work-title" title="বাছাই করা কাজ" lead="লঞ্চ, ব্র্যান্ড বিল্ড, ট্রেড প্রোগ্রাম আর একটি স্টার্টআপ, পেছনের সংখ্যাসহ। কেস স্টাডিগুলো ইংরেজিতে।" link={{ href: '/work/', label: 'সব প্রজেক্ট' }} />
+      <div class="work-grid" lang="en">
+        {work.map((project, i) => <WorkCard project={project} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--night" aria-label="সংখ্যায়">
+    <div class="container">
+      <Stats />
+      <div class="credentials">
+        <p class="credentials__label">স্বীকৃতি</p>
+        <ul class="credentials__list">{credentials.map((c) => <li>{c}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="story-title">
+    <div class="container">
+      <SectionHead num="০৩" id="story-title" title="এ পর্যন্ত <em>গল্পটা</em>" lead="ফার্স্ট-এইড ট্রেইনার থেকে ব্র্যান্ড বিল্ডার ও উদ্যোক্তা, এক অধ্যায় করে।" link={{ href: '/bn/about/', label: 'পুরো গল্প' }} />
+      <Chapters compact />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="principles-title">
+    <div class="container">
+      <SectionHead num="০৪" id="principles-title" title="যেভাবে কাজ করি" />
+      <Principles />
+    </div>
+  </section>
+
+  <section class="section section--rule" aria-labelledby="writing-title">
+    <div class="container">
+      <SectionHead num="০৫" id="writing-title" title="তাক থেকে <em>নোট</em>" lead="ব্র্যান্ড গড়া, রিটেইল আর বাংলাদেশের মানুষের কেনাকাটা নিয়ে লেখা। লেখাগুলো ইংরেজিতে।" link={{ href: '/writing/', label: 'সব লেখা' }} />
+      <div class="post-grid" lang="en">
+        {posts.map((post, i) => <PostCard post={post} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  {testimonials.length > 0 && (
+    <section class="section section--rule" aria-labelledby="quotes-title">
+      <div class="container">
+        <SectionHead num="০৬" id="quotes-title" title="সহকর্মীদের চোখে" />
+        <Testimonials />
+      </div>
+    </section>
+  )}
+</Base>

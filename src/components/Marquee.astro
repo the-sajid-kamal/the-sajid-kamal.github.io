@@ -1,10 +1,14 @@
 ---
 // Slow-scrolling band of products. Pauses on hover; still for reduced motion.
-import { shelf } from '../data/home';
+import { shelf as en } from '../data/home';
+import { shelf as bn } from '../data/bn';
+import { getLang } from '../i18n/ui';
+const lang = getLang(Astro.url);
+const shelf = lang === 'bn' ? bn : en;
 ---
 <section class="marquee" aria-labelledby="shelf-title">
   <div class="container marquee__head">
-    <p class="eyebrow" id="shelf-title">Brought to the shelf</p>
+    <p class="eyebrow" id="shelf-title">{lang === 'bn' ? 'যেসব পণ্য তাকে পৌঁছেছে' : 'Brought to the shelf'}</p>
   </div>
   <div class="marquee__viewport">
     <ul class="marquee__track">

@@ -1,20 +1,25 @@
 ---
-// "How I can help": one tab per kind of visitor. Content lives in src/data/home.ts.
-// Without JavaScript the panels simply stack, so nothing is ever hidden.
-import { audiences } from '../data/home';
+// "How I can help": one tab per kind of visitor. Content lives in src/data/home.ts
+// (Bangla: src/data/bn.ts). Without JavaScript the panels simply stack, so nothing is ever hidden.
+import { audiences as en } from '../data/home';
+import { audiences as bn } from '../data/bn';
+import { getLang } from '../i18n/ui';
 import { resolveHref, isExternal, isPlaceholder } from '../lib/util';
+const lang = getLang(Astro.url);
+const audiences = lang === 'bn' ? bn : en;
 ---
 <div class="audience" data-tabs>
-  <div class="audience__tabs" role="tablist" aria-label="I’m here for">
+  <div class="audience__tabs" role="tablist" aria-label={lang === 'bn' ? 'আমি এসেছি' : 'I’m here for'}>
     {audiences.map((a, i) => (
       <button class="audience__tab" type="button" role="tab" id={`tab-${a.id}`} aria-controls={a.id} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{a.tab}</button>
     ))}
+    <span class="audience__indicator" aria-hidden="true"></span>
   </div>
   {audiences.map((a) => {
-    const primary = resolveHref(a.primary.href);
-    const secondary = resolveHref(a.secondary.href);
+    const primary = resolveHref(a.primary.href, lang);
+    const secondary = resolveHref(a.secondary.href, lang);
     return (
-      <section class="audience__panel" id={a.id} role="tabpanel" aria-labelledby={`tab-${a.id}`}>
+      <section class="audience__panel" id={a.id} role="tabpanel" aria-labelledby={`tab-${a.id}`} data-zone={a.id}>
         <div class="audience__pitch">
           <p class="eyebrow">{a.eyebrow}</p>
           <h3 class="audience__title">{a.title}</h3>

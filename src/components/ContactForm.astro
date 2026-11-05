@@ -1,42 +1,40 @@
 ---
 // Contact form. Sends to /api/contact (functions/api/contact.js on Cloudflare Pages).
 // The topic can be pre-selected with a link like /contact/?topic=consulting#message
+// The script adds where the visitor came from (campaign, referrer, landing page) so
+// the email tells you which link or post brought them.
 import { site } from '../site.config';
-
-const topics = [
-  { value: 'hiring', label: 'A role or hiring' },
-  { value: 'consulting', label: 'Consulting or advisory' },
-  { value: 'venture', label: 'Investment or a venture' },
-  { value: 'speaking', label: 'Speaking or media' },
-  { value: 'other', label: 'Something else' },
-];
+import { getLang, t } from '../i18n/ui';
+const lang = getLang(Astro.url);
+const s = t(lang).form;
+const topics = Object.entries(s.topics).map(([value, label]) => ({ value, label }));
 const { endpoint, turnstileSiteKey } = site.contactForm;
 ---
 <form class="form" method="post" action={endpoint} data-contact-form data-fallback-email={site.email} data-astro-reload>
   <div class="form__row">
     <div class="field">
-      <label for="name">Name</label>
+      <label for="name">{s.name}</label>
       <input id="name" name="name" type="text" autocomplete="name" required maxlength="100" />
     </div>
     <div class="field">
-      <label for="email">Email</label>
+      <label for="email">{s.email}</label>
       <input id="email" name="email" type="email" autocomplete="email" required maxlength="200" />
     </div>
   </div>
   <div class="form__row">
     <div class="field">
-      <label for="topic">What is it about?</label>
+      <label for="topic">{s.topic}</label>
       <select id="topic" name="topic">
-        {topics.map((t) => <option value={t.value}>{t.label}</option>)}
+        {topics.map((topic) => <option value={topic.value}>{topic.label}</option>)}
       </select>
     </div>
     <div class="field">
-      <label for="organisation">Organisation <span class="optional">(optional)</span></label>
+      <label for="organisation">{s.organisation} <span class="optional">{s.optional}</span></label>
       <input id="organisation" name="organisation" type="text" autocomplete="organization" maxlength="150" />
     </div>
   </div>
   <div class="field">
-    <label for="message-body">Message</label>
+    <label for="message-body">{s.message}</label>
     <textarea id="message-body" name="message" rows="6" required maxlength="5000"></textarea>
   </div>
   <!-- Spam trap: hidden from people. Messages where a bot fills it in are dropped. -->
@@ -44,7 +42,9 @@ const { endpoint, turnstileSiteKey } = site.contactForm;
     <label for="website">Website</label>
     <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
   </div>
+  <input type="hidden" name="lang" value={lang} />
+  <input type="hidden" name="attribution" value="" data-attribution />
   {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="auto"></div>}
-  <button class="btn btn--primary" type="submit">Send message <span class="arrow" aria-hidden="true">→</span></button>
+  <button class="btn btn--primary" type="submit"><span class="btn__label">{s.send}</span> <span class="arrow" aria-hidden="true">→</span></button>
   <p class="form-status" role="status" aria-live="polite"></p>
 </form>

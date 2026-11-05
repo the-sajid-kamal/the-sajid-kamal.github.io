@@ -1,0 +1,93 @@
+---
+// ONE-PAGER: who I am, results, experience and how I can help, on one A4 page.
+// The "Download PDF" button serves public/Sajid-Kamal-One-Pager.pdf. After changing this
+// page, run `npm run build && npm run pdf` to make a fresh PDF (see README).
+import Base from '../layouts/Base.astro';
+import Qr from '../components/Qr.astro';
+import Share from '../components/Share.astro';
+import { Image } from 'astro:assets';
+import { site } from '../site.config';
+import { stats, credentials } from '../data/home';
+import { experience, ventures, education } from '../data/career';
+import { services } from '../data/services';
+import { photo } from '../lib/photos';
+import { absolute } from '../lib/util';
+const portrait = photo('portrait');
+const results = [
+  'Built Yum, Funtastic and Fast at Akij Bakers from zero; each reached No. 2 in its category.',
+  'Took four new categories to market at Ghorer Bazar while annual sales grew 140%.',
+  'Trade programs at Meghna Group lifted short-term sales by 172% (noodles) and 158% (snacks).',
+  'A Herlan digital campaign grew online sales by 60%.',
+  'Founded Sui Chokri: 156 tailor shops on one network, backed by an H&M Foundation grant.',
+];
+---
+<Base title="One-pager" description={`${site.name} on one page: who I am, results, experience and how I can help.`} hideCta>
+  <div class="paper-tools container">
+    <div>
+      <p class="eyebrow">One-pager</p>
+      <p class="paper-tools__note">Everything important on one page, to download, print or forward.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn--primary" href={site.onePager} download data-astro-reload>Download PDF</a>
+      <button class="btn btn--ghost" type="button" data-print hidden>Print</button>
+      <a class="link-arrow" href="/sajid-kamal.vcf" download="Sajid-Kamal.vcf" data-astro-reload>Save contact <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+
+  <article class="paper onepager" data-zone="one-pager">
+    <header class="op__head">
+      <div class="op__photo">
+        {portrait ? <Image src={portrait} alt="" width={240} height={300} /> : <span class="op__mono" aria-hidden="true">SK</span>}
+      </div>
+      <div>
+        <p class="op__kicker">{site.roles.join(' · ')} · Dhaka</p>
+        <h1 class="op__name">{site.name}</h1>
+        <p class="op__role">{site.role}, {site.company}</p>
+      </div>
+    </header>
+
+    <p class="op__intro">
+      I build food and beauty brands people reach for. Six years in Bangladeshi FMCG: three brands built from scratch, four new
+      categories, 100+ campaigns, and a startup that put 156 neighbourhood tailors on one network.
+    </p>
+
+    <ul class="op__stats">
+      {stats.map((s) => <li><strong>{s.value}{s.suffix}</strong><span>{s.label}</span></li>)}
+    </ul>
+
+    <div class="op__grid">
+      <section>
+        <h2>Selected results</h2>
+        <ul class="op__list">{results.map((r) => <li>{r}</li>)}</ul>
+        <h2>How I can help</h2>
+        <ul class="op__list op__list--tight">{services.map((s) => <li>{s.title}</li>)}</ul>
+      </section>
+      <section>
+        <h2>Experience</h2>
+        <ul class="op__jobs">
+          {experience.map((job) => <li><strong>{job.company}</strong><span>{job.role}</span><em>{job.dates}</em></li>)}
+          {ventures.slice(0, 1).map((v) => <li><strong>{v.company}</strong><span>Founder</span><em>{v.dates}</em></li>)}
+        </ul>
+        <h2>Education and recognition</h2>
+        <ul class="op__list op__list--tight">
+          {education.map((e) => <li>{e.school.replace('Institute of Business Administration (IBA)', 'IBA')}: {e.degree.split(',')[0]}</li>)}
+          {credentials.map((c) => <li>{c}</li>)}
+        </ul>
+      </section>
+    </div>
+
+    <footer class="op__foot">
+      <ul>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        {site.phone && <li>{site.phone}</li>}
+        <li><a href={site.url}>{site.url.replace(/^https?:\/\//, '')}</a></li>
+        <li><a href={site.profiles.linkedin}>linkedin.com/in/sajid-kamal</a></li>
+      </ul>
+      <Qr url={absolute('/op')} label="Scan for the full profile" size={74} />
+    </footer>
+  </article>
+
+  <div class="container paper-share">
+    <Share title={`${site.name} on one page`} label="Share the one-pager" />
+  </div>
+</Base>

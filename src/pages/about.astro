@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Portrait from '../components/Portrait.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Chapters from '../components/Chapters.astro';
+import IntroVideo from '../components/IntroVideo.astro';
 import { site } from '../site.config';
 import { experience, ventures, education, certifications, expertise, beyondWork, media } from '../data/career';
 import { isPlaceholder } from '../lib/util';
@@ -29,6 +30,8 @@ import { isPlaceholder } from '../lib/util';
         <p class="placeholder">[Optional: one personal line, such as what you do outside work or what you are curious about right now.]</p>
         <div class="actions">
           <a class="btn btn--primary" href={site.cv} download data-astro-reload>Download CV (PDF)</a>
+          <a class="link-arrow" href="/one-pager/">One-pager <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="link-arrow" href="/resume/">Printable résumé <span class="arrow" aria-hidden="true">→</span></a>
           <a class="link-arrow" href={site.profiles.linkedin} target="_blank" rel="me noopener">LinkedIn <span class="arrow" aria-hidden="true">→</span></a>
         </div>
         <dl class="glance">
@@ -40,6 +43,8 @@ import { isPlaceholder } from '../lib/util';
       </div>
     </div>
   </section>
+
+  <IntroVideo />
 
   <section class="section section--rule" aria-labelledby="story-title">
     <div class="container">
@@ -155,6 +160,7 @@ import { isPlaceholder } from '../lib/util';
         <div class="actions">
           <button class="btn btn--ghost btn--small" type="button" data-copy="#short-bio" hidden>Copy bio</button>
           <a class="link-arrow" href={site.cv} download data-astro-reload>Download CV <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="link-arrow" href={site.onePager} download data-astro-reload>One-pager (PDF) <span class="arrow" aria-hidden="true">→</span></a>
           <span class="link-arrow placeholder" data-placeholder>[Download press photos]</span>
         </div>
       </div>

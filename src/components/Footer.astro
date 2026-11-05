@@ -1,8 +1,21 @@
 ---
 import { site } from '../site.config';
+import { getLang, t, localHref, locales, digits } from '../i18n/ui';
+import { whatsappHref } from '../lib/util';
+
+const lang = getLang(Astro.url);
+const s = t(lang);
 const year = new Date().getFullYear();
+// The privacy note names every analytics tool that is switched on in site.config.ts
+const a = site.analytics;
+const tools = [
+  a.umami && 'Umami', a.gtm && 'Google Tag Manager', a.ga4 && 'Google Analytics', a.clarity && 'Microsoft Clarity',
+  a.metaPixel && 'Meta Pixel', a.linkedinInsight && 'LinkedIn Insight Tag', a.cloudflare && 'Cloudflare Web Analytics',
+].filter(Boolean) as string[];
+const and = lang === 'bn' ? ' ও ' : ' and ';
+const toolList = tools.length > 1 ? tools.slice(0, -1).join(', ') + and + tools[tools.length - 1] : tools[0];
 ---
-<footer class="site-footer">
+<footer class="site-footer" data-zone="footer">
   <div class="container">
     <div class="footer-top">
       <div>
@@ -10,52 +23,53 @@ const year = new Date().getFullYear();
         {site.nameBangla && <span class="footer-name__bn" lang="bn">{site.nameBangla}</span>}
       </div>
       <p class="footer-clock" data-clock-wrap hidden>
-        <strong data-clock data-timezone={site.timezone}></strong>
-        in Dhaka right now
+        {lang === 'bn' && <>{s.footer.clock} </>}
+        <strong data-clock data-timezone={site.timezone} data-locale={locales[lang]}></strong>
+        {lang === 'en' && <> {s.footer.clock}</>}
       </p>
     </div>
 
     <div class="footer-grid">
       <div class="footer-about">
-        <p>{site.role} at {site.company}. Building food and beauty brands in Bangladesh, and writing about what it takes.</p>
+        <p>{s.footer.about(site.role, site.company)}</p>
       </div>
       <div>
-        <h2 class="footer-title">Explore</h2>
+        <h2 class="footer-title">{s.footer.explore}</h2>
         <ul class="footer-links">
-          <li><a href="/work/">Work</a></li>
-          <li><a href="/writing/">Writing</a></li>
-          <li><a href="/about/">About</a></li>
-          {site.showServices && <li><a href="/services/">Services</a></li>}
-          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/work/">{s.nav.work}</a></li>
+          <li><a href="/writing/">{s.nav.writing}</a></li>
+          <li><a href={localHref(lang, '/about/')}>{s.nav.about}</a></li>
+          {site.showServices && <li><a href={localHref(lang, '/services/')}>{s.nav.services}</a></li>}
+          <li><a href={localHref(lang, '/contact/')}>{s.nav.contact}</a></li>
+          <li><a href="/resume/">{s.footer.resume}</a></li>
         </ul>
       </div>
       <div>
-        <h2 class="footer-title">Elsewhere</h2>
+        <h2 class="footer-title">{s.footer.elsewhere}</h2>
         <ul class="footer-links">
           {site.profiles.linkedin && <li><a href={site.profiles.linkedin} target="_blank" rel="me noopener">LinkedIn</a></li>}
+          {site.whatsapp.number && <li><a href={whatsappHref(lang)} target="_blank" rel="noopener">WhatsApp</a></li>}
           {site.profiles.facebook && <li><a href={site.profiles.facebook} target="_blank" rel="me noopener">Facebook</a></li>}
           {site.profiles.github && <li><a href={site.profiles.github} target="_blank" rel="me noopener">GitHub</a></li>}
-          <li><a href="/writing/feed.xml">RSS feed</a></li>
+          <li><a href="/writing/feed.xml">{s.footer.rss}</a></li>
         </ul>
       </div>
       <div>
-        <h2 class="footer-title">Contact</h2>
+        <h2 class="footer-title">{s.footer.contact}</h2>
         <ul class="footer-links">
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li>{site.location}</li>
-          <li><a href={site.cv} download data-astro-reload>Download CV (PDF)</a></li>
+          <li>{lang === 'bn' ? 'ঢাকা, বাংলাদেশ' : site.location}</li>
+          <li><a href={site.cv} download data-astro-reload>{s.footer.cv}</a></li>
+          <li><a href={site.onePager} download data-astro-reload>{s.footer.onePager}</a></li>
         </ul>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>© {year} {site.fullName}. All rights reserved.</p>
-      <p>Made in Dhaka.</p>
+      <p>© {digits(lang, year)} {site.fullName}. {s.footer.rights}</p>
+      <p>{s.footer.made}</p>
+      <a class="back-to-top" href="#top">{s.footer.top} <span class="arrow" aria-hidden="true">↑</span></a>
     </div>
-    <p class="footer-privacy">
-      This site uses Umami, Google Tag Manager and Microsoft Clarity to understand how visitors use it. Clarity records
-      clicks, scrolling and session replays. By using this site, you agree that Microsoft and I can collect and use this data.
-      See the <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft Privacy Statement</a>.
-    </p>
+    {toolList && <p class="footer-privacy" set:html={s.footer.privacy(toolList, !!a.clarity)} />}
   </div>
 </footer>

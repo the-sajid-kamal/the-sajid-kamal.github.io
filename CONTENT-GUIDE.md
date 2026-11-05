@@ -40,6 +40,14 @@ the end of the address and press **Placeholders**.
 - [ ] **Professional email:** consider `hello@thesajidkamal.me` (free with Cloudflare Email Routing; see the README).
 - [ ] **Phone number:** it is shown on the Contact page. Set `phone: ''` if you'd rather not publish it.
 - [ ] **Permissions:** check that you can name employers' results and show their product photos.
+- [ ] **Bangla version:** read the draft translation and make it sound like you: `src/pages/bn/`,
+      `src/data/bn.ts` (story, experience, services, FAQ) and `src/i18n/ui.ts` (menus, buttons, form).
+      Its placeholders are in [square brackets] too.
+- [ ] **WhatsApp:** check the number and the greeting people start with (`whatsapp` in `src/site.config.ts`).
+- [ ] **Résumé:** the *Languages* line on `/resume/` is a placeholder.
+- [ ] **One-pager:** once your portrait and numbers are final, make a fresh PDF (`npm run build && npm run pdf`).
+- [ ] **Later, when ready:** the intro video (`video` in `src/site.config.ts`) and the newsletter
+      (`showNewsletter`) are built in but hidden.
 
 ## 2. Where each placeholder lives
 
@@ -54,6 +62,9 @@ the end of the address and press **Placeholders**.
 | About | Portrait, personal line, "Beyond work", Speaking and media, press photos | `src/pages/about.astro`, `src/data/career.ts` |
 | Services | Formats, prices, FAQ answers | `src/data/services.ts` |
 | Contact | Reply time | `src/pages/contact.astro` |
+| Bangla pages | The same placeholders, in Bangla | `src/data/bn.ts`, `src/pages/bn/` |
+| Résumé | Languages | `src/pages/resume.astro` |
+| Home and About | Intro video (hidden until switched on) | `video` in `src/site.config.ts` |
 
 ## 3. Colour palettes
 

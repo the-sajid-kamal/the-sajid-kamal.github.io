@@ -1,9 +1,12 @@
 ---
 // "The story so far". compact = the short home-page version.
-import { chapters } from '../data/story';
+import { chapters as en } from '../data/story';
+import { chapters as bn } from '../data/bn';
+import { getLang } from '../i18n/ui';
 import { isPlaceholder } from '../lib/util';
 interface Props { compact?: boolean }
 const { compact = false } = Astro.props;
+const chapters = getLang(Astro.url) === 'bn' ? bn : en;
 ---
 <ol class="chapters" data-chapters>
   {chapters.map((c) => (

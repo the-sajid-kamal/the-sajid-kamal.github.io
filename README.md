@@ -11,6 +11,7 @@ and runs the contact form. It also still works on GitHub Pages.
   photo boxes and placeholder articles all show (in a muted colour) so you can see what is left to
   replace. Go live only once they are replaced; `?preview` outlines every one of them.
 - **Where to put photos:** [src/assets/photos/README.md](src/assets/photos/README.md). Drop a file in with the right name; no code needed.
+- **What has been built, and ideas for later:** [ROADMAP.md](ROADMAP.md).
 
 ---
 
@@ -27,24 +28,36 @@ and runs the contact form. It also still works on GitHub Pages.
 | `/services/` | Consulting, advisory and speaking | `src/data/services.ts` (hide with `showServices: false`) |
 | `/contact/` | Contact form with topics | `src/pages/contact.astro` |
 | `/writing/feed.xml` | RSS feed | automatic |
+| `/bn/`, `/bn/about/`, `/bn/services/`, `/bn/contact/` | Bangla version (the **বাংলা / EN** button switches) | `src/pages/bn/`, `src/data/bn.ts`, `src/i18n/ui.ts` |
+| `/resume/` | Printable résumé (A4, "Print or save as PDF") | `src/data/career.ts` |
+| `/one-pager/` | One-page summary, with a PDF download | `src/pages/one-pager.astro` → `npm run pdf` |
+| `/card`, `/li`, `/r`… | Tracked short links (see below) | `src/data/links.ts` |
+| `/sajid-kamal.vcf` | "Save contact" card for phones | `src/site.config.ts` |
 
-Also automatic: link previews (Open Graph), a Google profile tag (Person), `sitemap-index.xml`,
-dark mode, smooth page transitions and reduced-motion support.
+Also automatic: a link-preview image for every page (`/og/<page>.png`), a Google profile tag
+(Person), `sitemap-index.xml` with English/Bangla pairs, dark mode, smooth page transitions,
+the floating WhatsApp button, share buttons and reduced-motion support.
 
 ## Where things live
 
 ```
-src/site.config.ts        ← names, email, links, palette, booking link, analytics: start here
+src/site.config.ts        ← names, email, links, palette, WhatsApp, switches, analytics: start here
 src/data/                 ← lists: story chapters, experience, services, numbers, testimonials
+src/data/bn.ts            ← the Bangla versions of those lists
+src/data/links.ts         ← tracked short links (/card, /li…)
+src/i18n/ui.ts            ← menu, button and footer words in English and Bangla
 src/content/work/         ← one Markdown file per project
 src/content/writing/      ← one Markdown file per article
 src/assets/photos/        ← your photos (picked up by file name)
 src/components/           ← building blocks (header, cards, tabs...)
-src/pages/                ← one file per page
+src/pages/                ← one file per page (src/pages/bn/ for Bangla)
 src/styles/global.css     ← all styling, including the colour palettes
-src/scripts/site.ts       ← menu, tabs, fade-ins, contact form, dark mode
+src/scripts/site.ts       ← menu, tabs, animations, contact form, share, dark mode
+src/scripts/analytics.ts  ← event tracking and "where visitors came from"
+src/lib/og.ts             ← draws the link-preview images
 functions/api/contact.js  ← the contact form's email sender (Cloudflare)
-public/                   ← files served as they are: CV, favicon, share image, _redirects, _headers
+public/                   ← files served as they are: CV, one-pager PDF, favicon, _redirects, _headers
+scripts/                  ← tests, the one-pager PDF maker and the Bangla font tool
 ```
 
 ---
@@ -101,6 +114,66 @@ for the gallery.
 | CV | replace `public/MD-Sajid-Kamal-CV.pdf` (same name) |
 | Link-preview image | replace `public/og/share-card.png` (1200 × 630) |
 | Bangla name | `nameBangla` in `src/site.config.ts`, then run `npm run fonts:bangla` (needs `pip install fonttools brotli`) to rebuild the 2 KB font that draws it |
+| WhatsApp number or greeting | `whatsapp` in `src/site.config.ts` (`floating: false` removes the corner button) |
+| Show the newsletter box | `showNewsletter: true` in `src/site.config.ts` (and `newsletterUrl`) |
+| Show the intro video | `video.show: true` and `video.youtubeId` in `src/site.config.ts` |
+
+### The Bangla version
+
+The **বাংলা** button in the header opens the same page in Bangla (and **EN** goes back). Home,
+About, Services and Contact are translated; case studies and essays stay in English, and the
+Bangla pages say so. Search engines get both versions, linked to each other (`hreflang`).
+
+- Page text: `src/pages/bn/*.astro`. Lists (story, experience, services, FAQ…): `src/data/bn.ts`.
+  Menu, buttons, footer and form words: `src/i18n/ui.ts`.
+- The Bangla is a **draft translation**: read it through and adjust it in your own voice.
+- When you change a fact in English (a number, a job), change it in `src/data/bn.ts` too.
+- Visitors whose phone or browser is set to Bangla see a one-time hint offering the Bangla page.
+- Bangla pages use their own fonts (Tiro Bangla for headings, Noto Sans Bengali for text), which
+  load only on Bangla pages, so English pages stay as light as before.
+
+### The one-pager and the printable résumé
+
+`/resume/` is your CV as a web page, laid out for A4: visitors press **Print or save as PDF**.
+It is built from `src/data/career.ts`, so it is always in step with the About page. Your own
+designed CV (`public/MD-Sajid-Kamal-CV.pdf`) stays as the main download.
+
+`/one-pager/` puts everything important on one page. Its **Download PDF** button serves
+`public/Sajid-Kamal-One-Pager.pdf`. After changing the page (or your photo or numbers), make a
+fresh PDF:
+
+```sh
+npm run build && npm run pdf     # needs Playwright once: npx playwright install chromium
+```
+
+(Or open `/one-pager/` in Chrome, press Print, choose *Save as PDF* and replace the file.)
+Both pages carry a QR code that leads back to the site, tagged so you can see visits from paper.
+
+### Short links and QR codes
+
+`thesajidkamal.me/<short>` forwards to the site with tracking tags, so analytics shows exactly
+what brought each visit. Put them on business cards, slides, your email signature and profiles:
+
+| Link | Use it on | Shows up in analytics as |
+| --- | --- | --- |
+| `/card` | business card (or its QR code) | source `business-card` |
+| `/li` | the website field on LinkedIn | source `linkedin`, campaign `profile` |
+| `/fb` | Facebook | source `facebook` |
+| `/sig` | email signature | source `email-signature` |
+| `/talk` | the last slide of a talk or class | source `talk` |
+| `/r`, `/op` | QR codes on the résumé and one-pager | source `resume`, `one-pager` |
+| `/bangla` | the Bangla home page | campaign `bangla` |
+| `/cv`, `/wa` | straight to the CV, or a WhatsApp chat | (not tracked: they leave the site) |
+
+Add your own in `src/data/links.ts`.
+
+### Sharing
+
+Every page has its own link-preview image, drawn at build time in the site's fonts and colours
+(case studies show their headline number). Case studies, essays and the one-pager also have
+share buttons: the phone's own share sheet where available, LinkedIn, WhatsApp, Facebook, X,
+email and copy link. Shared links carry tags (`utm_source=linkedin&utm_medium=social&utm_campaign=share`),
+so you can see which network sends people.
 
 ---
 
@@ -179,15 +252,47 @@ and costs nothing on Cloudflare: Email Routing (in the Cloudflare dashboard for 
 your Gmail. To reply from it, add it in Gmail under Settings → Accounts → *Send mail as*.
 Then change `email` in `src/site.config.ts`.
 
-## Analytics and privacy
+## Analytics and tracking
 
-Google Tag Manager, Umami and Microsoft Clarity load on every page (IDs in `src/site.config.ts`;
-set one to `''` to switch it off). Cloudflare Web Analytics, which is free and cookie-free, can be
-added with its token. The footer carries the visitor notice Microsoft recommends for Clarity.
-Analytics never load in `npm run dev`, or in a build made with `PUBLIC_ANALYTICS=off npm run build`,
-so your own previews don't count as visits.
+**Tools.** Google Tag Manager, Umami and Microsoft Clarity are on (IDs in `src/site.config.ts`;
+set one to `''` to switch it off). There are slots for Google Analytics 4 (only if it isn't
+already inside Tag Manager), the Meta Pixel (Facebook/Instagram retargeting), the LinkedIn Insight
+Tag and Cloudflare Web Analytics, plus Google and Bing Search Console verification codes. The
+footer's privacy note lists whichever tools are on. Analytics never load in `npm run dev`, or in a
+build made with `PUBLIC_ANALYTICS=off npm run build`, so your own previews don't count.
 
-Pages change without a full reload, for smooth transitions. Umami and Clarity track this
+**Speed.** Umami and Cloudflare are tiny and start straight away, so every visit is counted. The
+heavier tools wait until the page has loaded and the browser is idle, or until the visitor first
+taps, scrolls or types, so they never slow the first view. Events from before then are queued.
+
+**Events.** Each one goes to every tool that is on (Umami events, the Tag Manager `dataLayer`,
+GA4, Clarity, Meta). Most are picked up automatically from clicks, so new links are covered too.
+Each carries the page, the language and where on the page it happened (`zone`: header, hero,
+cta-band, footer, floating-whatsapp…).
+
+| Event | When |
+| --- | --- |
+| `cv_download`, `one_pager_download`, `vcard_download` | CV, one-pager or contact card downloaded |
+| `resume_print`, `print` | the résumé (or any page) is printed or saved as PDF |
+| `whatsapp_click`, `email_click`, `phone_click`, `booking_click` | someone starts a conversation |
+| `contact_start`, `contact_submit`, `contact_error` | the contact form is begun, sent, or fails |
+| `share` (`network`), `copy` | a share button or "copy" is used |
+| `outbound_click` (`host`) | a link to another site, e.g. LinkedIn |
+| `audience_tab`, `work_filter`, `language_switch`, `theme_toggle`, `video_play`, `newsletter_click` | choices on the page |
+| `scroll_depth` (25/50/75/100), `read_complete`, `engaged` (30 s, 2 min) | how far and how long people read |
+| `not_found` | someone lands on a missing page (with the address they came from) |
+
+In Meta and GA4, `contact_submit` also counts as a lead, and WhatsApp, email and phone clicks as
+contacts, so ads can optimise for them. In Tag Manager, add a *Custom Event* trigger for the event
+names you care about and send them to GA4. To watch events live, open any page with
+`?debug-analytics` and look in the browser console (`?debug-analytics=off` stops it).
+
+**Where visitors came from.** The site remembers the campaign tags (`utm_…`), the site that sent
+the visitor, their first page and how many pages they read. Contact-form emails end with a
+*How they found you* section, e.g. *Source: linkedin / social (campaign: share) · First page:
+/work/sui-chokri/ · Pages viewed this visit: 4*.
+
+Pages change without a full reload, for smooth transitions. Umami, GA4 and Clarity track this
 automatically; in Google Tag Manager, use a *History Change* trigger for page views.
 
 ## Checks
@@ -195,5 +300,6 @@ automatically; in Google Tag Manager, use a *History Change* trigger for page vi
 Every push runs `.github/workflows/pages.yml`: it installs, tests the contact function and builds
 the site. A red cross on GitHub means something needs fixing before it goes live.
 
-Last audit (Lighthouse 13.5, compressed as on Cloudflare, analytics off): desktop 100 / 100 / 100 / 100;
-phone 92–95 performance and 100 for accessibility, best practices and SEO.
+Last audit (Lighthouse 13.5, compressed as on Cloudflare, analytics off): desktop 100 for
+performance, accessibility, best practices and SEO, in English and Bangla; phone performance
+92–98 in English and 90 in Bangla (which loads its own fonts), with 100 for everything else.

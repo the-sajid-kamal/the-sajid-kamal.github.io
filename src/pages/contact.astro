@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { site } from '../site.config';
-import { resolveHref, isExternal } from '../lib/util';
+import { resolveHref, isExternal, whatsappHref } from '../lib/util';
 
 const booking = resolveHref('booking');
 const reasons = [
@@ -38,10 +38,12 @@ const reasons = [
           <a class="big-link" href={`mailto:${site.email}`}>{site.email}</a>
           <ul class="contact-details">
             <li><span class="contact-details__label">LinkedIn</span><a href={site.profiles.linkedin} target="_blank" rel="me noopener">linkedin.com/in/sajid-kamal</a></li>
+            {site.whatsapp.number && <li><span class="contact-details__label">WhatsApp</span><a href={whatsappHref('en')} target="_blank" rel="noopener">Message me on WhatsApp</a></li>}
             {site.phone && <li><span class="contact-details__label">Phone</span><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></li>}
             <li><span class="contact-details__label">Based in</span><span>{site.location}</span></li>
-            <li><span class="contact-details__label">Call</span><a href={booking} target={isExternal(booking) ? '_blank' : undefined} rel={isExternal(booking) ? 'noopener' : undefined}>Book 30 minutes</a></li>
+            <li><span class="contact-details__label">Call</span><a href={booking} target={isExternal(booking) ? '_blank' : undefined} rel={isExternal(booking) ? 'noopener' : undefined} data-track="booking_click">Book 30 minutes</a></li>
             <li><span class="contact-details__label">CV</span><a href={site.cv} download data-astro-reload>Download (PDF)</a></li>
+            <li><span class="contact-details__label">Contact card</span><a href="/sajid-kamal.vcf" download="Sajid-Kamal.vcf" data-astro-reload>Save to your phone</a></li>
           </ul>
         </div>
 

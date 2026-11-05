@@ -88,6 +88,29 @@ const tests = {
     const r = await call(good);
     assert.deepEqual(r, { status: 502, data: { ok: false, error: 'send_failed' } });
   },
+  'adds where the visitor came from': async () => {
+    sent = []; fakeFetch(ok);
+    const attribution = JSON.stringify({ source: 'linkedin', medium: 'social', campaign: 'share', referrer: 'www.linkedin.com', landing: '/work/sui-chokri/?utm_source=linkedin', pages: 3, visits: 2, firstSource: 'google', sentFrom: '/contact/' });
+    await call({ ...good, attribution });
+    const text = JSON.parse(sent[0].init.body).text;
+    assert.match(text, /— How they found you —\nSource: linkedin \/ social \(campaign: share\)\nCame from: www.linkedin.com\nFirst page: \/work\/sui-chokri\/\?utm_source=linkedin\nPages viewed this visit: 3\nVisits so far: 2 \(first via google\)\nSent from: \/contact\//);
+  },
+  'ignores broken or hostile visit data': async () => {
+    sent = []; fakeFetch(ok);
+    const r = await call({ ...good, attribution: 'not json' });
+    assert.equal(r.status, 200);
+    assert.doesNotMatch(JSON.parse(sent[0].init.body).text, /How they found you/);
+    sent = [];
+    await call({ ...good, attribution: JSON.stringify({ source: 'x\nBcc: evil@example.com', pages: 'lots', visits: -4 }) });
+    const text = JSON.parse(sent[0].init.body).text;
+    assert.match(text, /Source: x Bcc: evil@example.com\n/);
+    assert.doesNotMatch(text, /Pages viewed|Visits so far/);
+  },
+  'says when a message comes from the Bangla site': async () => {
+    sent = []; fakeFetch(ok);
+    await call({ ...good, lang: 'bn' });
+    assert.match(JSON.parse(sent[0].init.body).text, /Topic: Consulting or advisory\nLanguage: Bangla \(sent from the Bangla site\)\n/);
+  },
   'checks Turnstile when it is switched on': async () => {
     sent = [];
     fakeFetch((url) => url.includes('turnstile') ? new Response('{"success":false}') : ok());

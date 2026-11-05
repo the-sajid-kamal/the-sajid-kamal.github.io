@@ -1,0 +1,103 @@
+---
+// PRINTABLE RÉSUMÉ, built from src/data/career.ts, so it stays in step with the About page.
+// "Print or save as PDF" opens the browser's print dialog; the layout is made for A4.
+// The QR code leads to thesajidkamal.me/r, so visits from printed copies show up in analytics.
+import Base from '../layouts/Base.astro';
+import Qr from '../components/Qr.astro';
+import { site } from '../site.config';
+import { experience, ventures, education, certifications, expertise } from '../data/career';
+import { absolute } from '../lib/util';
+const tel = site.phone.replace(/[^+\d]/g, '');
+---
+<Base title="Résumé" description={`Résumé of ${site.fullName}, ${site.role} at ${site.company}: experience, ventures, education, certifications and skills.`} hideCta>
+  <div class="paper-tools container">
+    <div>
+      <p class="eyebrow">Résumé</p>
+      <p class="paper-tools__note">A printable version of my CV, made for A4 paper.</p>
+    </div>
+    <div class="actions">
+      <button class="btn btn--primary" type="button" data-print hidden>Print or save as PDF</button>
+      <a class="btn btn--ghost" href={site.cv} download data-astro-reload>Designed CV (PDF)</a>
+      <a class="link-arrow" href="/one-pager/">One-pager <span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+
+  <article class="paper resume" data-zone="resume">
+    <header class="resume__head">
+      <div>
+        <h1 class="resume__name">{site.fullName}</h1>
+        <p class="resume__role">{site.role}, {site.company} · FMCG brand strategist · {site.location}</p>
+        <ul class="resume__contact">
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          {site.phone && <li><a href={`tel:${tel}`}>{site.phone}</a></li>}
+          <li><a href={site.url}>{site.url.replace(/^https?:\/\//, '')}</a></li>
+          <li><a href={site.profiles.linkedin}>linkedin.com/in/sajid-kamal</a></li>
+        </ul>
+      </div>
+      <Qr url={absolute('/r')} label="Full profile" size={84} />
+    </header>
+
+    <section class="resume__section">
+      <h2>Profile</h2>
+      <p>
+        FMCG brand strategist with six years in food, health and beauty in Bangladesh. Built three brands from scratch, each
+        reaching No. 2 in its category; took four new categories to market at Ghorer Bazar while annual sales grew 140%; designed
+        trade programs that lifted sales by up to 172%; and ran more than 100 integrated campaigns. Founder of Sui Chokri, a
+        network of 156 neighbourhood tailor shops selected for the H&amp;M Foundation’s Needle Innovation Challenge.
+      </p>
+    </section>
+
+    <section class="resume__section">
+      <h2>Experience</h2>
+      {experience.map((job) => (
+        <div class="resume__item">
+          <div class="resume__item-head"><h3>{job.role}</h3><span>{job.dates}</span></div>
+          <p class="resume__org">{job.company}</p>
+          <ul>{job.highlights.map((h) => <li>{h}</li>)}</ul>
+        </div>
+      ))}
+    </section>
+
+    <section class="resume__section">
+      <h2>Ventures and leadership</h2>
+      {ventures.map((v) => (
+        <div class="resume__item">
+          <div class="resume__item-head"><h3>{v.company}, {v.role}</h3><span>{v.dates}</span></div>
+          <ul>{v.highlights.map((h) => <li>{h}</li>)}</ul>
+        </div>
+      ))}
+    </section>
+
+    <div class="resume__cols">
+      <section class="resume__section">
+        <h2>Education</h2>
+        {education.map((e) => (
+          <div class="resume__item resume__item--tight">
+            <div class="resume__item-head"><h3>{e.school}</h3><span>{e.dates}</span></div>
+            <p class="resume__org">{e.degree}</p>
+          </div>
+        ))}
+      </section>
+      <section class="resume__section">
+        <h2>Certifications</h2>
+        <ul class="resume__plain">
+          {certifications.map((c) => <li><strong>{c.name}</strong>, {c.issuer} ({c.year})</li>)}
+        </ul>
+      </section>
+    </div>
+
+    <section class="resume__section">
+      <h2>Skills</h2>
+      <ul class="resume__plain resume__skills">
+        {expertise.map((g) => <li><strong>{g.group}:</strong> {g.items.join(', ')}</li>)}
+      </ul>
+    </section>
+
+    <section class="resume__section">
+      <h2>Languages</h2>
+      <p class="placeholder">[Bangla (native), English (professional working proficiency)]</p>
+    </section>
+
+    <p class="resume__foot">References available on request · Updated {new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</p>
+  </article>
+</Base>
