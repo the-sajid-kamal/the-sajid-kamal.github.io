@@ -5,7 +5,7 @@ import { isPlaceholder } from '../lib/util';
 {testimonials.length > 0 && (
   <div class="quotes">
     {testimonials.map((t) => (
-      <figure class="quote-card" data-reveal data-draft={isPlaceholder(t.quote) ? '' : undefined}>
+      <figure class="quote-card" data-reveal>
         <blockquote class:list={[isPlaceholder(t.quote) && 'placeholder']}>{t.quote}</blockquote>
         <figcaption class:list={[isPlaceholder(t.name) && 'placeholder']}><strong>{t.name}</strong>{t.role}</figcaption>
       </figure>

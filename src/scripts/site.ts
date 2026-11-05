@@ -318,9 +318,8 @@ function initClock() {
   clockTimer = window.setInterval(tick, 30_000);
 }
 
-/* Owner preview (only for you): add ?preview to any address to see unfinished
-   content, try palettes and outline every placeholder. Remembered while the tab
-   is open; × to leave. Visitors never see unfinished content. */
+/* Owner preview (only for you): add ?preview to any address to try palettes and
+   outline every placeholder. Remembered while the tab is open; × to leave. */
 function initOwnerPreview() {
   const root = document.documentElement;
   const palettes: [string, string, string][] = [
@@ -364,13 +363,12 @@ function initOwnerPreview() {
   bar.querySelector('.owner-preview__close')!.addEventListener('click', () => {
     save({});
     root.setAttribute('data-palette', defaultPalette);
-    root.classList.remove('show-drafts', 'outline-placeholders');
+    root.classList.remove('outline-placeholders');
     bar.remove();
   });
 
   function apply() {
     root.setAttribute('data-palette', state.palette!);
-    root.classList.add('show-drafts');
     root.classList.toggle('outline-placeholders', !!state.placeholders);
     bar.querySelectorAll<HTMLElement>('.owner-preview__swatch').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.palette === state.palette)));
     bar.querySelector('[data-ph]')!.setAttribute('aria-pressed', String(!!state.placeholders));

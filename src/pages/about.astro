@@ -8,8 +8,6 @@ import { site } from '../site.config';
 import { experience, ventures, education, certifications, expertise, beyondWork, media } from '../data/career';
 import { isPlaceholder } from '../lib/util';
 
-// Press kit number follows whichever optional sections are filled in
-const pressNum = String(6 + Number(beyondWork.some((b) => !isPlaceholder(b.text))) + Number(media.some((m) => !isPlaceholder(m.title)))).padStart(2, '0');
 ---
 <Base title="About" description="About Sajid Kamal, FMCG brand strategist, Brand Manager at Ghorer Bazar and founder of Sui Chokri. Story, experience, education and a press kit." person type="profile">
   <section class="page-head">
@@ -118,23 +116,23 @@ const pressNum = String(6 + Number(beyondWork.some((b) => !isPlaceholder(b.text)
     </div>
   </section>
 
-  <section class="section section--rule" aria-labelledby="beyond-title" data-draft={beyondWork.some((b) => !isPlaceholder(b.text)) ? undefined : ''}>
+  <section class="section section--rule" aria-labelledby="beyond-title">
     <div class="container">
       <SectionHead num="06" id="beyond-title" title="Beyond work" />
       <dl class="beyond">
         {beyondWork.map((b) => (
-          <div data-reveal data-draft={isPlaceholder(b.text) ? '' : undefined}><dt>{b.label}</dt><dd>{b.text}</dd></div>
+          <div data-reveal><dt>{b.label}</dt><dd class:list={[isPlaceholder(b.text) && 'placeholder']}>{b.text}</dd></div>
         ))}
       </dl>
     </div>
   </section>
 
-  <section class="section section--rule" aria-labelledby="media-title" data-draft={media.some((m) => !isPlaceholder(m.title)) ? undefined : ''}>
+  <section class="section section--rule" aria-labelledby="media-title">
     <div class="container">
       <SectionHead num="07" id="media-title" title="Speaking and media" lead="[Placeholder: talks, panels, guest lectures, podcasts and interviews. Delete this section until you have your first one.]" />
       <ul class="media-list">
         {media.map((m) => (
-          <li data-draft={isPlaceholder(m.title) ? '' : undefined}><span class="media-list__year">{m.year}</span><span>{m.title}</span><span>{m.where}</span></li>
+          <li class:list={[isPlaceholder(m.title) && 'placeholder']}><span class="media-list__year">{m.year}</span><span>{m.title}</span><span>{m.where}</span></li>
         ))}
       </ul>
     </div>
@@ -143,7 +141,7 @@ const pressNum = String(6 + Number(beyondWork.some((b) => !isPlaceholder(b.text)
   <section class="section section--rule" aria-labelledby="press-title" id="press">
     <div class="container split">
       <div>
-        <span class="section-num">{pressNum}</span>
+        <span class="section-num">08</span>
         <h2 class="h-section" id="press-title">Press kit</h2>
         <p class="lead">A short bio for event programmes, articles and introductions, plus my CV. Feel free to use it as it is.</p>
       </div>

@@ -10,10 +10,9 @@ kinds of content:
   They are based on your CV, but they are my words, so rewrite them in your voice.
 - **Copy options:** alternatives for the main lines, in section 4.
 
-**Visitors never see placeholders.** Unfinished content is hidden from the public site
-automatically and appears the moment you replace it, so the site looks finished even while you work
-through this list. **To see everything still to do,** open any page with `?preview` at the end of
-the address, and press **Placeholders** to outline it all.
+**Placeholders are visible everywhere** (in a muted colour) so you can see exactly what is left.
+Replace them all before going live. **To outline every one on a page,** open it with `?preview` at
+the end of the address and press **Placeholders**.
 
 ---
 

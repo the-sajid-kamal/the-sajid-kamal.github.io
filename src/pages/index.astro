@@ -15,13 +15,11 @@ import Testimonials from '../components/Testimonials.astro';
 import { site } from '../site.config';
 import { companies, testimonials, credentials } from '../data/home';
 import { getPosts } from '../lib/posts';
-import { isPlaceholder } from '../lib/util';
 
 const work = (await getCollection('work')).filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
 const allPosts = await getPosts();
 const realPosts = allPosts.filter((p) => !p.data.placeholder);
 const posts = [...realPosts, ...allPosts.filter((p) => p.data.placeholder)].slice(0, 3);
-const realQuotes = testimonials.filter((t) => !isPlaceholder(t.quote));
 ---
 <Base person>
   <section class="hero">
@@ -95,7 +93,7 @@ const realQuotes = testimonials.filter((t) => !isPlaceholder(t.quote));
     </div>
   </section>
 
-  <section class="section section--rule" aria-labelledby="writing-title" data-draft={realPosts.length ? undefined : ''}>
+  <section class="section section--rule" aria-labelledby="writing-title">
     <div class="container">
       <SectionHead num="05" id="writing-title" title="Notes from <em>the shelf</em>" lead="Essays on building brands, retail and how people in Bangladesh shop." link={{ href: '/writing/', label: 'All writing' }} />
       <div class="post-grid">
@@ -105,7 +103,7 @@ const realQuotes = testimonials.filter((t) => !isPlaceholder(t.quote));
   </section>
 
   {testimonials.length > 0 && (
-    <section class="section section--rule" aria-labelledby="quotes-title" data-draft={realQuotes.length ? undefined : ''}>
+    <section class="section section--rule" aria-labelledby="quotes-title">
       <div class="container">
         <SectionHead num="06" id="quotes-title" title="Kind words" />
         <Testimonials />

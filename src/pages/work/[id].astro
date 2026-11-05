@@ -22,7 +22,6 @@ const { data, id } = project;
 const { Content } = await render(project);
 const cover = photo(`work/${id}`);
 const gallery = data.gallery.map((g, i) => ({ ...g, img: photo(`work/${id}-${i + 1}`) }));
-const hasGalleryPhotos = gallery.some((g) => g.img);
 // Unfinished case studies: hide the [bracketed] stand-ins from visitors
 const body = data.placeholder && project.rendered?.html ? markDrafts(project.rendered.html) : null;
 ---
@@ -64,7 +63,7 @@ const body = data.placeholder && project.rendered?.html ? markDrafts(project.ren
       <div class="case-body">
         <div class="prose">
           {data.placeholder && (
-            <p class="placeholder-note" role="note" data-draft><strong>Placeholder case study.</strong> Text in [square brackets] and the striped images are stand-ins to replace with your own.</p>
+            <p class="placeholder-note" role="note"><strong>Placeholder case study.</strong> Text in [square brackets] and the striped images are stand-ins to replace with your own.</p>
           )}
           {body ? <Fragment set:html={body} /> : <Content />}
         </div>
@@ -76,9 +75,9 @@ const body = data.placeholder && project.rendered?.html ? markDrafts(project.ren
       </div>
 
       {gallery.length > 0 && (
-        <div class="gallery" data-draft={hasGalleryPhotos ? undefined : ''}>
+        <div class="gallery">
           {gallery.map((g) => (
-            <figure data-reveal data-draft={g.img ? undefined : ''}>
+            <figure data-reveal>
               {g.img ? (
                 <Image src={g.img} alt={g.caption && !isPlaceholder(g.caption) ? g.caption : ''} widths={[480, 720, 1000]} sizes="(max-width: 640px) 92vw, 46vw" />
               ) : (
@@ -91,7 +90,7 @@ const body = data.placeholder && project.rendered?.html ? markDrafts(project.ren
       )}
 
       {data.quote && (
-        <figure class="case-quote" data-reveal data-draft={isPlaceholder(data.quote.text) ? '' : undefined}>
+        <figure class="case-quote" data-reveal>
           <blockquote class:list={[isPlaceholder(data.quote.text) && 'placeholder']}>{data.quote.text}</blockquote>
           <figcaption class:list={[isPlaceholder(data.quote.name) && 'placeholder']}><strong>{data.quote.name}</strong>{data.quote.role}</figcaption>
         </figure>

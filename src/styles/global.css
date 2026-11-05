@@ -1375,8 +1375,8 @@ a:hover .arrow, a:focus-visible .arrow { transform: translateX(4px); }
 
 /* ---------------------------------------------------------------------
    23. Placeholders and owner preview
-   Placeholders are text in [square brackets] and the striped boxes. Visitors
-   never see them; add ?preview to any address to see and outline them.
+   Placeholders are text in [square brackets] and the striped boxes. They stay
+   visible until replaced; add ?preview to any address to outline them.
    --------------------------------------------------------------------- */
 .placeholder { color: var(--muted); }
 .placeholder-note { padding: .95rem 1.15rem; background: var(--tint); border-left: 2px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; font-family: var(--sans); font-size: .875rem; line-height: 1.55; color: var(--ink-soft); }
@@ -1393,17 +1393,10 @@ a:hover .arrow, a:focus-visible .arrow { transform: translateX(4px); }
   text-align: center;
   color: var(--muted);
 }
-.show-drafts .visitor-only { display: none !important; }
-.coming-soon { max-width: 46rem; }
-.coming-soon .lead { margin-top: 1rem; }
-
-/* Unfinished content is never shown to visitors. The owner preview
-   (?preview) shows it, and its "Placeholders" button outlines it. */
-html:not(.show-drafts) .placeholder,
-html:not(.show-drafts) [data-draft] { display: none !important; }
+/* Placeholders stay visible (in a muted colour) until you replace them.
+   The owner preview's "Placeholders" button outlines every one of them. */
 .outline-placeholders .placeholder,
-.outline-placeholders [data-placeholder],
-.outline-placeholders [data-draft] { outline: 2px dashed var(--accent); outline-offset: 4px; }
+.outline-placeholders [data-placeholder] { outline: 2px dashed var(--accent); outline-offset: 4px; }
 .outline-placeholders .placeholder { background: var(--accent-soft); }
 
 .owner-preview {

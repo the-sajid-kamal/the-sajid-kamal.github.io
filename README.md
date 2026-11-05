@@ -7,9 +7,9 @@ and runs the contact form. It also still works on GitHub Pages.
 
 - **What to replace before going live:** [CONTENT-GUIDE.md](CONTENT-GUIDE.md) lists every
   placeholder, plus colour palette and copy suggestions.
-- **Unfinished content never shows to visitors.** Text in [square brackets], empty quotes,
-  photo boxes and articles still marked `placeholder: true` are hidden automatically, and appear
-  as soon as you replace them. You see all of it in the owner preview (`?preview`).
+- **Placeholders are visible on purpose.** Text in [square brackets], the "SK" portrait, striped
+  photo boxes and placeholder articles all show (in a muted colour) so you can see what is left to
+  replace. Go live only once they are replaced; `?preview` outlines every one of them.
 - **Where to put photos:** [src/assets/photos/README.md](src/assets/photos/README.md). Drop a file in with the right name; no code needed.
 
 ---
@@ -107,14 +107,12 @@ for the gallery.
 ## Previewing
 
 **Owner preview (any browser).** Add `?preview` to any address, e.g. `https://thesajidkamal.me/?preview`.
-Everything still unfinished becomes visible, and a small bar lets you switch palettes and outline
-every placeholder. It is remembered while the tab is open; × closes it. Visitors never see it.
+A small bar lets you switch palettes and press **Placeholders** to outline every stand-in on the
+page. It is remembered while the tab is open; × closes it. Visitors never see the bar.
 
-What visitors see while things are unfinished:
-- **Writing:** the menu link, home-page section and RSS entries appear once one article no longer
-  has `placeholder: true`. Until then, `/writing/` says the first essays are on their way.
-- **Case studies:** only the finished parts show. A heading with nothing but [bracketed] text under it is hidden too.
-- **Testimonials, Speaking and media, Beyond work, FAQ answers, gallery photos:** each appears when it has real content.
+Articles still marked `placeholder: true` are kept out of search engines, the sitemap and the RSS
+feed, so nothing unfinished gets indexed even if the site goes live early. Delete that line when an
+article is real.
 
 **On your computer.** Install [Node.js](https://nodejs.org) 22, then:
 

@@ -45,8 +45,6 @@ const { hideCta = false, ...seo } = Astro.props;
           if (palette) d.setAttribute('data-palette', palette);
           if (theme !== 'light' && theme !== 'dark') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           d.setAttribute('data-theme', theme);
-          var q = new URLSearchParams(location.search);
-          d.classList.toggle('show-drafts', (!!preview.on || q.has('preview')) && q.get('preview') !== 'off');
           d.classList.toggle('outline-placeholders', !!(preview.on && preview.placeholders));
           d.classList.add('js');
         }

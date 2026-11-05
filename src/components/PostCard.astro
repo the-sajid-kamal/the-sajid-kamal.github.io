@@ -10,7 +10,7 @@ const { post, index = 0 } = Astro.props;
 const { data, id } = post;
 const cover = photo(`writing/${id}`);
 ---
-<article class="post-card" data-reveal data-draft={data.placeholder ? '' : undefined}>
+<article class="post-card" data-reveal>
   <a class="post-card__link" href={`/writing/${id}/`}>
     <div class="post-card__media" transition:name={`post-media-${id}`}>
       {cover ? (

@@ -26,16 +26,10 @@ const latestCover = latest && photo(`writing/${latest.id}`);
 
   <section class="section">
     <div class="container">
-      {real.length === 0 && (
-        <div class="coming-soon visitor-only">
-          <h2 class="h-section">The first essays are <em>on their way</em>.</h2>
-          <p class="lead">On brand building, trade programs and starting a company in Bangladesh. Follow along to read them first.</p>
-        </div>
-      )}
 
       {latest && (
         <>
-          <a class="feature" href={`/writing/${latest.id}/`} data-draft={latest.data.placeholder ? '' : undefined}>
+          <a class="feature" href={`/writing/${latest.id}/`}>
             <div class="feature__media" transition:name={`post-media-${latest.id}`}>
               {latestCover ? (
                 <Image src={latestCover} alt="" widths={[640, 960, 1280]} sizes="(max-width: 860px) 92vw, 52vw" />
@@ -51,9 +45,9 @@ const latestCover = latest && photo(`writing/${latest.id}`);
               <span class="link-arrow">Read the essay <span class="arrow" aria-hidden="true">→</span></span>
             </div>
           </a>
-          <div class="post-list" data-draft={rest.some((p) => !p.data.placeholder) ? undefined : ''}>
+          <div class="post-list">
             {rest.map((post) => (
-              <article class="post-row" data-reveal data-draft={post.data.placeholder ? '' : undefined}>
+              <article class="post-row" data-reveal>
                 <a class="post-row__link" href={`/writing/${post.id}/`}>
                   <time class="post-row__date" datetime={post.data.date.toISOString()}>{formatDate(post.data.date, 'short')}</time>
                   <div>

@@ -67,12 +67,12 @@ const booking = resolveHref('booking');
       </div>
     </section>
 
-    <section class="section section--rule" aria-labelledby="faq-title" data-draft={faq.some((f) => !isPlaceholder(f.a)) ? undefined : ''}>
+    <section class="section section--rule" aria-labelledby="faq-title">
       <div class="container container--narrow">
         <SectionHead num="04" id="faq-title" title="Questions" />
         <div class="faq">
           {faq.map((f) => (
-            <details data-draft={isPlaceholder(f.a) ? '' : undefined}>
+            <details>
               <summary>{f.q}</summary>
               <p class:list={[isPlaceholder(f.a) && 'placeholder']}>{f.a}</p>
             </details>

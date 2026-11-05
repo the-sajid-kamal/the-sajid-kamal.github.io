@@ -1,7 +1,5 @@
 ---
 import { site } from '../site.config';
-import { hasPublishedWriting } from '../lib/posts';
-const writingLive = await hasPublishedWriting();
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
@@ -25,7 +23,7 @@ const year = new Date().getFullYear();
         <h2 class="footer-title">Explore</h2>
         <ul class="footer-links">
           <li><a href="/work/">Work</a></li>
-          <li data-draft={writingLive ? undefined : ''}><a href="/writing/">Writing</a></li>
+          <li><a href="/writing/">Writing</a></li>
           <li><a href="/about/">About</a></li>
           {site.showServices && <li><a href="/services/">Services</a></li>}
           <li><a href="/contact/">Contact</a></li>
@@ -37,7 +35,7 @@ const year = new Date().getFullYear();
           {site.profiles.linkedin && <li><a href={site.profiles.linkedin} target="_blank" rel="me noopener">LinkedIn</a></li>}
           {site.profiles.facebook && <li><a href={site.profiles.facebook} target="_blank" rel="me noopener">Facebook</a></li>}
           {site.profiles.github && <li><a href={site.profiles.github} target="_blank" rel="me noopener">GitHub</a></li>}
-          <li data-draft={writingLive ? undefined : ''}><a href="/writing/feed.xml">RSS feed</a></li>
+          <li><a href="/writing/feed.xml">RSS feed</a></li>
         </ul>
       </div>
       <div>
