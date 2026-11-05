@@ -37,6 +37,14 @@ export const stats = [
   { value: 156, label: 'tailor shops on the Sui Chokri network' },
 ];
 
+// Recognition and certifications: the row under the big numbers (all from the CV)
+export const credentials = [
+  'Selected for the H&M Foundation’s Needle Innovation Challenge',
+  'Google Ads and Google Analytics 4 certified',
+  'Meta Business Suite Expert, Meta Blueprint',
+  'Digital Ad Expert, Aleph Group',
+];
+
 // "How I can help": one tab for each kind of visitor.
 // The id is used in links, e.g. /#for-investors opens that tab.
 export const audiences = [

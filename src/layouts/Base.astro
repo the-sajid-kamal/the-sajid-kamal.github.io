@@ -2,9 +2,11 @@
 import '@fontsource-variable/newsreader/opsz.css';
 import '@fontsource-variable/newsreader/opsz-italic.css';
 import '@fontsource-variable/inter/index.css';
-import '@fontsource-variable/noto-serif-bengali/index.css';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+// The two fonts the top of every page needs: downloaded straight away
+import serifFont from '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url';
+import sansFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import { site } from '../site.config';
 import Seo from '../components/Seo.astro';
 import Analytics from '../components/Analytics.astro';
@@ -43,7 +45,9 @@ const { hideCta = false, ...seo } = Astro.props;
           if (palette) d.setAttribute('data-palette', palette);
           if (theme !== 'light' && theme !== 'dark') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           d.setAttribute('data-theme', theme);
-          d.classList.toggle('show-placeholders', !!(preview.on && preview.placeholders));
+          var q = new URLSearchParams(location.search);
+          d.classList.toggle('show-drafts', (!!preview.on || q.has('preview')) && q.get('preview') !== 'off');
+          d.classList.toggle('outline-placeholders', !!(preview.on && preview.placeholders));
           d.classList.add('js');
         }
         apply();
@@ -53,6 +57,8 @@ const { hideCta = false, ...seo } = Astro.props;
         }
       })();
     </script>
+    <link rel="preload" href={serifFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sansFont} as="font" type="font/woff2" crossorigin />
     <Seo {...seo} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />

@@ -40,6 +40,10 @@ export const site = {
   // Try them all first by adding ?preview to any address.
   palette: 'terracotta' as 'terracotta' | 'bottle' | 'indigo',
 
+  // Shown as "Open to" on the About page. Keep it general if you'd rather your
+  // current employer didn't read it as job hunting.
+  openTo: 'Advisory, ventures, talks and the right conversations',
+
   // Set to false to hide the Services page and every link to it
   // (for example, if your employment contract rules out outside work).
   showServices: true,

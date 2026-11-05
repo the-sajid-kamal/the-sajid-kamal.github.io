@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "cf:preview": "npx wrangler@4.151.3 pages dev dist",
-    "test:contact": "node scripts/test-contact.mjs"
+    "test:contact": "node scripts/test-contact.mjs",
+    "fonts:bangla": "python3 scripts/subset-bangla.py"
   },
   "dependencies": {
     "@astrojs/rss": "4.0.19",

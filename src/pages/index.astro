@@ -13,10 +13,15 @@ import Principles from '../components/Principles.astro';
 import PostCard from '../components/PostCard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import { site } from '../site.config';
-import { companies, testimonials } from '../data/home';
+import { companies, testimonials, credentials } from '../data/home';
+import { getPosts } from '../lib/posts';
+import { isPlaceholder } from '../lib/util';
 
 const work = (await getCollection('work')).filter((p) => p.data.featured).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
-const posts = (await getCollection('writing', (p) => !p.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
+const allPosts = await getPosts();
+const realPosts = allPosts.filter((p) => !p.data.placeholder);
+const posts = [...realPosts, ...allPosts.filter((p) => p.data.placeholder)].slice(0, 3);
+const realQuotes = testimonials.filter((t) => !isPlaceholder(t.quote));
 ---
 <Base person>
   <section class="hero">
@@ -69,6 +74,10 @@ const posts = (await getCollection('writing', (p) => !p.data.draft)).sort((a, b)
   <section class="section section--night" aria-label="In numbers">
     <div class="container">
       <Stats />
+      <div class="credentials">
+        <p class="credentials__label">Recognition</p>
+        <ul class="credentials__list">{credentials.map((c) => <li>{c}</li>)}</ul>
+      </div>
     </div>
   </section>
 
@@ -86,7 +95,7 @@ const posts = (await getCollection('writing', (p) => !p.data.draft)).sort((a, b)
     </div>
   </section>
 
-  <section class="section section--rule" aria-labelledby="writing-title">
+  <section class="section section--rule" aria-labelledby="writing-title" data-draft={realPosts.length ? undefined : ''}>
     <div class="container">
       <SectionHead num="05" id="writing-title" title="Notes from <em>the shelf</em>" lead="Essays on building brands, retail and how people in Bangladesh shop." link={{ href: '/writing/', label: 'All writing' }} />
       <div class="post-grid">
@@ -96,7 +105,7 @@ const posts = (await getCollection('writing', (p) => !p.data.draft)).sort((a, b)
   </section>
 
   {testimonials.length > 0 && (
-    <section class="section section--rule" aria-labelledby="quotes-title">
+    <section class="section section--rule" aria-labelledby="quotes-title" data-draft={realQuotes.length ? undefined : ''}>
       <div class="container">
         <SectionHead num="06" id="quotes-title" title="Kind words" />
         <Testimonials />

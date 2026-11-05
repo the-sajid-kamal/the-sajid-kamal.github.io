@@ -10,8 +10,10 @@ kinds of content:
   They are based on your CV, but they are my words, so rewrite them in your voice.
 - **Copy options:** alternatives for the main lines, in section 4.
 
-**See every placeholder at once:** open any page with `?preview` at the end of the address and
-press **Placeholders**.
+**Visitors never see placeholders.** Unfinished content is hidden from the public site
+automatically and appears the moment you replace it, so the site looks finished even while you work
+through this list. **To see everything still to do,** open any page with `?preview` at the end of
+the address, and press **Placeholders** to outline it all.
 
 ---
 
@@ -32,7 +34,11 @@ press **Placeholders**.
       employment contract allows outside work. If it doesn't, set `showServices: false` in `src/site.config.ts`.
 - [ ] **Booking link:** add a Cal.com or Calendly address to `bookingUrl` in `src/site.config.ts`.
 - [ ] **Contact form:** set up Resend on Cloudflare (README, step 2) and send yourself a test.
-- [ ] **Bangla name:** check that `সাজিদ কামাল` (in `src/site.config.ts`) is how you write your name; edit it, or set it to `''` to hide.
+- [ ] **Bangla name:** check that `সাজিদ কামাল` (in `src/site.config.ts`) is how you write your name. If you change it,
+      run `npm run fonts:bangla`, or set it to `''` to hide it.
+- [ ] **"Open to" line** on the About page (`openTo` in `src/site.config.ts`): it is worded so it doesn't read as
+      job hunting. Change it if you're openly looking.
+- [ ] **Professional email:** consider `hello@thesajidkamal.me` (free with Cloudflare Email Routing; see the README).
 - [ ] **Phone number:** it is shown on the Contact page. Set `phone: ''` if you'd rather not publish it.
 - [ ] **Permissions:** check that you can name employers' results and show their product photos.
 

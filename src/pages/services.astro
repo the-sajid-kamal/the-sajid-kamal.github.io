@@ -33,6 +33,7 @@ const booking = resolveHref('booking');
               <p>{s.text}</p>
               <ul>{s.includes.map((x) => <li>{x}</li>)}</ul>
               <p class="service-card__proof"><strong>Done before</strong>{s.proof}</p>
+              {s.work && <a class="link-arrow service-card__link" href={`/work/${s.work}/`}>Related case study <span class="arrow" aria-hidden="true">→</span></a>}
             </article>
           ))}
         </div>
@@ -66,12 +67,12 @@ const booking = resolveHref('booking');
       </div>
     </section>
 
-    <section class="section section--rule" aria-labelledby="faq-title">
+    <section class="section section--rule" aria-labelledby="faq-title" data-draft={faq.some((f) => !isPlaceholder(f.a)) ? undefined : ''}>
       <div class="container container--narrow">
         <SectionHead num="04" id="faq-title" title="Questions" />
         <div class="faq">
           {faq.map((f) => (
-            <details>
+            <details data-draft={isPlaceholder(f.a) ? '' : undefined}>
               <summary>{f.q}</summary>
               <p class:list={[isPlaceholder(f.a) && 'placeholder']}>{f.a}</p>
             </details>

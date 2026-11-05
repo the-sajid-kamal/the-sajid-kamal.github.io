@@ -12,36 +12,42 @@ export const services = [
     text: 'Find the right space to play in, and build a brand people remember.',
     includes: ['Category and portfolio opportunities', 'Positioning and brand architecture', 'Naming, packaging and launch briefs'],
     proof: 'Four new categories at Ghorer Bazar; Yum, Funtastic and Fast built from scratch.',
+    work: 'yum-funtastic-fast',
   },
   {
     title: 'Go-to-market and route-to-market',
     text: 'Launch plans that work in real shops, not only in slide decks.',
     includes: ['Launch plans and channel mix', 'Retail route-to-market design', 'Distributor and retailer programs'],
     proof: 'Ghorer Bazar’s first retail route-to-market; Herlan’s go-to-market.',
+    work: 'herlan-go-to-market',
   },
   {
     title: 'Trade marketing programs',
     text: 'Turn retailers into your best salespeople, and make trade spend pay back.',
     includes: ['Trade schemes and incentives', 'Flagship and loyalty store programs', 'Activation plans'],
     proof: '172% and 158% short-term growth at Meghna Group; 50+ flagship stores.',
+    work: 'mgi-trade-programs',
   },
   {
     title: 'Integrated campaigns and content',
     text: 'Campaigns with a clear business job, and a way to measure it.',
     includes: ['360° campaign planning', 'Content calendars and agency briefs', 'Performance tracking'],
     proof: '100+ campaigns at Akij Bakers; 60% more online sales for Herlan.',
+    work: 'akij-chanachur-chocolate',
   },
   {
     title: 'Brand P&L and dashboards',
     text: 'See which brands, SKUs and channels actually make money.',
     includes: ['Brand-wise P&L and margin tracking', 'Category contribution analysis', 'Decision dashboards in Excel or BI'],
     proof: 'P&L and margin dashboards at Ghorer Bazar and Akij Bakers.',
+    work: 'ghorer-bazar-new-categories',
   },
   {
     title: 'Startup and venture advisory',
     text: 'From business model to pilot, with an operator’s discipline.',
     includes: ['Business model design', 'Pilot design and metrics', 'Operations playbooks'],
     proof: 'Founded Sui Chokri: 156 tailor shops and an H&M Foundation grant.',
+    work: 'sui-chokri',
   },
 ];
 

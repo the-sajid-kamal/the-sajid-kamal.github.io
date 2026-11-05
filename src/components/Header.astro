@@ -1,9 +1,12 @@
 ---
 import { site } from '../site.config';
+import { hasPublishedWriting } from '../lib/posts';
+
+const writingLive = await hasPublishedWriting();
 
 const nav = [
   { label: 'Work', href: '/work/' },
-  { label: 'Writing', href: '/writing/' },
+  { label: 'Writing', href: '/writing/', draft: !writingLive },
   { label: 'About', href: '/about/' },
   ...(site.showServices ? [{ label: 'Services', href: '/services/' }] : []),
 ];
@@ -17,7 +20,7 @@ const isCurrent = (href: string) => path === href || path.startsWith(href);
     <nav class="site-nav" id="site-menu" aria-label="Main">
       <ul class="site-nav__list">
         {nav.map((item) => (
-          <li>
+          <li data-draft={item.draft ? '' : undefined}>
             <a class="site-nav__link" href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
           </li>
         ))}

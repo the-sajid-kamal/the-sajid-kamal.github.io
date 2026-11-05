@@ -22,9 +22,9 @@ const img = photo(name);
           fetchpriority={priority ? 'high' : 'auto'}
         />
       ) : (
-        <div class="arch-placeholder" data-placeholder role="img" aria-label={`Portrait of ${site.name} (placeholder)`}>
+        <div class="arch-placeholder" data-placeholder role="img" aria-label={site.name}>
           <span class="arch-placeholder__mark" aria-hidden="true">SK</span>
-          <span class="arch-placeholder__note" aria-hidden="true">Portrait placeholder</span>
+          <span class="arch-placeholder__note placeholder" aria-hidden="true">Portrait placeholder · add portrait.jpg</span>
         </div>
       )}
     </div>

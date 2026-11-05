@@ -7,7 +7,7 @@ const { compact = false } = Astro.props;
 ---
 <ol class="chapters" data-chapters>
   {chapters.map((c) => (
-    <li class="chapter" data-chapter>
+    <li class="chapter" data-chapter data-draft={isPlaceholder(c.title) ? '' : undefined}>
       <p class="chapter__when">{c.years}</p>
       <div class="chapter__body">
         {c.place && <p class="chapter__place">{c.place}</p>}

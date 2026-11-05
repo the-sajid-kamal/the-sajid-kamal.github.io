@@ -7,6 +7,7 @@ import Base from '../../layouts/Base.astro';
 import CoverArt from '../../components/CoverArt.astro';
 import { photo } from '../../lib/photos';
 import { isPlaceholder } from '../../lib/util';
+import { markDrafts } from '../../lib/drafts';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
@@ -21,6 +22,9 @@ const { data, id } = project;
 const { Content } = await render(project);
 const cover = photo(`work/${id}`);
 const gallery = data.gallery.map((g, i) => ({ ...g, img: photo(`work/${id}-${i + 1}`) }));
+const hasGalleryPhotos = gallery.some((g) => g.img);
+// Unfinished case studies: hide the [bracketed] stand-ins from visitors
+const body = data.placeholder && project.rendered?.html ? markDrafts(project.rendered.html) : null;
 ---
 <Base title={data.title} description={data.summary}>
   <article>
@@ -60,9 +64,9 @@ const gallery = data.gallery.map((g, i) => ({ ...g, img: photo(`work/${id}-${i +
       <div class="case-body">
         <div class="prose">
           {data.placeholder && (
-            <p class="placeholder-note" role="note"><strong>Placeholder case study.</strong> Text in [square brackets] and the striped images are stand-ins to replace with your own.</p>
+            <p class="placeholder-note" role="note" data-draft><strong>Placeholder case study.</strong> Text in [square brackets] and the striped images are stand-ins to replace with your own.</p>
           )}
-          <Content />
+          {body ? <Fragment set:html={body} /> : <Content />}
         </div>
         <aside class="case-aside" aria-label="Work with me">
           <h2>Facing something similar?</h2>
@@ -72,9 +76,9 @@ const gallery = data.gallery.map((g, i) => ({ ...g, img: photo(`work/${id}-${i +
       </div>
 
       {gallery.length > 0 && (
-        <div class="gallery">
+        <div class="gallery" data-draft={hasGalleryPhotos ? undefined : ''}>
           {gallery.map((g) => (
-            <figure data-reveal>
+            <figure data-reveal data-draft={g.img ? undefined : ''}>
               {g.img ? (
                 <Image src={g.img} alt={g.caption && !isPlaceholder(g.caption) ? g.caption : ''} widths={[480, 720, 1000]} sizes="(max-width: 640px) 92vw, 46vw" />
               ) : (
@@ -87,7 +91,7 @@ const gallery = data.gallery.map((g, i) => ({ ...g, img: photo(`work/${id}-${i +
       )}
 
       {data.quote && (
-        <figure class="case-quote" data-reveal>
+        <figure class="case-quote" data-reveal data-draft={isPlaceholder(data.quote.text) ? '' : undefined}>
           <blockquote class:list={[isPlaceholder(data.quote.text) && 'placeholder']}>{data.quote.text}</blockquote>
           <figcaption class:list={[isPlaceholder(data.quote.name) && 'placeholder']}><strong>{data.quote.name}</strong>{data.quote.role}</figcaption>
         </figure>

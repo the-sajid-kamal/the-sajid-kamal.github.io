@@ -7,6 +7,9 @@ and runs the contact form. It also still works on GitHub Pages.
 
 - **What to replace before going live:** [CONTENT-GUIDE.md](CONTENT-GUIDE.md) lists every
   placeholder, plus colour palette and copy suggestions.
+- **Unfinished content never shows to visitors.** Text in [square brackets], empty quotes,
+  photo boxes and articles still marked `placeholder: true` are hidden automatically, and appear
+  as soon as you replace them. You see all of it in the owner preview (`?preview`).
 - **Where to put photos:** [src/assets/photos/README.md](src/assets/photos/README.md). Drop a file in with the right name; no code needed.
 
 ---
@@ -97,13 +100,21 @@ for the gallery.
 | Services, formats, prices, FAQ | `src/data/services.ts` |
 | CV | replace `public/MD-Sajid-Kamal-CV.pdf` (same name) |
 | Link-preview image | replace `public/og/share-card.png` (1200 × 630) |
+| Bangla name | `nameBangla` in `src/site.config.ts`, then run `npm run fonts:bangla` (needs `pip install fonttools brotli`) to rebuild the 2 KB font that draws it |
 
 ---
 
 ## Previewing
 
 **Owner preview (any browser).** Add `?preview` to any address, e.g. `https://thesajidkamal.me/?preview`.
-A small bar lets you switch palettes and outline every placeholder. Only you see it; × closes it.
+Everything still unfinished becomes visible, and a small bar lets you switch palettes and outline
+every placeholder. It is remembered while the tab is open; × closes it. Visitors never see it.
+
+What visitors see while things are unfinished:
+- **Writing:** the menu link, home-page section and RSS entries appear once one article no longer
+  has `placeholder: true`. Until then, `/writing/` says the first essays are on their way.
+- **Case studies:** only the finished parts show. A heading with nothing but [bracketed] text under it is hidden too.
+- **Testimonials, Speaking and media, Beyond work, FAQ answers, gallery photos:** each appears when it has real content.
 
 **On your computer.** Install [Node.js](https://nodejs.org) 22, then:
 
@@ -163,6 +174,13 @@ If you'd rather edit visually later, the design here can be rebuilt in Framer.
 
 ---
 
+## A professional email address
+
+`hello@thesajidkamal.me` looks more established to investors and clients than a Gmail address,
+and costs nothing on Cloudflare: Email Routing (in the Cloudflare dashboard for your domain) forwards it to
+your Gmail. To reply from it, add it in Gmail under Settings → Accounts → *Send mail as*.
+Then change `email` in `src/site.config.ts`.
+
 ## Analytics and privacy
 
 Google Tag Manager, Umami and Microsoft Clarity load on every page (IDs in `src/site.config.ts`;
@@ -178,3 +196,6 @@ automatically; in Google Tag Manager, use a *History Change* trigger for page vi
 
 Every push runs `.github/workflows/pages.yml`: it installs, tests the contact function and builds
 the site. A red cross on GitHub means something needs fixing before it goes live.
+
+Last audit (Lighthouse 13.5, compressed as on Cloudflare, analytics off): desktop 100 / 100 / 100 / 100;
+phone 92–95 performance and 100 for accessibility, best practices and SEO.
